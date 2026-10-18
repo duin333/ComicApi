@@ -22,6 +22,68 @@ namespace ComicApi.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
+            modelBuilder.Entity("ComicApi.Models.Chapter", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ComicId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsHidden")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<long>("ViewCount")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ComicId", "Number")
+                        .IsUnique();
+
+                    b.ToTable("chapters", (string)null);
+                });
+
+            modelBuilder.Entity("ComicApi.Models.ChapterImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ChapterId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChapterId", "SortOrder");
+
+                    b.ToTable("chapter_images", (string)null);
+                });
+
             modelBuilder.Entity("ComicApi.Models.Comic", b =>
                 {
                     b.Property<int>("Id")
@@ -57,6 +119,9 @@ namespace ComicApi.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<int?>("UploaderId")
+                        .HasColumnType("int");
+
                     b.Property<long>("ViewCount")
                         .HasColumnType("bigint");
 
@@ -64,7 +129,310 @@ namespace ComicApi.Migrations
 
                     b.HasIndex("Title");
 
+                    b.HasIndex("UploaderId");
+
                     b.ToTable("comics", (string)null);
+                });
+
+            modelBuilder.Entity("ComicApi.Models.ComicGenre", b =>
+                {
+                    b.Property<int>("ComicId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GenreId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ComicId", "GenreId");
+
+                    b.HasIndex("GenreId");
+
+                    b.ToTable("comic_genres", (string)null);
+                });
+
+            modelBuilder.Entity("ComicApi.Models.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ComicId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ComicId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("comments", (string)null);
+                });
+
+            modelBuilder.Entity("ComicApi.Models.Follow", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ComicId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("UserId", "ComicId");
+
+                    b.HasIndex("ComicId");
+
+                    b.ToTable("follows", (string)null);
+                });
+
+            modelBuilder.Entity("ComicApi.Models.Genre", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("genres", (string)null);
+                });
+
+            modelBuilder.Entity("ComicApi.Models.ReadingHistory", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ComicId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ChapterId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ReadAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("UserId", "ComicId");
+
+                    b.HasIndex("ChapterId");
+
+                    b.HasIndex("ComicId");
+
+                    b.ToTable("reading_histories", (string)null);
+                });
+
+            modelBuilder.Entity("ComicApi.Models.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<bool>("IsLocked")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("Username")
+                        .IsUnique();
+
+                    b.ToTable("users", (string)null);
+                });
+
+            modelBuilder.Entity("ComicApi.Models.Chapter", b =>
+                {
+                    b.HasOne("ComicApi.Models.Comic", "Comic")
+                        .WithMany("Chapters")
+                        .HasForeignKey("ComicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Comic");
+                });
+
+            modelBuilder.Entity("ComicApi.Models.ChapterImage", b =>
+                {
+                    b.HasOne("ComicApi.Models.Chapter", "Chapter")
+                        .WithMany("Images")
+                        .HasForeignKey("ChapterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Chapter");
+                });
+
+            modelBuilder.Entity("ComicApi.Models.Comic", b =>
+                {
+                    b.HasOne("ComicApi.Models.User", "Uploader")
+                        .WithMany("UploadedComics")
+                        .HasForeignKey("UploaderId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Uploader");
+                });
+
+            modelBuilder.Entity("ComicApi.Models.ComicGenre", b =>
+                {
+                    b.HasOne("ComicApi.Models.Comic", "Comic")
+                        .WithMany("ComicGenres")
+                        .HasForeignKey("ComicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ComicApi.Models.Genre", "Genre")
+                        .WithMany("ComicGenres")
+                        .HasForeignKey("GenreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Comic");
+
+                    b.Navigation("Genre");
+                });
+
+            modelBuilder.Entity("ComicApi.Models.Comment", b =>
+                {
+                    b.HasOne("ComicApi.Models.Comic", "Comic")
+                        .WithMany("Comments")
+                        .HasForeignKey("ComicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ComicApi.Models.User", "User")
+                        .WithMany("Comments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Comic");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ComicApi.Models.Follow", b =>
+                {
+                    b.HasOne("ComicApi.Models.Comic", "Comic")
+                        .WithMany("Follows")
+                        .HasForeignKey("ComicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ComicApi.Models.User", "User")
+                        .WithMany("Follows")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Comic");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ComicApi.Models.ReadingHistory", b =>
+                {
+                    b.HasOne("ComicApi.Models.Chapter", "Chapter")
+                        .WithMany()
+                        .HasForeignKey("ChapterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ComicApi.Models.Comic", "Comic")
+                        .WithMany()
+                        .HasForeignKey("ComicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ComicApi.Models.User", "User")
+                        .WithMany("Histories")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Chapter");
+
+                    b.Navigation("Comic");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ComicApi.Models.Chapter", b =>
+                {
+                    b.Navigation("Images");
+                });
+
+            modelBuilder.Entity("ComicApi.Models.Comic", b =>
+                {
+                    b.Navigation("Chapters");
+
+                    b.Navigation("ComicGenres");
+
+                    b.Navigation("Comments");
+
+                    b.Navigation("Follows");
+                });
+
+            modelBuilder.Entity("ComicApi.Models.Genre", b =>
+                {
+                    b.Navigation("ComicGenres");
+                });
+
+            modelBuilder.Entity("ComicApi.Models.User", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("Follows");
+
+                    b.Navigation("Histories");
+
+                    b.Navigation("UploadedComics");
                 });
 #pragma warning restore 612, 618
         }
