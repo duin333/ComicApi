@@ -16,8 +16,11 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IJwtService, JwtService>();
+
 builder.Services.AddScoped<IComicRepository, ComicRepository>();
 builder.Services.AddScoped<IChapterRepository, ChapterRepository>();
+
+builder.Services.AddSingleton<IFileStorage, FileStorage>();
 
 var app = builder.Build();
 
@@ -34,6 +37,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseDefaultFiles();
 app.UseStaticFiles();
 
 app.UseAuthentication();    
