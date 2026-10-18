@@ -16,6 +16,8 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddScoped<IComicRepository, ComicRepository>();
+builder.Services.AddScoped<IChapterRepository, ChapterRepository>();
 
 var app = builder.Build();
 
