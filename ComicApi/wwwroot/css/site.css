@@ -116,3 +116,43 @@ body.reader-page {
     border-radius: .25rem;
     background: #e9ecef;
 }
+
+/* Lưới ảnh trang trong form chương */
+.img-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: .5rem;
+}
+
+.img-item {
+    position: relative;
+    border: 1px solid #dee2e6;
+    border-radius: .375rem;
+    overflow: hidden;
+    background: #f8f9fa;
+}
+
+    .img-item img {
+        display: block;
+        width: 100%;
+        aspect-ratio: 2 / 3;
+        object-fit: cover;
+    }
+
+    .img-item .img-index {
+        position: absolute;
+        top: .25rem;
+        left: .25rem;
+    }
+
+    .img-item .img-new {
+        position: absolute;
+        top: .25rem;
+        right: .25rem;
+    }
+
+    .img-item .img-tools {
+        display: flex;
+        justify-content: space-between;
+        padding: .25rem;
+    }

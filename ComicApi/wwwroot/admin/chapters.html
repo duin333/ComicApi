@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quản lý chương - ComicHub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/site.css" rel="stylesheet">
+</head>
+<body>
+    <div id="navbar"></div>
+
+    <main class="container py-4" id="adminRoot">
+        <div id="adminNav"></div>
+
+        <div id="pageContent">
+            <div class="mb-2"><a href="/admin/comics.html">← Danh sách truyện</a></div>
+
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                <h4 class="section-title mb-0">
+                    Chương: <span id="comicTitle"></span>
+                    <small id="totalText" class="text-muted fs-6"></small>
+                </h4>
+                <button id="addBtn" type="button" class="btn btn-sm btn-warning">+ Thêm chương</button>
+            </div>
+
+            <div class="card border-0 shadow-sm">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Chương</th>
+                                <th>Tên chương</th>
+                                <th>Ảnh</th>
+                                <th class="text-end">Lượt xem</th>
+                                <th>Trạng thái</th>
+                                <th>Ngày tạo</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="chapterRows"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Hộp thoại thêm / sửa chương -->
+    <div class="modal fade" id="chapterModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <form class="modal-content" id="chapterForm" novalidate>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle">Thêm chương</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div id="formAlert" class="alert alert-danger d-none"></div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-sm-3">
+                            <label class="form-label" for="number">Số chương *</label>
+                            <input class="form-control" type="number" id="number" name="number" min="1" required>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label" for="chapterTitle">Tên chương</label>
+                            <input class="form-control" id="chapterTitle" name="title" maxlength="200"
+                                   placeholder="Để trống sẽ lấy theo số chương">
+                        </div>
+                        <div class="col-sm-3 d-flex align-items-end">
+                            <div class="form-check form-switch mb-2">
+                                <input class="form-check-input" type="checkbox" id="isHidden" name="isHidden">
+                                <label class="form-check-label" for="isHidden">Ẩn chương này</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <label class="form-label">Ảnh các trang (<span id="imgCount">0</span>)</label>
+                    <input type="file" id="imageFiles" class="form-control form-control-sm mb-1" multiple
+                           accept="image/jpeg,image/png,image/webp,image/gif">
+                    <div class="form-text mb-3">
+                        Chọn nhiều ảnh cùng lúc, mỗi ảnh tối đa 5 MB. Ảnh tự xếp theo tên file, bạn có thể đổi thứ tự bằng nút ← →.
+                    </div>
+
+                    <div id="imgGrid" class="img-grid"></div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-warning" id="saveBtn">Lưu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/utils/auth.js"></script>
+    <script src="/js/api/client.js"></script>
+    <script src="/js/utils/ui.js"></script>
+    <script src="/js/utils/admin.js"></script>
+    <script src="/js/pages/admin-chapters.js"></script>
+</body>
+</html>
