@@ -22,6 +22,10 @@ builder.Services.AddScoped<IChapterRepository, ChapterRepository>();
 
 builder.Services.AddSingleton<IFileStorage, FileStorage>();
 
+builder.Services.AddScoped<IFollowRepository, FollowRepository>();
+builder.Services.AddScoped<IReadingHistoryRepository, ReadingHistoryRepository>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
