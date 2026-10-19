@@ -52,7 +52,7 @@ const Api = (() => {
             // Token hết hạn hoặc bị từ chối: xóa và đưa về trang đăng nhập
             if (res.status === 401 && token && !url.startsWith('/api/Auth/login')) {
                 Auth.logout();
-                location.href = 'login.html?redirect=' +
+                location.href = '/login.html?redirect=' +
                     encodeURIComponent(location.pathname + location.search);
             }
             throw new ApiError(res.status, extractMessage(data, res.status), data);

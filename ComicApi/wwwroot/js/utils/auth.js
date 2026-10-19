@@ -48,7 +48,7 @@ const Auth = (() => {
     // Dùng ở các trang bắt buộc đăng nhập: chưa đăng nhập thì chuyển sang trang login
     function requireLogin() {
         if (isLoggedIn()) return true;
-        location.href = 'login.html?redirect=' + encodeURIComponent(location.pathname + location.search);
+        location.href = '/login.html?redirect=' + encodeURIComponent(location.pathname + location.search);
         return false;
     }
 

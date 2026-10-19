@@ -134,8 +134,12 @@
         const keyword = new URLSearchParams(location.search).get('keyword') || '';
         const onAuthPage = /(login|register)\.html$/.test(location.pathname);
         const loginHref = onAuthPage
-            ? 'login.html'
-            : 'login.html?redirect=' + encodeURIComponent(location.pathname + location.search);
+            ? '/login.html'
+            : '/login.html?redirect=' + encodeURIComponent(location.pathname + location.search);
+
+        const adminItems = user && user.role === 'Admin'
+            ? '<li><a class="dropdown-item" href="/admin/comics.html">Quản trị</a></li><li><hr class="dropdown-divider"></li>'
+            : '';
 
         const right = user
             ? `<li class="nav-item dropdown">
@@ -144,21 +148,22 @@
              ${user.role === 'Admin' ? '<span class="badge text-bg-warning ms-1">Admin</span>' : ''}
            </a>
            <ul class="dropdown-menu dropdown-menu-end">
+             ${adminItems}
              <li><button class="dropdown-item" id="logoutBtn" type="button">Đăng xuất</button></li>
            </ul>
          </li>`
             : `<li class="nav-item me-lg-2 mb-2 mb-lg-0"><a class="btn btn-outline-light btn-sm" href="${loginHref}">Đăng nhập</a></li>
-         <li class="nav-item"><a class="btn btn-warning btn-sm" href="register.html">Đăng ký</a></li>`;
+         <li class="nav-item"><a class="btn btn-warning btn-sm" href="/register.html">Đăng ký</a></li>`;
 
         host.innerHTML = `
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
         <div class="container">
-          <a class="navbar-brand fw-bold" href="index.html">ComicHub</a>
+          <a class="navbar-brand fw-bold" href="/index.html">ComicHub</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="mainNav">
-            <form class="d-flex mx-lg-auto my-2 my-lg-0 nav-search" action="index.html" method="get" role="search">
+            <form class="d-flex mx-lg-auto my-2 my-lg-0 nav-search" action="/index.html" method="get" role="search">
               <input class="form-control me-2" type="search" name="keyword"
                      placeholder="Tìm truyện hoặc tác giả..." value="${escapeHtml(keyword)}">
               <button class="btn btn-warning" type="submit">Tìm</button>
@@ -170,7 +175,7 @@
 
         document.getElementById('logoutBtn')?.addEventListener('click', () => {
             Auth.logout();
-            location.href = 'index.html';
+            location.href = '/index.html';
         });
     }
 

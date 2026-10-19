@@ -98,3 +98,21 @@ body.reader-page {
         min-height: 300px; /* giữ chỗ để ảnh tải dần (lazy) không bị giật */
         background: #2a2d33;
     }
+
+/* Khu vực quản trị */
+.nav-pills .nav-link {
+    color: #495057;
+}
+
+    .nav-pills .nav-link.active {
+        background: #ffc107;
+        color: #212529;
+    }
+
+.admin-thumb {
+    width: 44px;
+    height: 66px;
+    object-fit: cover;
+    border-radius: .25rem;
+    background: #e9ecef;
+}
