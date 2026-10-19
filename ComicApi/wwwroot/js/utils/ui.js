@@ -136,6 +136,10 @@
         const loginHref = onAuthPage
             ? '/login.html'
             : '/login.html?redirect=' + encodeURIComponent(location.pathname + location.search);
+        const userItems = `
+            <li><a class="dropdown-item" href="/following.html">Truyện đang theo dõi</a></li>
+            <li><a class="dropdown-item" href="/history.html">Lịch sử đọc</a></li>
+            <li><hr class="dropdown-divider"></li>`;
 
         const adminItems = user && user.role === 'Admin'
             ? '<li><a class="dropdown-item" href="/admin/comics.html">Quản trị</a></li><li><hr class="dropdown-divider"></li>'
@@ -148,7 +152,7 @@
              ${user.role === 'Admin' ? '<span class="badge text-bg-warning ms-1">Admin</span>' : ''}
            </a>
            <ul class="dropdown-menu dropdown-menu-end">
-             ${adminItems}
+            ${userItems}${adminItems}
              <li><button class="dropdown-item" id="logoutBtn" type="button">Đăng xuất</button></li>
            </ul>
          </li>`

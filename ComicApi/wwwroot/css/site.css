@@ -156,3 +156,32 @@ body.reader-page {
         justify-content: space-between;
         padding: .25rem;
     }
+
+/* Bình luận */
+.avatar {
+    width: 40px;
+    height: 40px;
+    flex: 0 0 40px;
+    border-radius: 50%;
+    background: #ffc107;
+    color: #212529;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.comment-text {
+    white-space: pre-line; /* giữ xuống dòng người dùng gõ */
+    word-break: break-word;
+}
+
+/* Lịch sử đọc */
+.history-thumb {
+    display: block;
+    width: 56px;
+    height: 84px;
+    object-fit: cover;
+    border-radius: .25rem;
+    background: #e9ecef;
+}

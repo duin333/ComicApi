@@ -84,6 +84,12 @@
         Api.post(`/api/Chapters/${chapterId}/view`).catch(() => { /* lỗi thì bỏ qua */ });
     }
 
+    // Đã đăng nhập thì lưu "đang đọc tới chương này" vào lịch sử
+    function saveHistory(chapterId) {
+        if (!Auth.isLoggedIn()) return;
+        Api.post(`/api/History/chapters/${chapterId}`).catch(() => { /* lỗi thì bỏ qua */ });
+    }
+
     // Chọn chương trong ô danh sách thì chuyển sang chương đó
     root.addEventListener('change', e => {
         if (e.target.classList.contains('chapter-select')) go(e.target.value);
@@ -103,7 +109,7 @@
             render(chapter);
             fillChapterSelect(chapter);
             countView(chapter.id);
-            // Giai đoạn 7: lưu lịch sử đọc của người dùng sẽ thêm ở đây
+            saveHistory(chapter.id);
         } catch (err) {
             root.innerHTML = err.status === 404
                 ? notFound('Không tìm thấy chương')
