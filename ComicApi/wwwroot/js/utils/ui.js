@@ -184,6 +184,12 @@
     }
 
     renderNavbar();
+    // Nút chat nổi trên mọi trang (trừ khu quản trị)
+    if (!location.pathname.startsWith('/admin/')) {
+        const s = document.createElement('script');
+        s.src = '/js/utils/chatWidget.js';
+        document.body.appendChild(s);
+    }
 
     return {
         placeholder, escapeHtml, formatNumber, formatDate, timeAgo,
