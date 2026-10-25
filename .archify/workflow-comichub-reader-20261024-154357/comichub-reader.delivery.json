@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "3698266e-2d3b-4ed8-85e0-8b48f4a947c3",
+  "status": "current",
+  "command": "deliver",
+  "type": "workflow",
+  "input": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\candidate.json",
+  "output": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\comichub-reader.html",
+  "specification": {
+    "sha256": "3a85bb4f94e409f1fde9e72deec12af703b99495903020aec13a38a5ca834486",
+    "bytes": 25735
+  },
+  "artifact": {
+    "sha256": "24ec137987e618127395ec5aa7407b44176bdca7da4e1f1a6d8ca916298e4a69",
+    "bytes": 849513
+  }
+}

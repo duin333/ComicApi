@@ -1,0 +1,412 @@
+{
+  "schemaVersion": 1,
+  "ok": false,
+  "command": "finalize",
+  "status": "fail",
+  "type": "architecture",
+  "quality": "showcase",
+  "startedAt": "2026-10-24T08:12:44.150Z",
+  "specification": {
+    "path": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\architecture-comicapi-20261024-151222\\candidate.json",
+    "sha256": "68ca18e39d952a25f9e31a8711be83389d742b866872e1aaa31d83f81617667c",
+    "bytes": 3467
+  },
+  "artifact": {
+    "path": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\architecture-comicapi-20261024-151222\\comicapi.html",
+    "sha256": "53c0f3a244ded31101c088371c63c1bf014af3e2391e51ddd9e8a51c23ecd23d",
+    "bytes": 814823
+  },
+  "stages": {
+    "validate": {
+      "status": "pass",
+      "exitCode": 0,
+      "durationMs": null,
+      "execution": "embedded-in-deliver",
+      "command": [
+        "D:\\nodejs\\node.exe",
+        "C:\\Users\\THIEN QUOC AN\\.agents\\skills\\archify\\bin\\archify.mjs",
+        "deliver",
+        "architecture",
+        "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\architecture-comicapi-20261024-151222\\candidate.json",
+        "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\architecture-comicapi-20261024-151222\\comicapi.html",
+        "--quality",
+        "showcase",
+        "--repo-root",
+        "D:\\btCsharp_ThayThuan\\ComicApi",
+        "--json"
+      ],
+      "receipt": {
+        "schemaVersion": 1,
+        "ok": true,
+        "command": "validate",
+        "specification": {
+          "sha256": "68ca18e39d952a25f9e31a8711be83389d742b866872e1aaa31d83f81617667c",
+          "bytes": 3467
+        },
+        "validation": {
+          "checksPassed": 9,
+          "checkCount": 9,
+          "compositionProfile": "showcase",
+          "compositionStatus": "pass",
+          "errors": 0,
+          "warnings": 0
+        }
+      }
+    },
+    "deliver": {
+      "status": "pass",
+      "exitCode": 0,
+      "durationMs": 2009,
+      "command": [
+        "D:\\nodejs\\node.exe",
+        "C:\\Users\\THIEN QUOC AN\\.agents\\skills\\archify\\bin\\archify.mjs",
+        "deliver",
+        "architecture",
+        "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\architecture-comicapi-20261024-151222\\candidate.json",
+        "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\architecture-comicapi-20261024-151222\\comicapi.html",
+        "--quality",
+        "showcase",
+        "--repo-root",
+        "D:\\btCsharp_ThayThuan\\ComicApi",
+        "--json"
+      ],
+      "receipt": {
+        "schemaVersion": 1,
+        "receiptId": "94ba93a3-3336-4091-807a-75261604f261",
+        "ok": true,
+        "command": "deliver",
+        "type": "architecture",
+        "input": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\architecture-comicapi-20261024-151222\\candidate.json",
+        "output": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\architecture-comicapi-20261024-151222\\comicapi.html",
+        "specification": {
+          "sha256": "68ca18e39d952a25f9e31a8711be83389d742b866872e1aaa31d83f81617667c",
+          "bytes": 3467
+        },
+        "artifact": {
+          "sha256": "53c0f3a244ded31101c088371c63c1bf014af3e2391e51ddd9e8a51c23ecd23d",
+          "bytes": 814823
+        },
+        "validation": {
+          "checksPassed": 9,
+          "checkCount": 9,
+          "compositionProfile": "showcase",
+          "compositionStatus": "pass",
+          "errors": 0,
+          "warnings": 0
+        },
+        "evidence": {
+          "verified": true,
+          "repository": "https://github.com/duin333/ComicApi",
+          "revision": "e283f764e62695e560b4b6463638aac5e80d1c3d",
+          "references": 10
+        },
+        "diagnostics": [
+          {
+            "code": "i18n/locale-fallback",
+            "severity": "warning",
+            "message": "meta.locale \"vi\" has no bundled catalog and no usable meta.translations; the Viewer chrome and <html lang> fall back to English.",
+            "subject": {
+              "diagramType": "architecture",
+              "path": "/meta/locale"
+            },
+            "evidence": {
+              "locale": "vi",
+              "bundledLocales": [
+                "en",
+                "zh-CN",
+                "zh-TW",
+                "es",
+                "ko",
+                "ar"
+              ]
+            },
+            "supportedFixes": [
+              "Supply meta.translations for this locale.",
+              "Use a bundled locale: en, zh-CN, zh-TW, es, ko, ar."
+            ]
+          }
+        ],
+        "update": {
+          "status": "unavailable",
+          "installedVersion": null,
+          "availableVersion": null,
+          "releaseNotes": null,
+          "checkedAt": null,
+          "source": null,
+          "noticeRequired": false,
+          "noticeText": null,
+          "reason": "disabled"
+        }
+      },
+      "stderr": "archify: meta.locale \"vi\" has no bundled catalog and no usable meta.translations; the Viewer chrome and <html lang> fall back to English."
+    },
+    "check": {
+      "status": "pass",
+      "exitCode": 0,
+      "durationMs": 171,
+      "command": [
+        "D:\\nodejs\\node.exe",
+        "C:\\Users\\THIEN QUOC AN\\.agents\\skills\\archify\\bin\\archify.mjs",
+        "check",
+        "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\architecture-comicapi-20261024-151222\\comicapi.html",
+        "--require-provenance"
+      ],
+      "receipt": {
+        "ok": true,
+        "file": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\architecture-comicapi-20261024-151222\\comicapi.html",
+        "artifact": {
+          "sha256": "53c0f3a244ded31101c088371c63c1bf014af3e2391e51ddd9e8a51c23ecd23d",
+          "bytes": 814823
+        },
+        "checks": [
+          {
+            "name": "single_svg",
+            "ok": true,
+            "details": [
+              "found 1 <svg> block(s)"
+            ]
+          },
+          {
+            "name": "finite_svg",
+            "ok": true,
+            "details": []
+          },
+          {
+            "name": "orthogonal_arrows",
+            "ok": true,
+            "details": []
+          },
+          {
+            "name": "label_route_clearance",
+            "ok": true,
+            "details": []
+          },
+          {
+            "name": "relationship_crossings",
+            "ok": true,
+            "details": []
+          },
+          {
+            "name": "relationship_corridors",
+            "ok": true,
+            "details": []
+          },
+          {
+            "name": "container_border_runs",
+            "ok": true,
+            "details": []
+          },
+          {
+            "name": "route_rhythm",
+            "ok": true,
+            "details": []
+          },
+          {
+            "name": "legend_clearance",
+            "ok": true,
+            "details": []
+          }
+        ],
+        "composition": {
+          "schemaVersion": 1,
+          "profile": "showcase",
+          "status": "pass",
+          "summary": {
+            "errors": 0,
+            "warnings": 0
+          },
+          "metrics": {
+            "properCrossings": 0,
+            "resolvedCrossovers": 0,
+            "ambiguousCorridors": 0,
+            "arrowheadCollisions": 0,
+            "containerBorderRuns": 0,
+            "labelRouteClearanceIssues": 0,
+            "labelCanvasOverflowIssues": 0,
+            "minLabelRouteClearance": 120.4,
+            "desktopReadabilityIssues": 0,
+            "viewportHeightIssues": 0,
+            "minProjectedNodeTextPx": 7.5,
+            "maxBends": 1,
+            "routesOverSuggestedBends": 0,
+            "maxStretch": 1,
+            "routesOverSuggestedStretch": 0,
+            "minSegmentPx": 19,
+            "minInteriorSegmentPx": null,
+            "shortSegmentCount": 0,
+            "shortEndpointSegmentCount": 0,
+            "shortInteriorSegmentCount": 0,
+            "microSegmentCount": 0
+          },
+          "suggestedLimits": {
+            "bendsPerRelationship": 2,
+            "stretch": 1.35,
+            "segmentPx": 16,
+            "microSegmentPx": 8
+          },
+          "routeReview": {
+            "crossings": [],
+            "detours": []
+          },
+          "leadingSpace": {
+            "measured": true,
+            "emptyTopPx": 75,
+            "emptyTopRatio": 0.147,
+            "occupiedTop": 75,
+            "viewBoxTop": 0,
+            "canvasHeight": 510,
+            "typicalNodeHeight": 92,
+            "reviewSuggested": false
+          },
+          "desktopReadability": {
+            "budgetBasis": "recognized-declared-wide",
+            "readerContract": "declared-wide-v1",
+            "availableDiagramWidth": 993.75,
+            "actualBudgetPx": 993.75,
+            "actualReaderWidth": 1023.75,
+            "desiredReaderWidth": 1023.75,
+            "viewportCap": 1376,
+            "limit": "source-size",
+            "requestedTargetPx": 7.5,
+            "requestedTargetMet": true,
+            "hardFloorPx": 6,
+            "hardFloorMet": true,
+            "minimumOwner": {
+              "kind": "edge",
+              "id": "browser-api",
+              "from": "browser",
+              "to": "api"
+            },
+            "minimumSourceTextPx": 8,
+            "minimumProjectedTextPx": 7.5,
+            "semanticTextCount": 11
+          },
+          "issues": []
+        },
+        "provenance": "current",
+        "deliveryReceiptId": "94ba93a3-3336-4091-807a-75261604f261"
+      }
+    },
+    "browser-check": {
+      "status": "fail",
+      "exitCode": 1,
+      "durationMs": 249,
+      "command": [
+        "D:\\nodejs\\node.exe",
+        "C:\\Users\\THIEN QUOC AN\\.agents\\skills\\archify\\bin\\archify.mjs",
+        "browser-check",
+        "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\architecture-comicapi-20261024-151222\\comicapi.html",
+        "--json",
+        "--require-provenance"
+      ],
+      "execution": "in-process",
+      "receipt": {
+        "schemaVersion": 1,
+        "ok": false,
+        "command": "browser-check",
+        "evidenceKind": "automated-browser",
+        "status": "fail",
+        "visualReview": "not-requested",
+        "provenance": "current",
+        "deliveryReceiptId": "94ba93a3-3336-4091-807a-75261604f261",
+        "artifact": {
+          "path": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\architecture-comicapi-20261024-151222\\comicapi.html",
+          "sha256": "53c0f3a244ded31101c088371c63c1bf014af3e2391e51ddd9e8a51c23ecd23d",
+          "bytes": 814823
+        },
+        "state": {
+          "detail": "read",
+          "motion": "still"
+        },
+        "chrome": {
+          "status": "available",
+          "executable": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+        },
+        "diagnostics": [
+          {
+            "code": "viewer/browser-check-runtime",
+            "severity": "error",
+            "message": "browser-check could not complete its Chrome inspection.",
+            "subject": {
+              "artifact": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\architecture-comicapi-20261024-151222\\comicapi.html"
+            },
+            "evidence": {
+              "reason": "Temporary directory ancestor identity is unavailable: C:\\Users\\THIEN QUOC AN\\AppData\\Local\\Temp"
+            },
+            "supportedFixes": [
+              "resolve the reported Chrome inspection error, then rerun browser-check"
+            ]
+          }
+        ],
+        "containment": {
+          "status": "fail",
+          "policy": "fit-or-reader-declared-readable-vertical-scroll",
+          "viewports": []
+        },
+        "themeStates": {
+          "status": "fail",
+          "viewports": []
+        },
+        "readability": {
+          "status": "fail",
+          "minimumProjectedNodeTextPx": 6,
+          "viewports": []
+        },
+        "viewerChrome": {
+          "status": "fail",
+          "viewports": []
+        },
+        "captures": {
+          "status": "not-requested",
+          "screenshots": [],
+          "contactSheet": null
+        },
+        "sidecars": {
+          "receipt": "comicapi.browser-check.json",
+          "files": []
+        },
+        "error": "Temporary directory ancestor identity is unavailable: C:\\Users\\THIEN QUOC AN\\AppData\\Local\\Temp"
+      }
+    }
+  },
+  "browserCheck": {
+    "requested": true,
+    "ran": false
+  },
+  "diagnostics": [
+    {
+      "code": "viewer/browser-check-runtime",
+      "severity": "error",
+      "message": "browser-check could not complete its Chrome inspection.",
+      "subject": {
+        "artifact": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\architecture-comicapi-20261024-151222\\comicapi.html"
+      },
+      "evidence": {
+        "reason": "Temporary directory ancestor identity is unavailable: C:\\Users\\THIEN QUOC AN\\AppData\\Local\\Temp"
+      },
+      "supportedFixes": [
+        "resolve the reported Chrome inspection error, then rerun browser-check"
+      ]
+    }
+  ],
+  "evidence": {
+    "receipt": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\architecture-comicapi-20261024-151222\\comicapi.finalize.json",
+    "summaryReceipt": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\architecture-comicapi-20261024-151222\\comicapi.finalize-summary.json",
+    "browserCheckReceipt": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\architecture-comicapi-20261024-151222\\comicapi.browser-check.json"
+  },
+  "visualReview": "not-requested",
+  "failedStage": "browser-check",
+  "finishedAt": "2026-10-24T08:12:46.875Z",
+  "durationMs": 2725,
+  "update": {
+    "status": "unavailable",
+    "installedVersion": null,
+    "availableVersion": null,
+    "releaseNotes": null,
+    "checkedAt": null,
+    "source": null,
+    "noticeRequired": false,
+    "noticeText": null,
+    "reason": "cache-unavailable"
+  }
+}

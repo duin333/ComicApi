@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "ok": false,
+  "command": "finalize",
+  "status": "fail",
+  "type": "architecture",
+  "quality": "showcase",
+  "specification": {
+    "path": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\architecture-comicapi-20261024-151222\\candidate.json",
+    "sha256": "68ca18e39d952a25f9e31a8711be83389d742b866872e1aaa31d83f81617667c",
+    "bytes": 3467
+  },
+  "artifact": {
+    "path": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\architecture-comicapi-20261024-151222\\comicapi.html",
+    "sha256": "53c0f3a244ded31101c088371c63c1bf014af3e2391e51ddd9e8a51c23ecd23d",
+    "bytes": 814823
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "fail"
+  },
+  "failedStage": "browser-check",
+  "diagnostics": [
+    {
+      "code": "viewer/browser-check-runtime",
+      "severity": "error",
+      "message": "browser-check could not complete its Chrome inspection.",
+      "subject": {
+        "artifact": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\architecture-comicapi-20261024-151222\\comicapi.html"
+      },
+      "evidence": {
+        "reason": "Temporary directory ancestor identity is unavailable: C:\\Users\\THIEN QUOC AN\\AppData\\Local\\Temp"
+      },
+      "supportedFixes": [
+        "resolve the reported Chrome inspection error, then rerun browser-check"
+      ]
+    }
+  ],
+  "diagnosticSummary": {
+    "total": 1,
+    "shown": 1,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\architecture-comicapi-20261024-151222\\comicapi.finalize.json",
+    "summaryReceipt": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\architecture-comicapi-20261024-151222\\comicapi.finalize-summary.json",
+    "browserCheckReceipt": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\architecture-comicapi-20261024-151222\\comicapi.browser-check.json"
+  },
+  "visualReview": "not-requested",
+  "durationMs": 2725,
+  "browserCheck": {
+    "requested": true,
+    "ran": false
+  }
+}

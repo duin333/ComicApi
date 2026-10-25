@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "ok": false,
+  "command": "finalize",
+  "status": "fail",
+  "type": "workflow",
+  "quality": "showcase",
+  "specification": {
+    "path": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\candidate.json",
+    "sha256": "0bf867200eb5731008fc14b82c31e4db20b20a5d245d896f51e37591a15c582e",
+    "bytes": 10104
+  },
+  "artifact": {
+    "path": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\comichub-reader.html"
+  },
+  "gates": {
+    "validate": "fail",
+    "deliver": "not-run",
+    "check": "not-run",
+    "browser-check": "not-run"
+  },
+  "failedStage": "validate",
+  "diagnostics": [
+    {
+      "code": "workflow/route-preset-conflict",
+      "severity": "error",
+      "message": "Workflow edge \"login-required\" cannot satisfy route preset \"bottom-channel\": candidate violates readable segment rhythm.",
+      "subject": {
+        "diagramType": "workflow",
+        "edge": "login-required",
+        "from": "account_gate",
+        "to": "auth_page",
+        "route": "bottom-channel"
+      },
+      "evidence": {
+        "invariant": "readable segment rhythm",
+        "segmentIndex": 1,
+        "actualSegmentPx": 6,
+        "requiredSegmentPx": 16,
+        "attemptedCandidateFamily": "bottom-channel",
+        "points": [
+          [
+            613.6,
+            626
+          ],
+          [
+            613.6,
+            684
+          ],
+          [
+            607.6,
+            684
+          ],
+          [
+            607.6,
+            236
+          ]
+        ],
+        "fromSide": "right",
+        "toSide": "left",
+        "requiredEndpointStubPx": 8,
+        "requiredInteriorSegmentPx": 16,
+        "requiredDirectClearancePx": 28
+      }
+    }
+  ],
+  "diagnosticSummary": {
+    "total": 1,
+    "shown": 1,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\review-7\\comichub-reader.finalize.json",
+    "summaryReceipt": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\review-7\\comichub-reader.finalize-summary.json"
+  },
+  "visualReview": "not-requested",
+  "durationMs": 1516,
+  "browserCheck": {
+    "requested": true,
+    "ran": false
+  },
+  "nextAction": {
+    "action": "edit-in-place",
+    "candidate": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\candidate.json",
+    "constraint": "Preserve unaffected semantics and geometry; apply each diagnostic's supportedFixes, or the fix its message names, and do not replace the whole candidate.",
+    "then": "finalize-once"
+  }
+}

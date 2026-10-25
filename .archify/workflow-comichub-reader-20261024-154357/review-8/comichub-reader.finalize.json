@@ -1,0 +1,284 @@
+{
+  "schemaVersion": 1,
+  "ok": false,
+  "command": "finalize",
+  "status": "fail",
+  "type": "workflow",
+  "quality": "showcase",
+  "startedAt": "2026-10-24T08:47:59.478Z",
+  "specification": {
+    "path": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\candidate.json",
+    "sha256": "ff231fa2f021db47af999e917bcd9a0d6272f544688835074545ba127cb9fc11",
+    "bytes": 10077
+  },
+  "artifact": {
+    "path": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\comichub-reader.html"
+  },
+  "stages": {
+    "validate": {
+      "status": "fail",
+      "exitCode": 1,
+      "durationMs": null,
+      "command": [
+        "D:\\nodejs\\node.exe",
+        "C:\\Users\\THIEN QUOC AN\\.agents\\skills\\archify\\bin\\archify.mjs",
+        "deliver",
+        "workflow",
+        "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\candidate.json",
+        "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\comichub-reader.html",
+        "--quality",
+        "showcase",
+        "--repo-root",
+        "D:\\btCsharp_ThayThuan\\ComicApi",
+        "--json"
+      ],
+      "receipt": {
+        "schemaVersion": 1,
+        "ok": false,
+        "command": "deliver",
+        "receiptId": "26eca299-4e65-4a57-ad4c-1d86b3f3abff",
+        "stage": "render",
+        "type": "workflow",
+        "input": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\candidate.json",
+        "output": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\comichub-reader.html",
+        "error": "Workflow layout validation failed:\n- Phase \"admin_phase\" (0..3) overlaps phase \"discover\" (0..1) — start at col 2 or later, or end the earlier phase at col -1.\n- Phase \"reader_phase\" (2..4) overlaps phase \"admin_phase\" (0..3) — start at col 4 or later, or end the earlier phase at col 1.\n- [composition/ambiguous-corridor] showcase workflow edges[0] id \"open-home\" \"start\" -> \"home\" shares a 60px corridor with edges[6] id \"send-auth\" \"auth_page\" -> \"auth_api\" at [679.6, 294] -> [739.6, 294] (segments 3 and 1; minimum 8px) — adjust route/via, bias, or channel coordinates so unrelated edges do not visually merge.\n- [composition/ambiguous-corridor] showcase workflow edges[6] id \"send-auth\" \"auth_page\" -> \"auth_api\" shares a 120px corridor with edges[10] id \"save-progress\" \"history_gate\" -> \"history\" at [1074, 384] -> [1074, 504] (segments 2 and 2; minimum 8px) — adjust route/via, bias, or channel coordinates so unrelated edges do not visually merge.",
+        "diagnostics": [
+          {
+            "code": "layout/constraint",
+            "severity": "error",
+            "message": "Phase \"admin_phase\" (0..3) overlaps phase \"discover\" (0..1) — start at col 2 or later, or end the earlier phase at col -1.",
+            "subject": {
+              "diagramType": "workflow"
+            },
+            "evidence": {},
+            "supportedFixes": []
+          },
+          {
+            "code": "layout/constraint",
+            "severity": "error",
+            "message": "Phase \"reader_phase\" (2..4) overlaps phase \"admin_phase\" (0..3) — start at col 4 or later, or end the earlier phase at col 1.",
+            "subject": {
+              "diagramType": "workflow"
+            },
+            "evidence": {},
+            "supportedFixes": []
+          },
+          {
+            "code": "composition/ambiguous-corridor",
+            "severity": "error",
+            "message": "[composition/ambiguous-corridor] showcase workflow edges[0] id \"open-home\" \"start\" -> \"home\" shares a 60px corridor with edges[6] id \"send-auth\" \"auth_page\" -> \"auth_api\" at [679.6, 294] -> [739.6, 294] (segments 3 and 1; minimum 8px) — adjust route/via, bias, or channel coordinates so unrelated edges do not visually merge.",
+            "subject": {
+              "diagramType": "workflow",
+              "collection": "edges",
+              "index": 0,
+              "id": "open-home",
+              "from": "start",
+              "to": "home"
+            },
+            "evidence": {
+              "otherRelationship": {
+                "diagramType": "workflow",
+                "collection": "edges",
+                "index": 6,
+                "id": "send-auth",
+                "from": "auth_page",
+                "to": "auth_api"
+              },
+              "overlapLengthPx": 60,
+              "minimumPx": 8,
+              "from": [
+                679.6,
+                294
+              ],
+              "to": [
+                739.6,
+                294
+              ],
+              "segmentIndex": 3,
+              "otherSegmentIndex": 1
+            },
+            "supportedFixes": [
+              "adjust route/via, bias, or channel coordinates so unrelated edges do not visually merge"
+            ]
+          },
+          {
+            "code": "composition/ambiguous-corridor",
+            "severity": "error",
+            "message": "[composition/ambiguous-corridor] showcase workflow edges[6] id \"send-auth\" \"auth_page\" -> \"auth_api\" shares a 120px corridor with edges[10] id \"save-progress\" \"history_gate\" -> \"history\" at [1074, 384] -> [1074, 504] (segments 2 and 2; minimum 8px) — adjust route/via, bias, or channel coordinates so unrelated edges do not visually merge.",
+            "subject": {
+              "diagramType": "workflow",
+              "collection": "edges",
+              "index": 6,
+              "id": "send-auth",
+              "from": "auth_page",
+              "to": "auth_api"
+            },
+            "evidence": {
+              "otherRelationship": {
+                "diagramType": "workflow",
+                "collection": "edges",
+                "index": 10,
+                "id": "save-progress",
+                "from": "history_gate",
+                "to": "history"
+              },
+              "overlapLengthPx": 120,
+              "minimumPx": 8,
+              "from": [
+                1074,
+                384
+              ],
+              "to": [
+                1074,
+                504
+              ],
+              "segmentIndex": 2,
+              "otherSegmentIndex": 2
+            },
+            "supportedFixes": [
+              "adjust route/via, bias, or channel coordinates so unrelated edges do not visually merge"
+            ]
+          }
+        ],
+        "provenance": "absent",
+        "update": {
+          "status": "unavailable",
+          "installedVersion": null,
+          "availableVersion": null,
+          "releaseNotes": null,
+          "checkedAt": null,
+          "source": null,
+          "noticeRequired": false,
+          "noticeText": null,
+          "reason": "disabled"
+        }
+      },
+      "execution": "embedded-in-deliver"
+    },
+    "deliver": {
+      "status": "not-run",
+      "execution": "blocked-by-validate"
+    }
+  },
+  "browserCheck": {
+    "requested": true,
+    "ran": false
+  },
+  "diagnostics": [
+    {
+      "code": "layout/constraint",
+      "severity": "error",
+      "message": "Phase \"admin_phase\" (0..3) overlaps phase \"discover\" (0..1) — start at col 2 or later, or end the earlier phase at col -1.",
+      "subject": {
+        "diagramType": "workflow"
+      },
+      "evidence": {},
+      "supportedFixes": []
+    },
+    {
+      "code": "layout/constraint",
+      "severity": "error",
+      "message": "Phase \"reader_phase\" (2..4) overlaps phase \"admin_phase\" (0..3) — start at col 4 or later, or end the earlier phase at col 1.",
+      "subject": {
+        "diagramType": "workflow"
+      },
+      "evidence": {},
+      "supportedFixes": []
+    },
+    {
+      "code": "composition/ambiguous-corridor",
+      "severity": "error",
+      "message": "[composition/ambiguous-corridor] showcase workflow edges[0] id \"open-home\" \"start\" -> \"home\" shares a 60px corridor with edges[6] id \"send-auth\" \"auth_page\" -> \"auth_api\" at [679.6, 294] -> [739.6, 294] (segments 3 and 1; minimum 8px) — adjust route/via, bias, or channel coordinates so unrelated edges do not visually merge.",
+      "subject": {
+        "diagramType": "workflow",
+        "collection": "edges",
+        "index": 0,
+        "id": "open-home",
+        "from": "start",
+        "to": "home"
+      },
+      "evidence": {
+        "otherRelationship": {
+          "diagramType": "workflow",
+          "collection": "edges",
+          "index": 6,
+          "id": "send-auth",
+          "from": "auth_page",
+          "to": "auth_api"
+        },
+        "overlapLengthPx": 60,
+        "minimumPx": 8,
+        "from": [
+          679.6,
+          294
+        ],
+        "to": [
+          739.6,
+          294
+        ],
+        "segmentIndex": 3,
+        "otherSegmentIndex": 1
+      },
+      "supportedFixes": [
+        "adjust route/via, bias, or channel coordinates so unrelated edges do not visually merge"
+      ]
+    },
+    {
+      "code": "composition/ambiguous-corridor",
+      "severity": "error",
+      "message": "[composition/ambiguous-corridor] showcase workflow edges[6] id \"send-auth\" \"auth_page\" -> \"auth_api\" shares a 120px corridor with edges[10] id \"save-progress\" \"history_gate\" -> \"history\" at [1074, 384] -> [1074, 504] (segments 2 and 2; minimum 8px) — adjust route/via, bias, or channel coordinates so unrelated edges do not visually merge.",
+      "subject": {
+        "diagramType": "workflow",
+        "collection": "edges",
+        "index": 6,
+        "id": "send-auth",
+        "from": "auth_page",
+        "to": "auth_api"
+      },
+      "evidence": {
+        "otherRelationship": {
+          "diagramType": "workflow",
+          "collection": "edges",
+          "index": 10,
+          "id": "save-progress",
+          "from": "history_gate",
+          "to": "history"
+        },
+        "overlapLengthPx": 120,
+        "minimumPx": 8,
+        "from": [
+          1074,
+          384
+        ],
+        "to": [
+          1074,
+          504
+        ],
+        "segmentIndex": 2,
+        "otherSegmentIndex": 2
+      },
+      "supportedFixes": [
+        "adjust route/via, bias, or channel coordinates so unrelated edges do not visually merge"
+      ]
+    }
+  ],
+  "evidence": {
+    "receipt": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\review-8\\comichub-reader.finalize.json",
+    "summaryReceipt": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\review-8\\comichub-reader.finalize-summary.json"
+  },
+  "visualReview": "not-requested",
+  "failedStage": "validate",
+  "finishedAt": "2026-10-24T08:48:00.721Z",
+  "durationMs": 1242,
+  "update": {
+    "status": "unavailable",
+    "installedVersion": null,
+    "availableVersion": null,
+    "releaseNotes": null,
+    "checkedAt": null,
+    "source": null,
+    "noticeRequired": false,
+    "noticeText": null,
+    "reason": "cache-unavailable"
+  }
+}

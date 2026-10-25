@@ -26,11 +26,30 @@ public class CommentDto
     public int UserId { get; set; }
     public string Username { get; set; } = string.Empty;
     public string Content { get; set; } = string.Empty;
+    public string? GifUrl { get; set; }
     public DateTime CreatedAt { get; set; }
 }
 
+// Bình luận có thể chỉ có chữ, chỉ có GIF, hoặc cả hai (kiểm tra trong controller)
 public class CommentCreateDto
 {
-    [Required, StringLength(1000, MinimumLength = 1)]
-    public string Content { get; set; } = string.Empty;
+    [StringLength(1000)]
+    public string? Content { get; set; }
+
+    [StringLength(500)]
+    public string? GifUrl { get; set; }
+}
+
+public class RatingRequest
+{
+    [Range(1, 5)]
+    public int Stars { get; set; }
+}
+
+public class RatingSummaryDto
+{
+    public double Average { get; set; }                          // 0 nếu chưa có ai đánh giá
+    public int Count { get; set; }
+    public int[] Distribution { get; set; } = new int[5];        // [số lượt 1 sao, 2 sao, ..., 5 sao]
+    public int? MyRating { get; set; }                           // null nếu chưa đăng nhập hoặc chưa đánh giá
 }

@@ -4,6 +4,7 @@ using ComicApi.Models;
 using ComicApi.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ComicApi.Services;
 
 namespace ComicApi.Controllers;
 
@@ -35,22 +36,27 @@ public class CommentsController : ControllerBase
 
     [Authorize]
     [HttpPost("comics/{comicId:int}/comments")]
+
     public async Task<IActionResult> Create(int comicId, CommentCreateDto dto)
     {
-        var content = dto.Content.Trim();
-        if (content.Length == 0)
-            return BadRequest(new { message = "Nội dung bình luận không được để trống" });
+        var content = (dto.Content ?? string.Empty).Trim();
+        var gifUrl = string.IsNullOrWhiteSpace(dto.GifUrl) ? null : dto.GifUrl.Trim();
+
+        // Phải có chữ hoặc có GIF (hoặc cả hai)
+        if (content.Length == 0 && gifUrl is null)
+            return BadRequest(new { message = "Hãy nhập nội dung hoặc chọn một ảnh GIF" });
+
+        if (gifUrl is not null && !GifUrlValidator.IsAllowed(gifUrl))
+            return BadRequest(new { message = "Ảnh GIF không hợp lệ (chỉ nhận GIF trong thư viện của website hoặc từ Giphy, Tenor)" });
 
         if (!await _comics.ExistsAsync(comicId))
             return NotFound(new { message = "Không tìm thấy truyện" });
 
-        // Kiểm tra lại trong database: tài khoản bị khóa thì không được viết nữa,
-        // kể cả khi token cũ vẫn còn hạn
         var user = await _users.GetByIdAsync(User.GetUserId() ?? 0);
         if (user is null || user.IsLocked)
             return StatusCode(StatusCodes.Status403Forbidden, new { message = "Tài khoản đã bị khóa" });
 
-        var comment = new Comment { UserId = user.Id, ComicId = comicId, Content = content };
+        var comment = new Comment { UserId = user.Id, ComicId = comicId, Content = content, GifUrl = gifUrl };
         await _comments.AddAsync(comment);
         await _comments.SaveAsync();
 
@@ -60,6 +66,7 @@ public class CommentsController : ControllerBase
             UserId = user.Id,
             Username = user.Username,
             Content = comment.Content,
+            GifUrl = comment.GifUrl,
             CreatedAt = comment.CreatedAt
         };
         return Created($"/api/comics/{comicId}/comments", result);

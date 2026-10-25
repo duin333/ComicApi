@@ -17,5 +17,6 @@ public class CommentConfiguration : IEntityTypeConfiguration<Comment>
 
         b.HasOne(c => c.Comic).WithMany(x => x.Comments)
             .HasForeignKey(c => c.ComicId).OnDelete(DeleteBehavior.Cascade);
+        b.Property(c => c.GifUrl).HasMaxLength(500);
     }
 }

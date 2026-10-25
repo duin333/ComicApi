@@ -1,0 +1,162 @@
+{
+  "schemaVersion": 1,
+  "ok": false,
+  "command": "finalize",
+  "status": "fail",
+  "type": "workflow",
+  "quality": "showcase",
+  "startedAt": "2026-10-24T08:46:43.058Z",
+  "specification": {
+    "path": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\candidate.json",
+    "sha256": "10142c983db3e374c54c85ff62998184a854b2760dcdc11d17f58b9df25720c3",
+    "bytes": 27759
+  },
+  "artifact": {
+    "path": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\comichub-reader.html"
+  },
+  "stages": {
+    "validate": {
+      "status": "fail",
+      "exitCode": 1,
+      "durationMs": null,
+      "command": [
+        "D:\\nodejs\\node.exe",
+        "C:\\Users\\THIEN QUOC AN\\.agents\\skills\\archify\\bin\\archify.mjs",
+        "deliver",
+        "workflow",
+        "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\candidate.json",
+        "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\comichub-reader.html",
+        "--quality",
+        "showcase",
+        "--repo-root",
+        "D:\\btCsharp_ThayThuan\\ComicApi",
+        "--json"
+      ],
+      "receipt": {
+        "schemaVersion": 1,
+        "ok": false,
+        "command": "deliver",
+        "receiptId": "6f46e4fa-3a55-4250-b157-0fdb1a80209f",
+        "stage": "render",
+        "type": "workflow",
+        "input": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\candidate.json",
+        "output": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\comichub-reader.html",
+        "error": "Workflow nodes \"auth_page\" and \"history_gate\" are less than 8px apart in lane \"site\".",
+        "diagnostics": [
+          {
+            "code": "workflow/node-overlap",
+            "severity": "error",
+            "message": "Workflow nodes \"auth_page\" and \"history_gate\" are less than 8px apart in lane \"site\".",
+            "subject": {
+              "diagramType": "workflow",
+              "node": "history_gate",
+              "path": "/nodes/9"
+            },
+            "evidence": {
+              "lane": "site",
+              "minimumClearancePx": 8,
+              "nodes": [
+                {
+                  "id": "auth_page",
+                  "rect": {
+                    "x": 774,
+                    "y": 450,
+                    "width": 172,
+                    "height": 52
+                  }
+                },
+                {
+                  "id": "history_gate",
+                  "rect": {
+                    "x": 760,
+                    "y": 400,
+                    "width": 200,
+                    "height": 52
+                  }
+                }
+              ]
+            },
+            "supportedFixes": []
+          }
+        ],
+        "provenance": "absent",
+        "update": {
+          "status": "unavailable",
+          "installedVersion": null,
+          "availableVersion": null,
+          "releaseNotes": null,
+          "checkedAt": null,
+          "source": null,
+          "noticeRequired": false,
+          "noticeText": null,
+          "reason": "disabled"
+        }
+      },
+      "execution": "embedded-in-deliver"
+    },
+    "deliver": {
+      "status": "not-run",
+      "execution": "blocked-by-validate"
+    }
+  },
+  "browserCheck": {
+    "requested": true,
+    "ran": false
+  },
+  "diagnostics": [
+    {
+      "code": "workflow/node-overlap",
+      "severity": "error",
+      "message": "Workflow nodes \"auth_page\" and \"history_gate\" are less than 8px apart in lane \"site\".",
+      "subject": {
+        "diagramType": "workflow",
+        "node": "history_gate",
+        "path": "/nodes/9"
+      },
+      "evidence": {
+        "lane": "site",
+        "minimumClearancePx": 8,
+        "nodes": [
+          {
+            "id": "auth_page",
+            "rect": {
+              "x": 774,
+              "y": 450,
+              "width": 172,
+              "height": 52
+            }
+          },
+          {
+            "id": "history_gate",
+            "rect": {
+              "x": 760,
+              "y": 400,
+              "width": 200,
+              "height": 52
+            }
+          }
+        ]
+      },
+      "supportedFixes": []
+    }
+  ],
+  "evidence": {
+    "receipt": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\review-4\\comichub-reader.finalize.json",
+    "summaryReceipt": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\review-4\\comichub-reader.finalize-summary.json"
+  },
+  "visualReview": "not-requested",
+  "failedStage": "validate",
+  "finishedAt": "2026-10-24T08:46:45.788Z",
+  "durationMs": 2730,
+  "update": {
+    "status": "unavailable",
+    "installedVersion": null,
+    "availableVersion": null,
+    "releaseNotes": null,
+    "checkedAt": null,
+    "source": null,
+    "noticeRequired": false,
+    "noticeText": null,
+    "reason": "cache-unavailable"
+  }
+}

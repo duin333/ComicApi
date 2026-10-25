@@ -1,0 +1,536 @@
+{
+  "schemaVersion": 1,
+  "ok": false,
+  "command": "finalize",
+  "status": "fail",
+  "type": "workflow",
+  "quality": "showcase",
+  "startedAt": "2026-10-24T08:46:54.311Z",
+  "specification": {
+    "path": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\candidate.json",
+    "sha256": "8dd5594d4cbc7c1798663dad6fecc784cf0c482402d4acda4792e83a9d773088",
+    "bytes": 29373
+  },
+  "artifact": {
+    "path": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\comichub-reader.html"
+  },
+  "stages": {
+    "validate": {
+      "status": "fail",
+      "exitCode": 1,
+      "durationMs": null,
+      "command": [
+        "D:\\nodejs\\node.exe",
+        "C:\\Users\\THIEN QUOC AN\\.agents\\skills\\archify\\bin\\archify.mjs",
+        "deliver",
+        "workflow",
+        "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\candidate.json",
+        "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\comichub-reader.html",
+        "--quality",
+        "showcase",
+        "--repo-root",
+        "D:\\btCsharp_ThayThuan\\ComicApi",
+        "--json"
+      ],
+      "receipt": {
+        "schemaVersion": 1,
+        "ok": false,
+        "command": "deliver",
+        "receiptId": "7f4ac3b6-7ea0-4fd0-bb91-c388b6134fd3",
+        "stage": "render",
+        "type": "workflow",
+        "input": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\candidate.json",
+        "output": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\comichub-reader.html",
+        "error": "Workflow layout validation failed:\n- Sublabel \"Chi tiÃ¡ÂºÂ¿t Ã‚Â· chÃ†Â°Ã†Â¡ng Ã‚Â· bÃƒÂ¬nh luÃ¡ÂºÂ­n\" needs ~195px at the 6px legible minimum, but node \"comic\" provides 192px — shorten the sublabel or increase node.width.\n- Label \"Ã„ÂÃ„Æ’ng kÃƒÂ½ / Ã„â€˜Ã„Æ’ng nhÃ¡ÂºÂ­p\" (~272px) is wider than component \"auth_page\" (200px) — shorten the label or increase node.width.\n- Label \"Ã„ÂÃƒÂ£ Ã„â€˜Ã„Æ’ng nhÃ¡ÂºÂ­p?\" (~211px) is wider than component \"history_gate\" (200px) — shorten the label or increase node.width.\n- Sublabel \"KhÃƒÂ¡ch Ã„â€˜Ã¡Â»Âc tiÃ¡ÂºÂ¿p, khÃƒÂ´ng lÃ†Â°u tiÃ¡ÂºÂ¿n Ã„â€˜Ã¡Â»â„¢\" needs ~256px at the 6px legible minimum, but node \"history_gate\" provides 192px — shorten the sublabel or increase node.width.\n- Label \"CÃ¡ÂºÂ§n Ã„â€˜Ã„Æ’ng nhÃ¡ÂºÂ­p?\" (~211px) is wider than component \"account_gate\" (200px) — shorten the label or increase node.width.\n- Label \"KiÃ¡Â»Æ’m tra tÃƒÂ i khoÃ¡ÂºÂ£n\" (~211px) is wider than component \"auth_api\" (200px) — shorten the label or increase node.width.\n- Label \"LÃ¡Â»â€¹ch sÃ¡Â»Â­ Ã„â€˜Ã¡Â»Âc\" (~211px) is wider than component \"history\" (200px) — shorten the label or increase node.width.\n- Sublabel \"CRUD cho truyÃ¡Â»â€¡n, chÃ†Â°Ã†Â¡ng, thÃ¡Â»Æ’ loÃ¡ÂºÂ¡i, user\" needs ~220px at the 6px legible minimum, but node \"admin_api\" provides 192px — shorten the sublabel or increase node.width.\n- Label \"Theo dÃƒÂµi / gÃ¡Â»Â­i bÃƒÂ¬nh luÃ¡ÂºÂ­n\" (~272px) is wider than component \"social\" (200px) — shorten the label or increase node.width.\n- Sublabel \"Ã„ÂÃ„Æ’ng nhÃ¡ÂºÂ­p bÃ¡ÂºÂ±ng tÃƒÂ i khoÃ¡ÂºÂ£n Admin\" needs ~195px at the 6px legible minimum, but node \"admin_entry\" provides 192px — shorten the sublabel or increase node.width.\n- Sublabel \"TruyÃ¡Â»â€¡n Ã‚Â· chÃ†Â°Ã†Â¡ng Ã‚Â· thÃ¡Â»Æ’ loÃ¡ÂºÂ¡i Ã‚Â· ngÃ†Â°Ã¡Â»Âi dÃƒÂ¹ng\" needs ~292px at the 6px legible minimum, but node \"admin_console\" provides 192px — shorten the sublabel or increase node.width.\n- Label \"TÃ¡Â»Â« chÃ¡Â»â€˜i truy cÃ¡ÂºÂ­p\" (~218px) is wider than component \"admin_denied\" (200px) — shorten the label or increase node.width.\n- [composition/proper-crossing] showcase workflow edges[4] id \"logged-in-social\" \"account_gate\" -> \"social\" crosses edges[6] id \"send-auth\" \"auth_page\" -> \"auth_api\" at [787.2, 686] (segments 0 and 3) — adjust route/via, bias, or channel coordinates so the edges use separate lane corridors.\n- [composition/proper-crossing] showcase workflow edges[10] id \"save-progress\" \"history_gate\" -> \"history\" crosses edges[15] id \"admin-request\" \"admin_console\" -> \"admin_api\" at [1371.2, 961] (segments 3 and 0) — adjust route/via, bias, or channel coordinates so the edges use separate lane corridors.\n- [composition/ambiguous-corridor] showcase workflow edges[5] id \"login-required\" \"account_gate\" -> \"auth_page\" shares a 328px corridor with edges[6] id \"send-auth\" \"auth_page\" -> \"auth_api\" at [20, 278] -> [20, 606] (segments 1 and 2; minimum 8px) — adjust route/via, bias, or channel coordinates so unrelated edges do not visually merge.",
+        "diagnostics": [
+          {
+            "code": "layout/constraint",
+            "severity": "error",
+            "message": "Sublabel \"Chi tiÃ¡ÂºÂ¿t Ã‚Â· chÃ†Â°Ã†Â¡ng Ã‚Â· bÃƒÂ¬nh luÃ¡ÂºÂ­n\" needs ~195px at the 6px legible minimum, but node \"comic\" provides 192px — shorten the sublabel or increase node.width.",
+            "subject": {
+              "diagramType": "workflow"
+            },
+            "evidence": {},
+            "supportedFixes": []
+          },
+          {
+            "code": "layout/constraint",
+            "severity": "error",
+            "message": "Label \"Ã„ÂÃ„Æ’ng kÃƒÂ½ / Ã„â€˜Ã„Æ’ng nhÃ¡ÂºÂ­p\" (~272px) is wider than component \"auth_page\" (200px) — shorten the label or increase node.width.",
+            "subject": {
+              "diagramType": "workflow"
+            },
+            "evidence": {},
+            "supportedFixes": []
+          },
+          {
+            "code": "layout/constraint",
+            "severity": "error",
+            "message": "Label \"Ã„ÂÃƒÂ£ Ã„â€˜Ã„Æ’ng nhÃ¡ÂºÂ­p?\" (~211px) is wider than component \"history_gate\" (200px) — shorten the label or increase node.width.",
+            "subject": {
+              "diagramType": "workflow"
+            },
+            "evidence": {},
+            "supportedFixes": []
+          },
+          {
+            "code": "layout/constraint",
+            "severity": "error",
+            "message": "Sublabel \"KhÃƒÂ¡ch Ã„â€˜Ã¡Â»Âc tiÃ¡ÂºÂ¿p, khÃƒÂ´ng lÃ†Â°u tiÃ¡ÂºÂ¿n Ã„â€˜Ã¡Â»â„¢\" needs ~256px at the 6px legible minimum, but node \"history_gate\" provides 192px — shorten the sublabel or increase node.width.",
+            "subject": {
+              "diagramType": "workflow"
+            },
+            "evidence": {},
+            "supportedFixes": []
+          },
+          {
+            "code": "layout/constraint",
+            "severity": "error",
+            "message": "Label \"CÃ¡ÂºÂ§n Ã„â€˜Ã„Æ’ng nhÃ¡ÂºÂ­p?\" (~211px) is wider than component \"account_gate\" (200px) — shorten the label or increase node.width.",
+            "subject": {
+              "diagramType": "workflow"
+            },
+            "evidence": {},
+            "supportedFixes": []
+          },
+          {
+            "code": "layout/constraint",
+            "severity": "error",
+            "message": "Label \"KiÃ¡Â»Æ’m tra tÃƒÂ i khoÃ¡ÂºÂ£n\" (~211px) is wider than component \"auth_api\" (200px) — shorten the label or increase node.width.",
+            "subject": {
+              "diagramType": "workflow"
+            },
+            "evidence": {},
+            "supportedFixes": []
+          },
+          {
+            "code": "layout/constraint",
+            "severity": "error",
+            "message": "Label \"LÃ¡Â»â€¹ch sÃ¡Â»Â­ Ã„â€˜Ã¡Â»Âc\" (~211px) is wider than component \"history\" (200px) — shorten the label or increase node.width.",
+            "subject": {
+              "diagramType": "workflow"
+            },
+            "evidence": {},
+            "supportedFixes": []
+          },
+          {
+            "code": "layout/constraint",
+            "severity": "error",
+            "message": "Sublabel \"CRUD cho truyÃ¡Â»â€¡n, chÃ†Â°Ã†Â¡ng, thÃ¡Â»Æ’ loÃ¡ÂºÂ¡i, user\" needs ~220px at the 6px legible minimum, but node \"admin_api\" provides 192px — shorten the sublabel or increase node.width.",
+            "subject": {
+              "diagramType": "workflow"
+            },
+            "evidence": {},
+            "supportedFixes": []
+          },
+          {
+            "code": "layout/constraint",
+            "severity": "error",
+            "message": "Label \"Theo dÃƒÂµi / gÃ¡Â»Â­i bÃƒÂ¬nh luÃ¡ÂºÂ­n\" (~272px) is wider than component \"social\" (200px) — shorten the label or increase node.width.",
+            "subject": {
+              "diagramType": "workflow"
+            },
+            "evidence": {},
+            "supportedFixes": []
+          },
+          {
+            "code": "layout/constraint",
+            "severity": "error",
+            "message": "Sublabel \"Ã„ÂÃ„Æ’ng nhÃ¡ÂºÂ­p bÃ¡ÂºÂ±ng tÃƒÂ i khoÃ¡ÂºÂ£n Admin\" needs ~195px at the 6px legible minimum, but node \"admin_entry\" provides 192px — shorten the sublabel or increase node.width.",
+            "subject": {
+              "diagramType": "workflow"
+            },
+            "evidence": {},
+            "supportedFixes": []
+          },
+          {
+            "code": "layout/constraint",
+            "severity": "error",
+            "message": "Sublabel \"TruyÃ¡Â»â€¡n Ã‚Â· chÃ†Â°Ã†Â¡ng Ã‚Â· thÃ¡Â»Æ’ loÃ¡ÂºÂ¡i Ã‚Â· ngÃ†Â°Ã¡Â»Âi dÃƒÂ¹ng\" needs ~292px at the 6px legible minimum, but node \"admin_console\" provides 192px — shorten the sublabel or increase node.width.",
+            "subject": {
+              "diagramType": "workflow"
+            },
+            "evidence": {},
+            "supportedFixes": []
+          },
+          {
+            "code": "layout/constraint",
+            "severity": "error",
+            "message": "Label \"TÃ¡Â»Â« chÃ¡Â»â€˜i truy cÃ¡ÂºÂ­p\" (~218px) is wider than component \"admin_denied\" (200px) — shorten the label or increase node.width.",
+            "subject": {
+              "diagramType": "workflow"
+            },
+            "evidence": {},
+            "supportedFixes": []
+          },
+          {
+            "code": "composition/proper-crossing",
+            "severity": "error",
+            "message": "[composition/proper-crossing] showcase workflow edges[4] id \"logged-in-social\" \"account_gate\" -> \"social\" crosses edges[6] id \"send-auth\" \"auth_page\" -> \"auth_api\" at [787.2, 686] (segments 0 and 3) — adjust route/via, bias, or channel coordinates so the edges use separate lane corridors.",
+            "subject": {
+              "diagramType": "workflow",
+              "collection": "edges",
+              "index": 4,
+              "id": "logged-in-social",
+              "from": "account_gate",
+              "to": "social"
+            },
+            "evidence": {
+              "otherRelationship": {
+                "diagramType": "workflow",
+                "collection": "edges",
+                "index": 6,
+                "id": "send-auth",
+                "from": "auth_page",
+                "to": "auth_api"
+              },
+              "point": [
+                787.1999999999998,
+                686
+              ],
+              "segmentIndex": 0,
+              "otherSegmentIndex": 3
+            },
+            "supportedFixes": [
+              "adjust route/via, bias, or channel coordinates so the edges use separate lane corridors"
+            ]
+          },
+          {
+            "code": "composition/proper-crossing",
+            "severity": "error",
+            "message": "[composition/proper-crossing] showcase workflow edges[10] id \"save-progress\" \"history_gate\" -> \"history\" crosses edges[15] id \"admin-request\" \"admin_console\" -> \"admin_api\" at [1371.2, 961] (segments 3 and 0) — adjust route/via, bias, or channel coordinates so the edges use separate lane corridors.",
+            "subject": {
+              "diagramType": "workflow",
+              "collection": "edges",
+              "index": 10,
+              "id": "save-progress",
+              "from": "history_gate",
+              "to": "history"
+            },
+            "evidence": {
+              "otherRelationship": {
+                "diagramType": "workflow",
+                "collection": "edges",
+                "index": 15,
+                "id": "admin-request",
+                "from": "admin_console",
+                "to": "admin_api"
+              },
+              "point": [
+                1371.1999999999991,
+                961.0000000000002
+              ],
+              "segmentIndex": 3,
+              "otherSegmentIndex": 0
+            },
+            "supportedFixes": [
+              "adjust route/via, bias, or channel coordinates so the edges use separate lane corridors"
+            ]
+          },
+          {
+            "code": "composition/ambiguous-corridor",
+            "severity": "error",
+            "message": "[composition/ambiguous-corridor] showcase workflow edges[5] id \"login-required\" \"account_gate\" -> \"auth_page\" shares a 328px corridor with edges[6] id \"send-auth\" \"auth_page\" -> \"auth_api\" at [20, 278] -> [20, 606] (segments 1 and 2; minimum 8px) — adjust route/via, bias, or channel coordinates so unrelated edges do not visually merge.",
+            "subject": {
+              "diagramType": "workflow",
+              "collection": "edges",
+              "index": 5,
+              "id": "login-required",
+              "from": "account_gate",
+              "to": "auth_page"
+            },
+            "evidence": {
+              "otherRelationship": {
+                "diagramType": "workflow",
+                "collection": "edges",
+                "index": 6,
+                "id": "send-auth",
+                "from": "auth_page",
+                "to": "auth_api"
+              },
+              "overlapLengthPx": 328,
+              "minimumPx": 8,
+              "from": [
+                20,
+                278
+              ],
+              "to": [
+                20,
+                606
+              ],
+              "segmentIndex": 1,
+              "otherSegmentIndex": 2
+            },
+            "supportedFixes": [
+              "adjust route/via, bias, or channel coordinates so unrelated edges do not visually merge"
+            ]
+          }
+        ],
+        "provenance": "absent",
+        "update": {
+          "status": "unavailable",
+          "installedVersion": null,
+          "availableVersion": null,
+          "releaseNotes": null,
+          "checkedAt": null,
+          "source": null,
+          "noticeRequired": false,
+          "noticeText": null,
+          "reason": "disabled"
+        }
+      },
+      "execution": "embedded-in-deliver"
+    },
+    "deliver": {
+      "status": "not-run",
+      "execution": "blocked-by-validate"
+    }
+  },
+  "browserCheck": {
+    "requested": true,
+    "ran": false
+  },
+  "diagnostics": [
+    {
+      "code": "layout/constraint",
+      "severity": "error",
+      "message": "Sublabel \"Chi tiÃ¡ÂºÂ¿t Ã‚Â· chÃ†Â°Ã†Â¡ng Ã‚Â· bÃƒÂ¬nh luÃ¡ÂºÂ­n\" needs ~195px at the 6px legible minimum, but node \"comic\" provides 192px — shorten the sublabel or increase node.width.",
+      "subject": {
+        "diagramType": "workflow"
+      },
+      "evidence": {},
+      "supportedFixes": []
+    },
+    {
+      "code": "layout/constraint",
+      "severity": "error",
+      "message": "Label \"Ã„ÂÃ„Æ’ng kÃƒÂ½ / Ã„â€˜Ã„Æ’ng nhÃ¡ÂºÂ­p\" (~272px) is wider than component \"auth_page\" (200px) — shorten the label or increase node.width.",
+      "subject": {
+        "diagramType": "workflow"
+      },
+      "evidence": {},
+      "supportedFixes": []
+    },
+    {
+      "code": "layout/constraint",
+      "severity": "error",
+      "message": "Label \"Ã„ÂÃƒÂ£ Ã„â€˜Ã„Æ’ng nhÃ¡ÂºÂ­p?\" (~211px) is wider than component \"history_gate\" (200px) — shorten the label or increase node.width.",
+      "subject": {
+        "diagramType": "workflow"
+      },
+      "evidence": {},
+      "supportedFixes": []
+    },
+    {
+      "code": "layout/constraint",
+      "severity": "error",
+      "message": "Sublabel \"KhÃƒÂ¡ch Ã„â€˜Ã¡Â»Âc tiÃ¡ÂºÂ¿p, khÃƒÂ´ng lÃ†Â°u tiÃ¡ÂºÂ¿n Ã„â€˜Ã¡Â»â„¢\" needs ~256px at the 6px legible minimum, but node \"history_gate\" provides 192px — shorten the sublabel or increase node.width.",
+      "subject": {
+        "diagramType": "workflow"
+      },
+      "evidence": {},
+      "supportedFixes": []
+    },
+    {
+      "code": "layout/constraint",
+      "severity": "error",
+      "message": "Label \"CÃ¡ÂºÂ§n Ã„â€˜Ã„Æ’ng nhÃ¡ÂºÂ­p?\" (~211px) is wider than component \"account_gate\" (200px) — shorten the label or increase node.width.",
+      "subject": {
+        "diagramType": "workflow"
+      },
+      "evidence": {},
+      "supportedFixes": []
+    },
+    {
+      "code": "layout/constraint",
+      "severity": "error",
+      "message": "Label \"KiÃ¡Â»Æ’m tra tÃƒÂ i khoÃ¡ÂºÂ£n\" (~211px) is wider than component \"auth_api\" (200px) — shorten the label or increase node.width.",
+      "subject": {
+        "diagramType": "workflow"
+      },
+      "evidence": {},
+      "supportedFixes": []
+    },
+    {
+      "code": "layout/constraint",
+      "severity": "error",
+      "message": "Label \"LÃ¡Â»â€¹ch sÃ¡Â»Â­ Ã„â€˜Ã¡Â»Âc\" (~211px) is wider than component \"history\" (200px) — shorten the label or increase node.width.",
+      "subject": {
+        "diagramType": "workflow"
+      },
+      "evidence": {},
+      "supportedFixes": []
+    },
+    {
+      "code": "layout/constraint",
+      "severity": "error",
+      "message": "Sublabel \"CRUD cho truyÃ¡Â»â€¡n, chÃ†Â°Ã†Â¡ng, thÃ¡Â»Æ’ loÃ¡ÂºÂ¡i, user\" needs ~220px at the 6px legible minimum, but node \"admin_api\" provides 192px — shorten the sublabel or increase node.width.",
+      "subject": {
+        "diagramType": "workflow"
+      },
+      "evidence": {},
+      "supportedFixes": []
+    },
+    {
+      "code": "layout/constraint",
+      "severity": "error",
+      "message": "Label \"Theo dÃƒÂµi / gÃ¡Â»Â­i bÃƒÂ¬nh luÃ¡ÂºÂ­n\" (~272px) is wider than component \"social\" (200px) — shorten the label or increase node.width.",
+      "subject": {
+        "diagramType": "workflow"
+      },
+      "evidence": {},
+      "supportedFixes": []
+    },
+    {
+      "code": "layout/constraint",
+      "severity": "error",
+      "message": "Sublabel \"Ã„ÂÃ„Æ’ng nhÃ¡ÂºÂ­p bÃ¡ÂºÂ±ng tÃƒÂ i khoÃ¡ÂºÂ£n Admin\" needs ~195px at the 6px legible minimum, but node \"admin_entry\" provides 192px — shorten the sublabel or increase node.width.",
+      "subject": {
+        "diagramType": "workflow"
+      },
+      "evidence": {},
+      "supportedFixes": []
+    },
+    {
+      "code": "layout/constraint",
+      "severity": "error",
+      "message": "Sublabel \"TruyÃ¡Â»â€¡n Ã‚Â· chÃ†Â°Ã†Â¡ng Ã‚Â· thÃ¡Â»Æ’ loÃ¡ÂºÂ¡i Ã‚Â· ngÃ†Â°Ã¡Â»Âi dÃƒÂ¹ng\" needs ~292px at the 6px legible minimum, but node \"admin_console\" provides 192px — shorten the sublabel or increase node.width.",
+      "subject": {
+        "diagramType": "workflow"
+      },
+      "evidence": {},
+      "supportedFixes": []
+    },
+    {
+      "code": "layout/constraint",
+      "severity": "error",
+      "message": "Label \"TÃ¡Â»Â« chÃ¡Â»â€˜i truy cÃ¡ÂºÂ­p\" (~218px) is wider than component \"admin_denied\" (200px) — shorten the label or increase node.width.",
+      "subject": {
+        "diagramType": "workflow"
+      },
+      "evidence": {},
+      "supportedFixes": []
+    },
+    {
+      "code": "composition/proper-crossing",
+      "severity": "error",
+      "message": "[composition/proper-crossing] showcase workflow edges[4] id \"logged-in-social\" \"account_gate\" -> \"social\" crosses edges[6] id \"send-auth\" \"auth_page\" -> \"auth_api\" at [787.2, 686] (segments 0 and 3) — adjust route/via, bias, or channel coordinates so the edges use separate lane corridors.",
+      "subject": {
+        "diagramType": "workflow",
+        "collection": "edges",
+        "index": 4,
+        "id": "logged-in-social",
+        "from": "account_gate",
+        "to": "social"
+      },
+      "evidence": {
+        "otherRelationship": {
+          "diagramType": "workflow",
+          "collection": "edges",
+          "index": 6,
+          "id": "send-auth",
+          "from": "auth_page",
+          "to": "auth_api"
+        },
+        "point": [
+          787.1999999999998,
+          686
+        ],
+        "segmentIndex": 0,
+        "otherSegmentIndex": 3
+      },
+      "supportedFixes": [
+        "adjust route/via, bias, or channel coordinates so the edges use separate lane corridors"
+      ]
+    },
+    {
+      "code": "composition/proper-crossing",
+      "severity": "error",
+      "message": "[composition/proper-crossing] showcase workflow edges[10] id \"save-progress\" \"history_gate\" -> \"history\" crosses edges[15] id \"admin-request\" \"admin_console\" -> \"admin_api\" at [1371.2, 961] (segments 3 and 0) — adjust route/via, bias, or channel coordinates so the edges use separate lane corridors.",
+      "subject": {
+        "diagramType": "workflow",
+        "collection": "edges",
+        "index": 10,
+        "id": "save-progress",
+        "from": "history_gate",
+        "to": "history"
+      },
+      "evidence": {
+        "otherRelationship": {
+          "diagramType": "workflow",
+          "collection": "edges",
+          "index": 15,
+          "id": "admin-request",
+          "from": "admin_console",
+          "to": "admin_api"
+        },
+        "point": [
+          1371.1999999999991,
+          961.0000000000002
+        ],
+        "segmentIndex": 3,
+        "otherSegmentIndex": 0
+      },
+      "supportedFixes": [
+        "adjust route/via, bias, or channel coordinates so the edges use separate lane corridors"
+      ]
+    },
+    {
+      "code": "composition/ambiguous-corridor",
+      "severity": "error",
+      "message": "[composition/ambiguous-corridor] showcase workflow edges[5] id \"login-required\" \"account_gate\" -> \"auth_page\" shares a 328px corridor with edges[6] id \"send-auth\" \"auth_page\" -> \"auth_api\" at [20, 278] -> [20, 606] (segments 1 and 2; minimum 8px) — adjust route/via, bias, or channel coordinates so unrelated edges do not visually merge.",
+      "subject": {
+        "diagramType": "workflow",
+        "collection": "edges",
+        "index": 5,
+        "id": "login-required",
+        "from": "account_gate",
+        "to": "auth_page"
+      },
+      "evidence": {
+        "otherRelationship": {
+          "diagramType": "workflow",
+          "collection": "edges",
+          "index": 6,
+          "id": "send-auth",
+          "from": "auth_page",
+          "to": "auth_api"
+        },
+        "overlapLengthPx": 328,
+        "minimumPx": 8,
+        "from": [
+          20,
+          278
+        ],
+        "to": [
+          20,
+          606
+        ],
+        "segmentIndex": 1,
+        "otherSegmentIndex": 2
+      },
+      "supportedFixes": [
+        "adjust route/via, bias, or channel coordinates so unrelated edges do not visually merge"
+      ]
+    }
+  ],
+  "evidence": {
+    "receipt": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\review-5\\comichub-reader.finalize.json",
+    "summaryReceipt": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\review-5\\comichub-reader.finalize-summary.json"
+  },
+  "visualReview": "not-requested",
+  "failedStage": "validate",
+  "finishedAt": "2026-10-24T08:46:55.578Z",
+  "durationMs": 1266,
+  "update": {
+    "status": "unavailable",
+    "installedVersion": null,
+    "availableVersion": null,
+    "releaseNotes": null,
+    "checkedAt": null,
+    "source": null,
+    "noticeRequired": false,
+    "noticeText": null,
+    "reason": "cache-unavailable"
+  }
+}

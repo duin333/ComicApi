@@ -28,6 +28,9 @@ builder.Services.AddScoped<IFollowRepository, FollowRepository>();
 builder.Services.AddScoped<IReadingHistoryRepository, ReadingHistoryRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 
+builder.Services.AddScoped<IRatingRepository, RatingRepository>();
+
+
 builder.Services.Configure<OpenRouterSettings>(builder.Configuration.GetSection("OpenRouter"));
 builder.Services.AddHttpClient<ILlmClient, OpenRouterClient>(client =>
 {

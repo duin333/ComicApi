@@ -1,0 +1,700 @@
+{
+  "schemaVersion": 1,
+  "ok": false,
+  "command": "finalize",
+  "status": "fail",
+  "type": "workflow",
+  "quality": "showcase",
+  "startedAt": "2026-10-24T08:44:36.934Z",
+  "specification": {
+    "path": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\candidate.json",
+    "sha256": "8653110524d26730e8a408fa4157a8f1756a3f8edb247ee37673a2590aec9a64",
+    "bytes": 11425
+  },
+  "artifact": {
+    "path": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\comichub-reader.html"
+  },
+  "stages": {
+    "validate": {
+      "status": "fail",
+      "exitCode": 1,
+      "durationMs": null,
+      "command": [
+        "D:\\nodejs\\node.exe",
+        "C:\\Users\\THIEN QUOC AN\\.agents\\skills\\archify\\bin\\archify.mjs",
+        "deliver",
+        "workflow",
+        "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\candidate.json",
+        "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\comichub-reader.html",
+        "--quality",
+        "showcase",
+        "--repo-root",
+        "D:\\btCsharp_ThayThuan\\ComicApi",
+        "--json"
+      ],
+      "receipt": {
+        "schemaVersion": 1,
+        "ok": false,
+        "command": "deliver",
+        "receiptId": "6864fdef-797d-4cc5-87db-d969753a3f07",
+        "stage": "render",
+        "type": "workflow",
+        "input": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\candidate.json",
+        "output": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\comichub-reader.html",
+        "error": "Workflow layout validation failed:\n- [composition/proper-crossing] showcase workflow edges[0] id \"open-home\" \"start\" -> \"home\" crosses edges[13] id \"visit-admin\" \"jwt\" -> \"admin_gate\" at [32, 226] (segments 2 and 1) — adjust route/via, bias, or channel coordinates so the edges use separate lane corridors.\n- [composition/proper-crossing] showcase workflow edges[3] id \"protected-action\" \"comic\" -> \"account_gate\" crosses edges[15] id \"admin-denied\" \"admin_gate\" -> \"home\" at [521, 527] (segments 3 and 1) — adjust route/via, bias, or channel coordinates so the edges use separate lane corridors.\n- [composition/proper-crossing] showcase workflow edges[4] id \"already-logged\" \"account_gate\" -> \"social\" crosses edges[12] id \"open-history\" \"save_history\" -> \"history_page\" at [1128, 579] (segments 2 and 0) — adjust route/via, bias, or channel coordinates so the edges use separate lane corridors.\n- [composition/proper-crossing] showcase workflow edges[7] id \"issue-token\" \"auth_api\" -> \"jwt\" crosses edges[12] id \"open-history\" \"save_history\" -> \"history_page\" at [1144, 579] (segments 3 and 0) — adjust route/via, bias, or channel coordinates so the edges use separate lane corridors.\n- [composition/ambiguous-corridor] showcase workflow edges[3] id \"protected-action\" \"comic\" -> \"account_gate\" shares a 65.4px corridor with edges[15] id \"admin-denied\" \"admin_gate\" -> \"home\" at [348.8, 342] -> [414.2, 342] (segments 1 and 2; minimum 8px) — adjust route/via, bias, or channel coordinates so unrelated edges do not visually merge.\n- [composition/ambiguous-corridor] showcase workflow edges[4] id \"already-logged\" \"account_gate\" -> \"social\" shares a 204.4px corridor with edges[7] id \"issue-token\" \"auth_api\" -> \"jwt\" at [923.6, 626] -> [1128, 626] (segments 1 and 2; minimum 8px) — adjust route/via, bias, or channel coordinates so unrelated edges do not visually merge.\n- [composition/ambiguous-corridor] showcase workflow edges[5] id \"need-login\" \"account_gate\" -> \"auth_page\" shares a 113.8px corridor with edges[9] id \"check-chapter-auth\" \"chapter\" -> \"history_gate\" at [716.6, 292.2] -> [716.6, 406] (segments 2 and 2; minimum 8px) — adjust route/via, bias, or channel coordinates so unrelated edges do not visually merge.\n- [composition/ambiguous-corridor] showcase workflow edges[7] id \"issue-token\" \"auth_api\" -> \"jwt\" shares a 116px corridor with edges[8] id \"retry-social\" \"jwt\" -> \"social\" at [1144, 300] -> [1144, 416] (segments 3 and 1; minimum 8px) — adjust route/via, bias, or channel coordinates so unrelated edges do not visually merge.",
+        "diagnostics": [
+          {
+            "code": "i18n/locale-fallback",
+            "severity": "warning",
+            "message": "meta.locale \"vi\" has no bundled catalog and no usable meta.translations; the Viewer chrome and <html lang> fall back to English.",
+            "subject": {
+              "diagramType": "workflow",
+              "path": "/meta/locale"
+            },
+            "evidence": {
+              "locale": "vi",
+              "bundledLocales": [
+                "en",
+                "zh-CN",
+                "zh-TW",
+                "es",
+                "ko",
+                "ar"
+              ]
+            },
+            "supportedFixes": [
+              "Supply meta.translations for this locale.",
+              "Use a bundled locale: en, zh-CN, zh-TW, es, ko, ar."
+            ]
+          },
+          {
+            "code": "composition/proper-crossing",
+            "severity": "error",
+            "message": "[composition/proper-crossing] showcase workflow edges[0] id \"open-home\" \"start\" -> \"home\" crosses edges[13] id \"visit-admin\" \"jwt\" -> \"admin_gate\" at [32, 226] (segments 2 and 1) — adjust route/via, bias, or channel coordinates so the edges use separate lane corridors.",
+            "subject": {
+              "diagramType": "workflow",
+              "collection": "edges",
+              "index": 0,
+              "id": "open-home",
+              "from": "start",
+              "to": "home"
+            },
+            "evidence": {
+              "otherRelationship": {
+                "diagramType": "workflow",
+                "collection": "edges",
+                "index": 13,
+                "id": "visit-admin",
+                "from": "jwt",
+                "to": "admin_gate"
+              },
+              "point": [
+                32,
+                226
+              ],
+              "segmentIndex": 2,
+              "otherSegmentIndex": 1
+            },
+            "supportedFixes": [
+              "adjust route/via, bias, or channel coordinates so the edges use separate lane corridors"
+            ]
+          },
+          {
+            "code": "composition/proper-crossing",
+            "severity": "error",
+            "message": "[composition/proper-crossing] showcase workflow edges[3] id \"protected-action\" \"comic\" -> \"account_gate\" crosses edges[15] id \"admin-denied\" \"admin_gate\" -> \"home\" at [521, 527] (segments 3 and 1) — adjust route/via, bias, or channel coordinates so the edges use separate lane corridors.",
+            "subject": {
+              "diagramType": "workflow",
+              "collection": "edges",
+              "index": 3,
+              "id": "protected-action",
+              "from": "comic",
+              "to": "account_gate"
+            },
+            "evidence": {
+              "otherRelationship": {
+                "diagramType": "workflow",
+                "collection": "edges",
+                "index": 15,
+                "id": "admin-denied",
+                "from": "admin_gate",
+                "to": "home"
+              },
+              "point": [
+                521,
+                527
+              ],
+              "segmentIndex": 3,
+              "otherSegmentIndex": 1
+            },
+            "supportedFixes": [
+              "adjust route/via, bias, or channel coordinates so the edges use separate lane corridors"
+            ]
+          },
+          {
+            "code": "composition/proper-crossing",
+            "severity": "error",
+            "message": "[composition/proper-crossing] showcase workflow edges[4] id \"already-logged\" \"account_gate\" -> \"social\" crosses edges[12] id \"open-history\" \"save_history\" -> \"history_page\" at [1128, 579] (segments 2 and 0) — adjust route/via, bias, or channel coordinates so the edges use separate lane corridors.",
+            "subject": {
+              "diagramType": "workflow",
+              "collection": "edges",
+              "index": 4,
+              "id": "already-logged",
+              "from": "account_gate",
+              "to": "social"
+            },
+            "evidence": {
+              "otherRelationship": {
+                "diagramType": "workflow",
+                "collection": "edges",
+                "index": 12,
+                "id": "open-history",
+                "from": "save_history",
+                "to": "history_page"
+              },
+              "point": [
+                1128,
+                579
+              ],
+              "segmentIndex": 2,
+              "otherSegmentIndex": 0
+            },
+            "supportedFixes": [
+              "adjust route/via, bias, or channel coordinates so the edges use separate lane corridors"
+            ]
+          },
+          {
+            "code": "composition/proper-crossing",
+            "severity": "error",
+            "message": "[composition/proper-crossing] showcase workflow edges[7] id \"issue-token\" \"auth_api\" -> \"jwt\" crosses edges[12] id \"open-history\" \"save_history\" -> \"history_page\" at [1144, 579] (segments 3 and 0) — adjust route/via, bias, or channel coordinates so the edges use separate lane corridors.",
+            "subject": {
+              "diagramType": "workflow",
+              "collection": "edges",
+              "index": 7,
+              "id": "issue-token",
+              "from": "auth_api",
+              "to": "jwt"
+            },
+            "evidence": {
+              "otherRelationship": {
+                "diagramType": "workflow",
+                "collection": "edges",
+                "index": 12,
+                "id": "open-history",
+                "from": "save_history",
+                "to": "history_page"
+              },
+              "point": [
+                1144,
+                579
+              ],
+              "segmentIndex": 3,
+              "otherSegmentIndex": 0
+            },
+            "supportedFixes": [
+              "adjust route/via, bias, or channel coordinates so the edges use separate lane corridors"
+            ]
+          },
+          {
+            "code": "composition/ambiguous-corridor",
+            "severity": "error",
+            "message": "[composition/ambiguous-corridor] showcase workflow edges[3] id \"protected-action\" \"comic\" -> \"account_gate\" shares a 65.4px corridor with edges[15] id \"admin-denied\" \"admin_gate\" -> \"home\" at [348.8, 342] -> [414.2, 342] (segments 1 and 2; minimum 8px) — adjust route/via, bias, or channel coordinates so unrelated edges do not visually merge.",
+            "subject": {
+              "diagramType": "workflow",
+              "collection": "edges",
+              "index": 3,
+              "id": "protected-action",
+              "from": "comic",
+              "to": "account_gate"
+            },
+            "evidence": {
+              "otherRelationship": {
+                "diagramType": "workflow",
+                "collection": "edges",
+                "index": 15,
+                "id": "admin-denied",
+                "from": "admin_gate",
+                "to": "home"
+              },
+              "overlapLengthPx": 65.4,
+              "minimumPx": 8,
+              "from": [
+                348.8,
+                342
+              ],
+              "to": [
+                414.20000000000005,
+                342
+              ],
+              "segmentIndex": 1,
+              "otherSegmentIndex": 2
+            },
+            "supportedFixes": [
+              "adjust route/via, bias, or channel coordinates so unrelated edges do not visually merge"
+            ]
+          },
+          {
+            "code": "composition/ambiguous-corridor",
+            "severity": "error",
+            "message": "[composition/ambiguous-corridor] showcase workflow edges[4] id \"already-logged\" \"account_gate\" -> \"social\" shares a 204.4px corridor with edges[7] id \"issue-token\" \"auth_api\" -> \"jwt\" at [923.6, 626] -> [1128, 626] (segments 1 and 2; minimum 8px) — adjust route/via, bias, or channel coordinates so unrelated edges do not visually merge.",
+            "subject": {
+              "diagramType": "workflow",
+              "collection": "edges",
+              "index": 4,
+              "id": "already-logged",
+              "from": "account_gate",
+              "to": "social"
+            },
+            "evidence": {
+              "otherRelationship": {
+                "diagramType": "workflow",
+                "collection": "edges",
+                "index": 7,
+                "id": "issue-token",
+                "from": "auth_api",
+                "to": "jwt"
+              },
+              "overlapLengthPx": 204.4,
+              "minimumPx": 8,
+              "from": [
+                923.6,
+                626
+              ],
+              "to": [
+                1128,
+                626
+              ],
+              "segmentIndex": 1,
+              "otherSegmentIndex": 2
+            },
+            "supportedFixes": [
+              "adjust route/via, bias, or channel coordinates so unrelated edges do not visually merge"
+            ]
+          },
+          {
+            "code": "composition/ambiguous-corridor",
+            "severity": "error",
+            "message": "[composition/ambiguous-corridor] showcase workflow edges[5] id \"need-login\" \"account_gate\" -> \"auth_page\" shares a 113.8px corridor with edges[9] id \"check-chapter-auth\" \"chapter\" -> \"history_gate\" at [716.6, 292.2] -> [716.6, 406] (segments 2 and 2; minimum 8px) — adjust route/via, bias, or channel coordinates so unrelated edges do not visually merge.",
+            "subject": {
+              "diagramType": "workflow",
+              "collection": "edges",
+              "index": 5,
+              "id": "need-login",
+              "from": "account_gate",
+              "to": "auth_page"
+            },
+            "evidence": {
+              "otherRelationship": {
+                "diagramType": "workflow",
+                "collection": "edges",
+                "index": 9,
+                "id": "check-chapter-auth",
+                "from": "chapter",
+                "to": "history_gate"
+              },
+              "overlapLengthPx": 113.8,
+              "minimumPx": 8,
+              "from": [
+                716.6,
+                292.2
+              ],
+              "to": [
+                716.6,
+                406
+              ],
+              "segmentIndex": 2,
+              "otherSegmentIndex": 2
+            },
+            "supportedFixes": [
+              "adjust route/via, bias, or channel coordinates so unrelated edges do not visually merge"
+            ]
+          },
+          {
+            "code": "composition/ambiguous-corridor",
+            "severity": "error",
+            "message": "[composition/ambiguous-corridor] showcase workflow edges[7] id \"issue-token\" \"auth_api\" -> \"jwt\" shares a 116px corridor with edges[8] id \"retry-social\" \"jwt\" -> \"social\" at [1144, 300] -> [1144, 416] (segments 3 and 1; minimum 8px) — adjust route/via, bias, or channel coordinates so unrelated edges do not visually merge.",
+            "subject": {
+              "diagramType": "workflow",
+              "collection": "edges",
+              "index": 7,
+              "id": "issue-token",
+              "from": "auth_api",
+              "to": "jwt"
+            },
+            "evidence": {
+              "otherRelationship": {
+                "diagramType": "workflow",
+                "collection": "edges",
+                "index": 8,
+                "id": "retry-social",
+                "from": "jwt",
+                "to": "social"
+              },
+              "overlapLengthPx": 116,
+              "minimumPx": 8,
+              "from": [
+                1144,
+                300
+              ],
+              "to": [
+                1144,
+                416
+              ],
+              "segmentIndex": 3,
+              "otherSegmentIndex": 1
+            },
+            "supportedFixes": [
+              "adjust route/via, bias, or channel coordinates so unrelated edges do not visually merge"
+            ]
+          }
+        ],
+        "provenance": "absent",
+        "update": {
+          "status": "unavailable",
+          "installedVersion": null,
+          "availableVersion": null,
+          "releaseNotes": null,
+          "checkedAt": null,
+          "source": null,
+          "noticeRequired": false,
+          "noticeText": null,
+          "reason": "disabled"
+        }
+      },
+      "execution": "embedded-in-deliver"
+    },
+    "deliver": {
+      "status": "not-run",
+      "execution": "blocked-by-validate"
+    }
+  },
+  "browserCheck": {
+    "requested": true,
+    "ran": false
+  },
+  "diagnostics": [
+    {
+      "code": "i18n/locale-fallback",
+      "severity": "warning",
+      "message": "meta.locale \"vi\" has no bundled catalog and no usable meta.translations; the Viewer chrome and <html lang> fall back to English.",
+      "subject": {
+        "diagramType": "workflow",
+        "path": "/meta/locale"
+      },
+      "evidence": {
+        "locale": "vi",
+        "bundledLocales": [
+          "en",
+          "zh-CN",
+          "zh-TW",
+          "es",
+          "ko",
+          "ar"
+        ]
+      },
+      "supportedFixes": [
+        "Supply meta.translations for this locale.",
+        "Use a bundled locale: en, zh-CN, zh-TW, es, ko, ar."
+      ]
+    },
+    {
+      "code": "composition/proper-crossing",
+      "severity": "error",
+      "message": "[composition/proper-crossing] showcase workflow edges[0] id \"open-home\" \"start\" -> \"home\" crosses edges[13] id \"visit-admin\" \"jwt\" -> \"admin_gate\" at [32, 226] (segments 2 and 1) — adjust route/via, bias, or channel coordinates so the edges use separate lane corridors.",
+      "subject": {
+        "diagramType": "workflow",
+        "collection": "edges",
+        "index": 0,
+        "id": "open-home",
+        "from": "start",
+        "to": "home"
+      },
+      "evidence": {
+        "otherRelationship": {
+          "diagramType": "workflow",
+          "collection": "edges",
+          "index": 13,
+          "id": "visit-admin",
+          "from": "jwt",
+          "to": "admin_gate"
+        },
+        "point": [
+          32,
+          226
+        ],
+        "segmentIndex": 2,
+        "otherSegmentIndex": 1
+      },
+      "supportedFixes": [
+        "adjust route/via, bias, or channel coordinates so the edges use separate lane corridors"
+      ]
+    },
+    {
+      "code": "composition/proper-crossing",
+      "severity": "error",
+      "message": "[composition/proper-crossing] showcase workflow edges[3] id \"protected-action\" \"comic\" -> \"account_gate\" crosses edges[15] id \"admin-denied\" \"admin_gate\" -> \"home\" at [521, 527] (segments 3 and 1) — adjust route/via, bias, or channel coordinates so the edges use separate lane corridors.",
+      "subject": {
+        "diagramType": "workflow",
+        "collection": "edges",
+        "index": 3,
+        "id": "protected-action",
+        "from": "comic",
+        "to": "account_gate"
+      },
+      "evidence": {
+        "otherRelationship": {
+          "diagramType": "workflow",
+          "collection": "edges",
+          "index": 15,
+          "id": "admin-denied",
+          "from": "admin_gate",
+          "to": "home"
+        },
+        "point": [
+          521,
+          527
+        ],
+        "segmentIndex": 3,
+        "otherSegmentIndex": 1
+      },
+      "supportedFixes": [
+        "adjust route/via, bias, or channel coordinates so the edges use separate lane corridors"
+      ]
+    },
+    {
+      "code": "composition/proper-crossing",
+      "severity": "error",
+      "message": "[composition/proper-crossing] showcase workflow edges[4] id \"already-logged\" \"account_gate\" -> \"social\" crosses edges[12] id \"open-history\" \"save_history\" -> \"history_page\" at [1128, 579] (segments 2 and 0) — adjust route/via, bias, or channel coordinates so the edges use separate lane corridors.",
+      "subject": {
+        "diagramType": "workflow",
+        "collection": "edges",
+        "index": 4,
+        "id": "already-logged",
+        "from": "account_gate",
+        "to": "social"
+      },
+      "evidence": {
+        "otherRelationship": {
+          "diagramType": "workflow",
+          "collection": "edges",
+          "index": 12,
+          "id": "open-history",
+          "from": "save_history",
+          "to": "history_page"
+        },
+        "point": [
+          1128,
+          579
+        ],
+        "segmentIndex": 2,
+        "otherSegmentIndex": 0
+      },
+      "supportedFixes": [
+        "adjust route/via, bias, or channel coordinates so the edges use separate lane corridors"
+      ]
+    },
+    {
+      "code": "composition/proper-crossing",
+      "severity": "error",
+      "message": "[composition/proper-crossing] showcase workflow edges[7] id \"issue-token\" \"auth_api\" -> \"jwt\" crosses edges[12] id \"open-history\" \"save_history\" -> \"history_page\" at [1144, 579] (segments 3 and 0) — adjust route/via, bias, or channel coordinates so the edges use separate lane corridors.",
+      "subject": {
+        "diagramType": "workflow",
+        "collection": "edges",
+        "index": 7,
+        "id": "issue-token",
+        "from": "auth_api",
+        "to": "jwt"
+      },
+      "evidence": {
+        "otherRelationship": {
+          "diagramType": "workflow",
+          "collection": "edges",
+          "index": 12,
+          "id": "open-history",
+          "from": "save_history",
+          "to": "history_page"
+        },
+        "point": [
+          1144,
+          579
+        ],
+        "segmentIndex": 3,
+        "otherSegmentIndex": 0
+      },
+      "supportedFixes": [
+        "adjust route/via, bias, or channel coordinates so the edges use separate lane corridors"
+      ]
+    },
+    {
+      "code": "composition/ambiguous-corridor",
+      "severity": "error",
+      "message": "[composition/ambiguous-corridor] showcase workflow edges[3] id \"protected-action\" \"comic\" -> \"account_gate\" shares a 65.4px corridor with edges[15] id \"admin-denied\" \"admin_gate\" -> \"home\" at [348.8, 342] -> [414.2, 342] (segments 1 and 2; minimum 8px) — adjust route/via, bias, or channel coordinates so unrelated edges do not visually merge.",
+      "subject": {
+        "diagramType": "workflow",
+        "collection": "edges",
+        "index": 3,
+        "id": "protected-action",
+        "from": "comic",
+        "to": "account_gate"
+      },
+      "evidence": {
+        "otherRelationship": {
+          "diagramType": "workflow",
+          "collection": "edges",
+          "index": 15,
+          "id": "admin-denied",
+          "from": "admin_gate",
+          "to": "home"
+        },
+        "overlapLengthPx": 65.4,
+        "minimumPx": 8,
+        "from": [
+          348.8,
+          342
+        ],
+        "to": [
+          414.20000000000005,
+          342
+        ],
+        "segmentIndex": 1,
+        "otherSegmentIndex": 2
+      },
+      "supportedFixes": [
+        "adjust route/via, bias, or channel coordinates so unrelated edges do not visually merge"
+      ]
+    },
+    {
+      "code": "composition/ambiguous-corridor",
+      "severity": "error",
+      "message": "[composition/ambiguous-corridor] showcase workflow edges[4] id \"already-logged\" \"account_gate\" -> \"social\" shares a 204.4px corridor with edges[7] id \"issue-token\" \"auth_api\" -> \"jwt\" at [923.6, 626] -> [1128, 626] (segments 1 and 2; minimum 8px) — adjust route/via, bias, or channel coordinates so unrelated edges do not visually merge.",
+      "subject": {
+        "diagramType": "workflow",
+        "collection": "edges",
+        "index": 4,
+        "id": "already-logged",
+        "from": "account_gate",
+        "to": "social"
+      },
+      "evidence": {
+        "otherRelationship": {
+          "diagramType": "workflow",
+          "collection": "edges",
+          "index": 7,
+          "id": "issue-token",
+          "from": "auth_api",
+          "to": "jwt"
+        },
+        "overlapLengthPx": 204.4,
+        "minimumPx": 8,
+        "from": [
+          923.6,
+          626
+        ],
+        "to": [
+          1128,
+          626
+        ],
+        "segmentIndex": 1,
+        "otherSegmentIndex": 2
+      },
+      "supportedFixes": [
+        "adjust route/via, bias, or channel coordinates so unrelated edges do not visually merge"
+      ]
+    },
+    {
+      "code": "composition/ambiguous-corridor",
+      "severity": "error",
+      "message": "[composition/ambiguous-corridor] showcase workflow edges[5] id \"need-login\" \"account_gate\" -> \"auth_page\" shares a 113.8px corridor with edges[9] id \"check-chapter-auth\" \"chapter\" -> \"history_gate\" at [716.6, 292.2] -> [716.6, 406] (segments 2 and 2; minimum 8px) — adjust route/via, bias, or channel coordinates so unrelated edges do not visually merge.",
+      "subject": {
+        "diagramType": "workflow",
+        "collection": "edges",
+        "index": 5,
+        "id": "need-login",
+        "from": "account_gate",
+        "to": "auth_page"
+      },
+      "evidence": {
+        "otherRelationship": {
+          "diagramType": "workflow",
+          "collection": "edges",
+          "index": 9,
+          "id": "check-chapter-auth",
+          "from": "chapter",
+          "to": "history_gate"
+        },
+        "overlapLengthPx": 113.8,
+        "minimumPx": 8,
+        "from": [
+          716.6,
+          292.2
+        ],
+        "to": [
+          716.6,
+          406
+        ],
+        "segmentIndex": 2,
+        "otherSegmentIndex": 2
+      },
+      "supportedFixes": [
+        "adjust route/via, bias, or channel coordinates so unrelated edges do not visually merge"
+      ]
+    },
+    {
+      "code": "composition/ambiguous-corridor",
+      "severity": "error",
+      "message": "[composition/ambiguous-corridor] showcase workflow edges[7] id \"issue-token\" \"auth_api\" -> \"jwt\" shares a 116px corridor with edges[8] id \"retry-social\" \"jwt\" -> \"social\" at [1144, 300] -> [1144, 416] (segments 3 and 1; minimum 8px) — adjust route/via, bias, or channel coordinates so unrelated edges do not visually merge.",
+      "subject": {
+        "diagramType": "workflow",
+        "collection": "edges",
+        "index": 7,
+        "id": "issue-token",
+        "from": "auth_api",
+        "to": "jwt"
+      },
+      "evidence": {
+        "otherRelationship": {
+          "diagramType": "workflow",
+          "collection": "edges",
+          "index": 8,
+          "id": "retry-social",
+          "from": "jwt",
+          "to": "social"
+        },
+        "overlapLengthPx": 116,
+        "minimumPx": 8,
+        "from": [
+          1144,
+          300
+        ],
+        "to": [
+          1144,
+          416
+        ],
+        "segmentIndex": 3,
+        "otherSegmentIndex": 1
+      },
+      "supportedFixes": [
+        "adjust route/via, bias, or channel coordinates so unrelated edges do not visually merge"
+      ]
+    }
+  ],
+  "evidence": {
+    "receipt": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\comichub-reader.finalize.json",
+    "summaryReceipt": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\comichub-reader.finalize-summary.json"
+  },
+  "visualReview": "not-requested",
+  "failedStage": "validate",
+  "finishedAt": "2026-10-24T08:44:39.720Z",
+  "durationMs": 2786,
+  "update": {
+    "status": "unavailable",
+    "installedVersion": null,
+    "availableVersion": null,
+    "releaseNotes": null,
+    "checkedAt": null,
+    "source": null,
+    "noticeRequired": false,
+    "noticeText": null,
+    "reason": "cache-unavailable"
+  }
+}

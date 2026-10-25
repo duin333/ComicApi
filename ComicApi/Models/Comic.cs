@@ -19,4 +19,5 @@ public class Comic
     public List<Chapter> Chapters { get; set; } = new();
     public List<Comment> Comments { get; set; } = new();
     public List<Follow> Follows { get; set; } = new();
+    public List<Rating> Ratings { get; set; } = new();
 }

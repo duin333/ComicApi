@@ -1,0 +1,172 @@
+{
+  "schemaVersion": 1,
+  "ok": false,
+  "command": "finalize",
+  "status": "fail",
+  "type": "workflow",
+  "quality": "showcase",
+  "startedAt": "2026-10-24T08:47:44.051Z",
+  "specification": {
+    "path": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\candidate.json",
+    "sha256": "9365cef4b69b43011983358b12267c83a9142e07c8061eeea57b8e0023df7ce4",
+    "bytes": 10130
+  },
+  "artifact": {
+    "path": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\comichub-reader.html"
+  },
+  "stages": {
+    "validate": {
+      "status": "fail",
+      "exitCode": 1,
+      "durationMs": null,
+      "command": [
+        "D:\\nodejs\\node.exe",
+        "C:\\Users\\THIEN QUOC AN\\.agents\\skills\\archify\\bin\\archify.mjs",
+        "deliver",
+        "workflow",
+        "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\candidate.json",
+        "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\comichub-reader.html",
+        "--quality",
+        "showcase",
+        "--repo-root",
+        "D:\\btCsharp_ThayThuan\\ComicApi",
+        "--json"
+      ],
+      "receipt": {
+        "schemaVersion": 1,
+        "ok": false,
+        "command": "deliver",
+        "receiptId": "11c51963-f884-4e80-9521-60a4b9ce84ab",
+        "stage": "render",
+        "type": "workflow",
+        "input": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\candidate.json",
+        "output": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\comichub-reader.html",
+        "error": "Workflow edge \"logged-in-social\" cannot satisfy route preset \"outside-right\": candidate violates perpendicular endpoint-side direction.",
+        "diagnostics": [
+          {
+            "code": "workflow/route-preset-conflict",
+            "severity": "error",
+            "message": "Workflow edge \"logged-in-social\" cannot satisfy route preset \"outside-right\": candidate violates perpendicular endpoint-side direction.",
+            "subject": {
+              "diagramType": "workflow",
+              "edge": "logged-in-social",
+              "from": "account_gate",
+              "to": "social",
+              "route": "outside-right"
+            },
+            "evidence": {
+              "invariant": "perpendicular endpoint-side direction",
+              "attemptedCandidateFamily": "outside-right",
+              "points": [
+                [
+                  613.6,
+                  626
+                ],
+                [
+                  1074,
+                  626
+                ],
+                [
+                  1074,
+                  816
+                ],
+                [
+                  818,
+                  816
+                ]
+              ],
+              "fromSide": "right",
+              "toSide": "left",
+              "requiredEndpointStubPx": 8,
+              "requiredInteriorSegmentPx": 16,
+              "requiredDirectClearancePx": 28
+            },
+            "supportedFixes": []
+          }
+        ],
+        "provenance": "absent",
+        "update": {
+          "status": "unavailable",
+          "installedVersion": null,
+          "availableVersion": null,
+          "releaseNotes": null,
+          "checkedAt": null,
+          "source": null,
+          "noticeRequired": false,
+          "noticeText": null,
+          "reason": "disabled"
+        }
+      },
+      "execution": "embedded-in-deliver"
+    },
+    "deliver": {
+      "status": "not-run",
+      "execution": "blocked-by-validate"
+    }
+  },
+  "browserCheck": {
+    "requested": true,
+    "ran": false
+  },
+  "diagnostics": [
+    {
+      "code": "workflow/route-preset-conflict",
+      "severity": "error",
+      "message": "Workflow edge \"logged-in-social\" cannot satisfy route preset \"outside-right\": candidate violates perpendicular endpoint-side direction.",
+      "subject": {
+        "diagramType": "workflow",
+        "edge": "logged-in-social",
+        "from": "account_gate",
+        "to": "social",
+        "route": "outside-right"
+      },
+      "evidence": {
+        "invariant": "perpendicular endpoint-side direction",
+        "attemptedCandidateFamily": "outside-right",
+        "points": [
+          [
+            613.6,
+            626
+          ],
+          [
+            1074,
+            626
+          ],
+          [
+            1074,
+            816
+          ],
+          [
+            818,
+            816
+          ]
+        ],
+        "fromSide": "right",
+        "toSide": "left",
+        "requiredEndpointStubPx": 8,
+        "requiredInteriorSegmentPx": 16,
+        "requiredDirectClearancePx": 28
+      },
+      "supportedFixes": []
+    }
+  ],
+  "evidence": {
+    "receipt": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\review-6\\comichub-reader.finalize.json",
+    "summaryReceipt": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\review-6\\comichub-reader.finalize-summary.json"
+  },
+  "visualReview": "not-requested",
+  "failedStage": "validate",
+  "finishedAt": "2026-10-24T08:47:45.184Z",
+  "durationMs": 1132,
+  "update": {
+    "status": "unavailable",
+    "installedVersion": null,
+    "availableVersion": null,
+    "releaseNotes": null,
+    "checkedAt": null,
+    "source": null,
+    "noticeRequired": false,
+    "noticeText": null,
+    "reason": "cache-unavailable"
+  }
+}

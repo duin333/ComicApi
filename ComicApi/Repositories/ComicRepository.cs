@@ -41,6 +41,8 @@ public class ComicRepository : Repository<Comic>, IComicRepository
             "views" => q.OrderByDescending(c => c.ViewCount),
             "newest" => q.OrderByDescending(c => c.CreatedAt),
             "title" => q.OrderBy(c => c.Title),
+            "rating" => q.OrderByDescending(c => c.Ratings.Average(r => (double?)r.Stars) ?? 0)
+             .ThenByDescending(c => c.Ratings.Count),
             _ => q.OrderByDescending(c => c.UpdatedAt)
         };
         ordered = ordered.ThenBy(c => c.Id);
@@ -62,7 +64,9 @@ public class ComicRepository : Repository<Comic>, IComicRepository
                 UpdatedAt = c.UpdatedAt,
                 Genres = c.ComicGenres.Select(cg => cg.Genre.Name).ToList(),
                 ChapterCount = c.Chapters.Count(ch => !ch.IsHidden),
-                LatestChapterNumber = c.Chapters.Where(ch => !ch.IsHidden).Max(ch => (int?)ch.Number)
+                LatestChapterNumber = c.Chapters.Where(ch => !ch.IsHidden).Max(ch => (int?)ch.Number),
+                RatingCount = c.Ratings.Count,
+                RatingAverage = c.Ratings.Average(r => (double?)r.Stars)
             })
             .ToListAsync();
 
@@ -94,7 +98,9 @@ public class ComicRepository : Repository<Comic>, IComicRepository
                     .ToList(),
                 ChapterCount = c.Chapters.Count(ch => !ch.IsHidden),
                 FollowCount = c.Follows.Count,
-                CommentCount = c.Comments.Count
+                CommentCount = c.Comments.Count,
+                RatingCount = c.Ratings.Count,
+                RatingAverage = c.Ratings.Average(r => (double?)r.Stars)
             })
             .FirstOrDefaultAsync();
 

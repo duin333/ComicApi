@@ -16,6 +16,7 @@ public class AppDbContext : DbContext
     public DbSet<Follow> Follows => Set<Follow>();
     public DbSet<ReadingHistory> ReadingHistories => Set<ReadingHistory>();
     public DbSet<Comment> Comments => Set<Comment>();
+    public DbSet<Rating> Ratings => Set<Rating>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

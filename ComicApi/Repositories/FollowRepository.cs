@@ -51,7 +51,9 @@ public class FollowRepository : Repository<Follow>, IFollowRepository
                 UpdatedAt = f.Comic.UpdatedAt,
                 Genres = f.Comic.ComicGenres.Select(cg => cg.Genre.Name).ToList(),
                 ChapterCount = f.Comic.Chapters.Count(ch => !ch.IsHidden),
-                LatestChapterNumber = f.Comic.Chapters.Where(ch => !ch.IsHidden).Max(ch => (int?)ch.Number)
+                LatestChapterNumber = f.Comic.Chapters.Where(ch => !ch.IsHidden).Max(ch => (int?)ch.Number),
+                RatingCount = f.Comic.Ratings.Count,
+                RatingAverage = f.Comic.Ratings.Average(r => (double?)r.Stars)
             })
             .ToListAsync();
 

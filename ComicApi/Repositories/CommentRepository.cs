@@ -33,7 +33,8 @@ public class CommentRepository : Repository<Comment>, ICommentRepository
                 UserId = c.UserId,
                 Username = c.User.Username,
                 Content = c.Content,
-                CreatedAt = c.CreatedAt
+                CreatedAt = c.CreatedAt,
+                GifUrl = c.GifUrl
             })
             .ToListAsync();
 

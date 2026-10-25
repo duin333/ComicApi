@@ -1,0 +1,558 @@
+{
+    "schema_version":  2,
+    "diagram_type":  "workflow",
+    "meta":  {
+                 "title":  "Hành trình người dùng ComicHub",
+                 "locale":  "en",
+                 "quality_profile":  "showcase",
+                 "output":  ".archify/workflow-comichub-reader-20261024-154357/comichub-reader.html",
+                 "repository":  {
+                                    "url":  "https://github.com/duin333/ComicApi.git",
+                                    "provider":  "github",
+                                    "link_mode":  "web",
+                                    "revision":  "e283f764e62695e560b4b6463638aac5e80d1c3d"
+                                }
+             },
+    "lanes":  [
+                  {
+                      "id":  "reader",
+                      "label":  "Người đọc"
+                  },
+                  {
+                      "id":  "site",
+                      "label":  "Giao diện wwwroot"
+                  },
+                  {
+                      "id":  "identity",
+                      "label":  "Tài khoản và JWT"
+                  },
+                  {
+                      "id":  "api",
+                      "label":  "API ComicHub"
+                  },
+                  {
+                      "id":  "admin",
+                      "label":  "Quản trị"
+                  }
+              ],
+    "phases":  [
+                   {
+                       "id":  "discover",
+                       "label":  "Khám phá",
+                       "fromCol":  0,
+                       "toCol":  1,
+                       "variant":  "emphasis"
+                   },
+                   {
+                       "id":  "reader_phase",
+                       "label":  "Đọc và tài khoản",
+                       "fromCol":  2,
+                       "toCol":  4
+                   }
+               ],
+    "mainPath":  [
+                     "start",
+                     "home",
+                     "comic",
+                     "chapter",
+                     "history_gate",
+                     "history"
+                 ],
+    "nodes":  [
+                  {
+                      "id":  "start",
+                      "lane":  "reader",
+                      "col":  0,
+                      "type":  "external",
+                      "icon":  "person",
+                      "label":  "Mở ComicHub",
+                      "sublabel":  "Khách hoặc thành viên",
+                      "sources":  [
+                                      {
+                                          "path":  "ComicApi/wwwroot/index.html",
+                                          "line":  1,
+                                          "end_line":  8
+                                      }
+                                  ]
+                  },
+                  {
+                      "id":  "home",
+                      "lane":  "site",
+                      "col":  0,
+                      "type":  "frontend",
+                      "label":  "Xem danh sách truyện",
+                      "sublabel":  "Tìm · lọc · truyện hot",
+                      "sources":  [
+                                      {
+                                          "path":  "ComicApi/wwwroot/index.html",
+                                          "line":  13,
+                                          "end_line":  44
+                                      },
+                                      {
+                                          "path":  "ComicApi/wwwroot/js/pages/home.js",
+                                          "line":  62,
+                                          "end_line":  88
+                                      }
+                                  ]
+                  },
+                  {
+                      "id":  "comic",
+                      "lane":  "site",
+                      "col":  1,
+                      "type":  "frontend",
+                      "label":  "Mở trang truyện",
+                      "sublabel":  "Chi tiết · chương · bình luận",
+                      "sources":  [
+                                      {
+                                          "path":  "ComicApi/wwwroot/js/pages/comic.js",
+                                          "line":  26,
+                                          "end_line":  41
+                                      },
+                                      {
+                                          "path":  "ComicApi/Controllers/ComicsController.cs",
+                                          "line":  20,
+                                          "end_line":  65
+                                      },
+                                      {
+                                          "path":  "ComicApi/Controllers/CommentsController.cs",
+                                          "line":  25,
+                                          "end_line":  34
+                                      }
+                                  ]
+                  },
+                  {
+                      "id":  "chapter",
+                      "lane":  "site",
+                      "col":  2,
+                      "type":  "frontend",
+                      "label":  "Đọc chương",
+                      "sublabel":  "Ảnh · chuyển chương trước / sau",
+                      "sources":  [
+                                      {
+                                          "path":  "ComicApi/wwwroot/reader.html",
+                                          "line":  10,
+                                          "end_line":  19
+                                      },
+                                      {
+                                          "path":  "ComicApi/wwwroot/js/pages/reader.js",
+                                          "line":  20,
+                                          "end_line":  63
+                                      },
+                                      {
+                                          "path":  "ComicApi/wwwroot/js/pages/reader.js",
+                                          "line":  105,
+                                          "end_line":  117
+                                      }
+                                  ]
+                  },
+                  {
+                      "id":  "account_gate",
+                      "lane":  "identity",
+                      "col":  2,
+                      "type":  "security",
+                      "icon":  "decision",
+                      "label":  "Đã đăng nhập?",
+                      "sublabel":  "Theo dõi / viết bình luận",
+                      "sources":  [
+                                      {
+                                          "path":  "ComicApi/wwwroot/js/pages/comic.js",
+                                          "line":  161,
+                                          "end_line":  163
+                                      },
+                                      {
+                                          "path":  "ComicApi/Controllers/FollowsController.cs",
+                                          "line":  11,
+                                          "end_line":  14
+                                      },
+                                      {
+                                          "path":  "ComicApi/Controllers/CommentsController.cs",
+                                          "line":  36,
+                                          "end_line":  38
+                                      }
+                                  ]
+                  },
+                  {
+                      "id":  "auth_page",
+                      "lane":  "identity",
+                      "col":  3,
+                      "type":  "frontend",
+                      "label":  "Đăng ký / đăng nhập + JWT",
+                      "sublabel":  "POST /api/Auth/register hoặc /login",
+                      "sources":  [
+                                      {
+                                          "path":  "ComicApi/wwwroot/js/pages/register.js",
+                                          "end_line":  37,
+                                          "line":  34
+                                      },
+                                      {
+                                          "path":  "ComicApi/Controllers/AuthController.cs",
+                                          "end_line":  63,
+                                          "line":  26
+                                      },
+                                      {
+                                          "path":  "ComicApi/Controllers/AuthController.cs",
+                                          "end_line":  82,
+                                          "line":  78
+                                      }
+                                  ]
+                  },
+                  {
+                      "id":  "jwt",
+                      "lane":  "identity",
+                      "col":  4,
+                      "type":  "security",
+                      "label":  "Lưu JWT",
+                      "sublabel":  "localStorage · gửi Bearer cho API",
+                      "sources":  [
+                                      {
+                                          "path":  "ComicApi/wwwroot/js/utils/auth.js",
+                                          "line":  7,
+                                          "end_line":  12
+                                      },
+                                      {
+                                          "path":  "ComicApi/wwwroot/js/api/client.js",
+                                          "line":  23,
+                                          "end_line":  38
+                                      },
+                                      {
+                                          "path":  "ComicApi/Extensions/ServiceExtensions.cs",
+                                          "line":  21,
+                                          "end_line":  43
+                                      }
+                                  ]
+                  },
+                  {
+                      "id":  "social",
+                      "lane":  "api",
+                      "col":  4,
+                      "yOffset":  -72,
+                      "type":  "backend",
+                      "label":  "Theo dõi / bình luận",
+                      "sublabel":  "Đọc bình luận vẫn công khai",
+                      "sources":  [
+                                      {
+                                          "path":  "ComicApi/Controllers/FollowsController.cs",
+                                          "line":  34,
+                                          "end_line":  68
+                                      },
+                                      {
+                                          "path":  "ComicApi/Controllers/CommentsController.cs",
+                                          "line":  25,
+                                          "end_line":  65
+                                      },
+                                      {
+                                          "path":  "ComicApi/wwwroot/js/pages/comic.js",
+                                          "line":  203,
+                                          "end_line":  257
+                                      }
+                                  ]
+                  },
+                  {
+                      "id":  "history_gate",
+                      "lane":  "site",
+                      "col":  3,
+                      "yOffset":  90,
+                      "type":  "security",
+                      "icon":  "decision",
+                      "label":  "Đã đăng nhập?",
+                      "sublabel":  "Khách tiếp tục, không lưu",
+                      "sources":  [
+                                      {
+                                          "path":  "ComicApi/wwwroot/js/pages/reader.js",
+                                          "line":  87,
+                                          "end_line":  91
+                                      }
+                                  ]
+                  },
+                  {
+                      "id":  "history",
+                      "lane":  "api",
+                      "col":  4,
+                      "yOffset":  72,
+                      "type":  "backend",
+                      "label":  "Lịch sử đọc",
+                      "sublabel":  "Lưu chương · GET /api/History",
+                      "sources":  [
+                                      {
+                                          "path":  "ComicApi/Controllers/HistoryController.cs",
+                                          "line":  8,
+                                          "end_line":  37
+                                      },
+                                      {
+                                          "path":  "ComicApi/wwwroot/js/pages/reader.js",
+                                          "line":  87,
+                                          "end_line":  91
+                                      },
+                                      {
+                                          "path":  "ComicApi/wwwroot/js/pages/history.js",
+                                          "line":  1,
+                                          "end_line":  3
+                                      }
+                                  ]
+                  },
+                  {
+                      "id":  "guest_continue",
+                      "lane":  "site",
+                      "col":  4,
+                      "yOffset":  90,
+                      "type":  "frontend",
+                      "label":  "Tiếp tục đọc",
+                      "sublabel":  "Không lưu lịch sử khách",
+                      "sources":  [
+                                      {
+                                          "path":  "ComicApi/wwwroot/js/pages/reader.js",
+                                          "line":  87,
+                                          "end_line":  91
+                                      }
+                                  ]
+                  },
+                  {
+                      "id":  "admin_user",
+                      "lane":  "admin",
+                      "col":  0,
+                      "type":  "external",
+                      "icon":  "person",
+                      "label":  "Quản trị viên",
+                      "sublabel":  "Đăng nhập với role Admin",
+                      "sources":  [
+                                      {
+                                          "path":  "ComicApi/wwwroot/js/pages/admin-comics.js",
+                                          "line":  1,
+                                          "end_line":  4
+                                      }
+                                  ]
+                  },
+                  {
+                      "id":  "admin_gate",
+                      "lane":  "admin",
+                      "col":  1,
+                      "type":  "security",
+                      "icon":  "decision",
+                      "label":  "Kiểm tra role Admin",
+                      "sublabel":  "Guard giao diện + [Authorize]",
+                      "sources":  [
+                                      {
+                                          "path":  "ComicApi/wwwroot/js/utils/admin.js",
+                                          "line":  3,
+                                          "end_line":  20
+                                      },
+                                      {
+                                          "path":  "ComicApi/Controllers/AdminComicsController.cs",
+                                          "line":  12,
+                                          "end_line":  15
+                                      },
+                                      {
+                                          "path":  "ComicApi/Controllers/AdminUsersController.cs",
+                                          "line":  10,
+                                          "end_line":  13
+                                      }
+                                  ]
+                  },
+                  {
+                      "id":  "admin_console",
+                      "lane":  "admin",
+                      "col":  2,
+                      "yOffset":  -50,
+                      "type":  "frontend",
+                      "label":  "Khu vực quản trị",
+                      "sublabel":  "Truyện · chương · thể loại · người dùng",
+                      "width":  230,
+                      "sources":  [
+                                      {
+                                          "path":  "ComicApi/wwwroot/js/pages/admin-comics.js",
+                                          "line":  1,
+                                          "end_line":  4
+                                      },
+                                      {
+                                          "path":  "ComicApi/wwwroot/js/pages/admin-chapters.js",
+                                          "line":  1,
+                                          "end_line":  4
+                                      },
+                                      {
+                                          "path":  "ComicApi/wwwroot/js/pages/admin-users.js",
+                                          "line":  1,
+                                          "end_line":  4
+                                      }
+                                  ]
+                  },
+                  {
+                      "id":  "admin_api",
+                      "lane":  "api",
+                      "col":  3,
+                      "type":  "backend",
+                      "label":  "API quản trị",
+                      "sublabel":  "CRUD truyện / chương / thể loại / user",
+                      "width":  230,
+                      "sources":  [
+                                      {
+                                          "path":  "ComicApi/Controllers/AdminComicsController.cs",
+                                          "line":  12,
+                                          "end_line":  15
+                                      },
+                                      {
+                                          "path":  "ComicApi/Controllers/AdminChaptersController.cs",
+                                          "line":  12,
+                                          "end_line":  15
+                                      },
+                                      {
+                                          "path":  "ComicApi/Controllers/AdminGenresController.cs",
+                                          "line":  11,
+                                          "end_line":  14
+                                      }
+                                  ]
+                  },
+                  {
+                      "id":  "admin_denied",
+                      "lane":  "admin",
+                      "col":  2,
+                      "yOffset":  70,
+                      "type":  "security",
+                      "icon":  "failure",
+                      "label":  "Từ chối truy cập",
+                      "sublabel":  "Reader / khách",
+                      "sources":  [
+                                      {
+                                          "path":  "ComicApi/wwwroot/js/utils/admin.js",
+                                          "line":  5,
+                                          "end_line":  20
+                                      }
+                                  ]
+                  }
+              ],
+    "edges":  [
+                  {
+                      "id":  "open-home",
+                      "from":  "start",
+                      "to":  "home",
+                      "label":  "mở trang chủ",
+                      "role":  "main",
+                      "variant":  "emphasis"
+                  },
+                  {
+                      "id":  "show-comic",
+                      "from":  "home",
+                      "to":  "comic",
+                      "label":  "chọn truyện",
+                      "role":  "main"
+                  },
+                  {
+                      "id":  "select-chapter",
+                      "from":  "comic",
+                      "to":  "chapter",
+                      "label":  "chọn chương",
+                      "role":  "main"
+                  },
+                  {
+                      "id":  "protected-action",
+                      "from":  "comic",
+                      "to":  "account_gate",
+                      "label":  "theo dõi / bình luận",
+                      "role":  "branch"
+                  },
+                  {
+                      "id":  "logged-in-social",
+                      "from":  "account_gate",
+                      "to":  "social",
+                      "label":  "đã có JWT",
+                      "role":  "branch",
+                      "variant":  "security"
+                  },
+                  {
+                      "id":  "login-required",
+                      "from":  "account_gate",
+                      "to":  "auth_page",
+                      "label":  "chưa đăng nhập",
+                      "role":  "branch",
+                      "variant":  "security"
+                  },
+                  {
+                      "id":  "issue-jwt",
+                      "from":  "auth_page",
+                      "to":  "jwt",
+                      "label":  "trả JWT",
+                      "role":  "return",
+                      "variant":  "security"
+                  },
+                  {
+                      "id":  "retry-action",
+                      "from":  "jwt",
+                      "to":  "social",
+                      "label":  "gửi Bearer token",
+                      "role":  "main",
+                      "variant":  "security"
+                  },
+                  {
+                      "id":  "check-history",
+                      "from":  "chapter",
+                      "to":  "history_gate",
+                      "label":  "sau khi mở chương",
+                      "role":  "branch"
+                  },
+                  {
+                      "id":  "save-progress",
+                      "from":  "history_gate",
+                      "to":  "history",
+                      "label":  "có JWT · ghi tiến độ",
+                      "role":  "branch",
+                      "variant":  "security"
+                  },
+                  {
+                      "id":  "guest-continues",
+                      "from":  "history_gate",
+                      "to":  "guest_continue",
+                      "label":  "khách · bỏ qua lưu",
+                      "role":  "branch"
+                  },
+                  {
+                      "id":  "admin-enter",
+                      "from":  "admin_user",
+                      "to":  "admin_gate",
+                      "label":  "mở /admin",
+                      "role":  "main",
+                      "variant":  "security"
+                  },
+                  {
+                      "id":  "admin-yes",
+                      "from":  "admin_gate",
+                      "to":  "admin_console",
+                      "label":  "được phép",
+                      "role":  "branch",
+                      "variant":  "security"
+                  },
+                  {
+                      "id":  "admin-no",
+                      "from":  "admin_gate",
+                      "to":  "admin_denied",
+                      "label":  "không có role Admin",
+                      "role":  "error",
+                      "variant":  "security"
+                  },
+                  {
+                      "id":  "admin-request",
+                      "from":  "admin_console",
+                      "to":  "admin_api",
+                      "label":  "CRUD kèm JWT",
+                      "role":  "main",
+                      "variant":  "security"
+                  }
+              ],
+    "cards":  [
+                  {
+                      "dot":  "violet",
+                      "title":  "Đăng ký và JWT",
+                      "items":  [
+                                    "Đăng ký công khai tạo tài khoản Reader; đăng ký và đăng nhập trả JWT.",
+                                    "Trình duyệt lưu token trong localStorage; API client tự gửi Authorization: Bearer.",
+                                    "Xem truyện và chương công khai. Theo dõi, viết bình luận và lịch sử đọc cần đăng nhập."
+                                ]
+                  },
+                  {
+                      "dot":  "rose",
+                      "title":  "Khu vực admin",
+                      "items":  [
+                                    "Cả giao diện và API quản trị đều kiểm tra role Admin.",
+                                    "Admin quản lý truyện, chương, thể loại và người dùng."
+                                ]
+                  }
+              ]
+}

@@ -19,6 +19,8 @@ public class ComicListItemDto
     public List<string> Genres { get; set; } = new();
     public int ChapterCount { get; set; }
     public int? LatestChapterNumber { get; set; }
+    public int RatingCount { get; set; }
+    public double? RatingAverage { get; set; }      // null nếu chưa có ai đánh giá
 }
 
 // Dùng cho trang chi tiết truyện
@@ -37,4 +39,6 @@ public class ComicDetailDto
     public int ChapterCount { get; set; }
     public int FollowCount { get; set; }
     public int CommentCount { get; set; }
+    public int RatingCount { get; set; }
+    public double? RatingAverage { get; set; }      // null nếu chưa có ai đánh giá
 }

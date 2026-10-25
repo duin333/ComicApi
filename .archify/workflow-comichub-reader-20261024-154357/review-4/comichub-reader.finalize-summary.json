@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "ok": false,
+  "command": "finalize",
+  "status": "fail",
+  "type": "workflow",
+  "quality": "showcase",
+  "specification": {
+    "path": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\candidate.json",
+    "sha256": "10142c983db3e374c54c85ff62998184a854b2760dcdc11d17f58b9df25720c3",
+    "bytes": 27759
+  },
+  "artifact": {
+    "path": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\comichub-reader.html"
+  },
+  "gates": {
+    "validate": "fail",
+    "deliver": "not-run",
+    "check": "not-run",
+    "browser-check": "not-run"
+  },
+  "failedStage": "validate",
+  "diagnostics": [
+    {
+      "code": "workflow/node-overlap",
+      "severity": "error",
+      "message": "Workflow nodes \"auth_page\" and \"history_gate\" are less than 8px apart in lane \"site\".",
+      "subject": {
+        "diagramType": "workflow",
+        "node": "history_gate",
+        "path": "/nodes/9"
+      },
+      "evidence": {
+        "lane": "site",
+        "minimumClearancePx": 8,
+        "nodes": [
+          {
+            "id": "auth_page",
+            "rect": {
+              "x": 774,
+              "y": 450,
+              "width": 172,
+              "height": 52
+            }
+          },
+          {
+            "id": "history_gate",
+            "rect": {
+              "x": 760,
+              "y": 400,
+              "width": 200,
+              "height": 52
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "diagnosticSummary": {
+    "total": 1,
+    "shown": 1,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\review-4\\comichub-reader.finalize.json",
+    "summaryReceipt": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\review-4\\comichub-reader.finalize-summary.json"
+  },
+  "visualReview": "not-requested",
+  "durationMs": 2730,
+  "browserCheck": {
+    "requested": true,
+    "ran": false
+  },
+  "nextAction": {
+    "action": "edit-in-place",
+    "candidate": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\candidate.json",
+    "constraint": "Preserve unaffected semantics and geometry; apply each diagnostic's supportedFixes, or the fix its message names, and do not replace the whole candidate.",
+    "then": "finalize-once"
+  }
+}

@@ -168,6 +168,10 @@ namespace ComicApi.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("GifUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
@@ -217,6 +221,33 @@ namespace ComicApi.Migrations
                         .IsUnique();
 
                     b.ToTable("genres", (string)null);
+                });
+
+            modelBuilder.Entity("ComicApi.Models.Rating", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ComicId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("Stars")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("UserId", "ComicId");
+
+                    b.HasIndex("ComicId");
+
+                    b.ToTable("ratings", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_ratings_stars", "Stars BETWEEN 1 AND 5");
+                        });
                 });
 
             modelBuilder.Entity("ComicApi.Models.ReadingHistory", b =>
@@ -376,6 +407,25 @@ namespace ComicApi.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("ComicApi.Models.Rating", b =>
+                {
+                    b.HasOne("ComicApi.Models.Comic", "Comic")
+                        .WithMany("Ratings")
+                        .HasForeignKey("ComicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ComicApi.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Comic");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("ComicApi.Models.ReadingHistory", b =>
                 {
                     b.HasOne("ComicApi.Models.Chapter", "Chapter")
@@ -417,6 +467,8 @@ namespace ComicApi.Migrations
                     b.Navigation("Comments");
 
                     b.Navigation("Follows");
+
+                    b.Navigation("Ratings");
                 });
 
             modelBuilder.Entity("ComicApi.Models.Genre", b =>

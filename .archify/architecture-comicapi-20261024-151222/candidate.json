@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Kiến trúc ComicApi",
+    "locale": "vi",
+    "output": ".archify/architecture-comicapi-20261024-151222/comicapi.html",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/duin333/ComicApi.git",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "e283f764e62695e560b4b6463638aac5e80d1c3d"
+    }
+  },
+  "components": [
+    {
+      "id": "browser",
+      "type": "external",
+      "label": "Trình duyệt",
+      "sublabel": "Giao diện tĩnh từ wwwroot",
+      "pos": [40, 190],
+      "size": [170, 82],
+      "sources": [
+        { "path": "ComicApi/wwwroot/index.html", "line": 1, "end_line": 8 },
+        { "path": "ComicApi/wwwroot/js/utils/chatWidget.js", "line": 143, "end_line": 156 }
+      ]
+    },
+    {
+      "id": "api",
+      "type": "backend",
+      "label": "ASP.NET Core API",
+      "sublabel": ".NET 8 · Controllers · dịch vụ ứng dụng",
+      "pos": [380, 170],
+      "size": [230, 122],
+      "sources": [
+        { "path": "ComicApi/Program.cs", "line": 10, "end_line": 15 },
+        { "path": "ComicApi/Controllers/ChatController.cs", "line": 11, "end_line": 37 },
+        { "path": "ComicApi/Services/Chat/ChatService.cs", "line": 60, "end_line": 80 }
+      ]
+    },
+    {
+      "id": "mysql",
+      "type": "database",
+      "label": "MySQL",
+      "sublabel": "EF Core · Pomelo · dữ liệu truyện",
+      "pos": [790, 75],
+      "size": [210, 92],
+      "sources": [
+        { "path": "ComicApi/Extensions/ServiceExtensions.cs", "line": 13, "end_line": 18 },
+        { "path": "ComicApi/Repositories/ChatRepository.cs", "line": 21, "end_line": 37 },
+        { "path": "ComicApi/Data/AppDbContext.cs", "line": 6, "end_line": 18 }
+      ]
+    },
+    {
+      "id": "openrouter",
+      "type": "cloud",
+      "label": "OpenRouter",
+      "sublabel": "HTTPS · /api/v1/chat/completions",
+      "pos": [790, 350],
+      "size": [230, 92],
+      "sources": [
+        { "path": "ComicApi/Program.cs", "line": 31, "end_line": 36 },
+        { "path": "ComicApi/Services/OpenRouterClient.cs", "line": 26, "end_line": 51 }
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "browser-api",
+      "from": "browser",
+      "to": "api",
+      "label": "HTTPS · gọi /api/*",
+      "variant": "emphasis"
+    },
+    {
+      "id": "api-mysql",
+      "from": "api",
+      "to": "mysql",
+      "label": "EF Core / Pomelo · truy vấn",
+      "variant": "default"
+    },
+    {
+      "id": "api-openrouter",
+      "from": "api",
+      "to": "openrouter",
+      "label": "HttpClient · Bearer API key",
+      "variant": "default"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Luồng web",
+      "items": [
+        "ASP.NET Core cùng host phục vụ trang wwwroot qua UseDefaultFiles và UseStaticFiles.",
+        "JavaScript phía trình duyệt gọi các endpoint /api/*; chat gửi POST /api/Chat."
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Luồng chatbot",
+      "items": [
+        "ChatService đọc danh mục truyện từ MySQL trước khi phân tích câu hỏi.",
+        "Khi cần AI, OpenRouterClient gửi yêu cầu chat completions; lỗi AI có thể trả câu dự phòng từ dữ liệu có sẵn.",
+        "Endpoint chat áp giới hạn 10 yêu cầu mỗi phút cho mỗi người dùng hoặc IP khách."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,178 @@
+{
+  "schemaVersion": 1,
+  "ok": false,
+  "command": "finalize",
+  "status": "fail",
+  "type": "workflow",
+  "quality": "showcase",
+  "startedAt": "2026-10-24T08:47:52.905Z",
+  "specification": {
+    "path": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\candidate.json",
+    "sha256": "0bf867200eb5731008fc14b82c31e4db20b20a5d245d896f51e37591a15c582e",
+    "bytes": 10104
+  },
+  "artifact": {
+    "path": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\comichub-reader.html"
+  },
+  "stages": {
+    "validate": {
+      "status": "fail",
+      "exitCode": 1,
+      "durationMs": null,
+      "command": [
+        "D:\\nodejs\\node.exe",
+        "C:\\Users\\THIEN QUOC AN\\.agents\\skills\\archify\\bin\\archify.mjs",
+        "deliver",
+        "workflow",
+        "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\candidate.json",
+        "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\comichub-reader.html",
+        "--quality",
+        "showcase",
+        "--repo-root",
+        "D:\\btCsharp_ThayThuan\\ComicApi",
+        "--json"
+      ],
+      "receipt": {
+        "schemaVersion": 1,
+        "ok": false,
+        "command": "deliver",
+        "receiptId": "40b3c8a8-f70c-4866-b1c4-3d6dc0a604d9",
+        "stage": "render",
+        "type": "workflow",
+        "input": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\candidate.json",
+        "output": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\comichub-reader.html",
+        "error": "Workflow edge \"login-required\" cannot satisfy route preset \"bottom-channel\": candidate violates readable segment rhythm.",
+        "diagnostics": [
+          {
+            "code": "workflow/route-preset-conflict",
+            "severity": "error",
+            "message": "Workflow edge \"login-required\" cannot satisfy route preset \"bottom-channel\": candidate violates readable segment rhythm.",
+            "subject": {
+              "diagramType": "workflow",
+              "edge": "login-required",
+              "from": "account_gate",
+              "to": "auth_page",
+              "route": "bottom-channel"
+            },
+            "evidence": {
+              "invariant": "readable segment rhythm",
+              "segmentIndex": 1,
+              "actualSegmentPx": 6,
+              "requiredSegmentPx": 16,
+              "attemptedCandidateFamily": "bottom-channel",
+              "points": [
+                [
+                  613.6,
+                  626
+                ],
+                [
+                  613.6,
+                  684
+                ],
+                [
+                  607.6,
+                  684
+                ],
+                [
+                  607.6,
+                  236
+                ]
+              ],
+              "fromSide": "right",
+              "toSide": "left",
+              "requiredEndpointStubPx": 8,
+              "requiredInteriorSegmentPx": 16,
+              "requiredDirectClearancePx": 28
+            },
+            "supportedFixes": []
+          }
+        ],
+        "provenance": "absent",
+        "update": {
+          "status": "unavailable",
+          "installedVersion": null,
+          "availableVersion": null,
+          "releaseNotes": null,
+          "checkedAt": null,
+          "source": null,
+          "noticeRequired": false,
+          "noticeText": null,
+          "reason": "disabled"
+        }
+      },
+      "execution": "embedded-in-deliver"
+    },
+    "deliver": {
+      "status": "not-run",
+      "execution": "blocked-by-validate"
+    }
+  },
+  "browserCheck": {
+    "requested": true,
+    "ran": false
+  },
+  "diagnostics": [
+    {
+      "code": "workflow/route-preset-conflict",
+      "severity": "error",
+      "message": "Workflow edge \"login-required\" cannot satisfy route preset \"bottom-channel\": candidate violates readable segment rhythm.",
+      "subject": {
+        "diagramType": "workflow",
+        "edge": "login-required",
+        "from": "account_gate",
+        "to": "auth_page",
+        "route": "bottom-channel"
+      },
+      "evidence": {
+        "invariant": "readable segment rhythm",
+        "segmentIndex": 1,
+        "actualSegmentPx": 6,
+        "requiredSegmentPx": 16,
+        "attemptedCandidateFamily": "bottom-channel",
+        "points": [
+          [
+            613.6,
+            626
+          ],
+          [
+            613.6,
+            684
+          ],
+          [
+            607.6,
+            684
+          ],
+          [
+            607.6,
+            236
+          ]
+        ],
+        "fromSide": "right",
+        "toSide": "left",
+        "requiredEndpointStubPx": 8,
+        "requiredInteriorSegmentPx": 16,
+        "requiredDirectClearancePx": 28
+      },
+      "supportedFixes": []
+    }
+  ],
+  "evidence": {
+    "receipt": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\review-7\\comichub-reader.finalize.json",
+    "summaryReceipt": "D:\\btCsharp_ThayThuan\\ComicApi\\.archify\\workflow-comichub-reader-20261024-154357\\review-7\\comichub-reader.finalize-summary.json"
+  },
+  "visualReview": "not-requested",
+  "failedStage": "validate",
+  "finishedAt": "2026-10-24T08:47:54.422Z",
+  "durationMs": 1516,
+  "update": {
+    "status": "unavailable",
+    "installedVersion": null,
+    "availableVersion": null,
+    "releaseNotes": null,
+    "checkedAt": null,
+    "source": null,
+    "noticeRequired": false,
+    "noticeText": null,
+    "reason": "cache-unavailable"
+  }
+}
