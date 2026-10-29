@@ -46,6 +46,25 @@ public class ComicsController : ControllerBase
         return Ok(result.Items);
     }
 
+    // GET /api/Comics/featured?take=5: truyện nổi bật cho banner trang chủ (nhiều lượt xem, kèm mô tả)
+    [HttpGet("featured")]
+    public async Task<IActionResult> Featured([FromQuery] int take = 5)
+    {
+        var top = await _comics.SearchAsync(new ComicQueryParams
+        {
+            Sort = "views",
+            PageSize = Math.Clamp(take, 1, 10)
+        });
+
+        var result = new List<ComicDetailDto>();
+        foreach (var c in top.Items)
+        {
+            var detail = await _comics.GetDetailAsync(c.Id);
+            if (detail is not null) result.Add(detail);
+        }
+        return Ok(result);
+    }
+
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById(int id)
     {

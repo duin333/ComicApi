@@ -103,6 +103,64 @@
       </div>`;
     }
 
+    // "Hành động" -> "hanh-dong" (dùng để ghép tên file ảnh thể loại)
+    const slug = text => String(text || '').toLowerCase().replace(/đ/g, 'd')
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+
+    // Nhãn ruy-băng của thẻ truyện, tính từ dữ liệu thật
+    function comicLabel(c, hotIds) {
+        if (hotIds && hotIds.has(c.id)) return { cls: 'hot', text: 'HOT' };
+
+        const updated = parseDate(c.updatedAt);
+        if (updated && Date.now() - updated.getTime() < 3 * 24 * 3600 * 1000) return { cls: 'new', text: 'MỚI' };
+
+        if (c.status === 'Completed') return { cls: 'done', text: 'HOÀN THÀNH' };
+        if (c.ratingCount >= 5 && c.ratingAverage >= 4.5) return { cls: 'top', text: 'TOP ĐÁNH GIÁ' };
+        return { cls: 'ongoing', text: 'ĐANG RA' };
+    }
+
+    // Thẻ truyện kiểu mới: bìa bên trái, ruy-băng ngang, thông tin bên phải
+    function comicCardX(c, ctx = {}) {
+        const cover = c.coverUrl ? escapeHtml(c.coverUrl) : placeholder;
+        const label = comicLabel(c, ctx.hotIds);
+        const genres = (c.genres || []).slice(0, 2).map(escapeHtml).join(', ');
+        const meta = [escapeHtml(c.author || 'Đang cập nhật'), genres].filter(Boolean).join(' · ');
+        const latest = c.latestChapterNumber ? `Chương ${c.latestChapterNumber}` : 'Chưa có chương';
+        const rating = c.ratingCount
+            ? `${stars(c.ratingAverage)} <span class="cx-score">${Number(c.ratingAverage).toFixed(1)}</span>
+         <span class="cx-count">(${formatNumber(c.ratingCount)})</span>`
+            : '<span class="cx-count">Chưa có đánh giá</span>';
+
+        return `
+      <a class="cx-card" href="/comic.html?id=${c.id}" title="${escapeHtml(c.title)}">
+        <div class="cx-ribbon cx-${label.cls}">${label.text}</div>
+        <div class="cx-cover">
+          <img src="${cover}" alt="" loading="lazy" onerror="this.onerror=null;this.src=UI.placeholder">
+        </div>
+        <div class="cx-body">
+          <div class="cx-title">${escapeHtml(c.title)}</div>
+          <div class="cx-meta">${meta}</div>
+          <div class="cx-meta">${latest} · ${formatNumber(c.viewCount)} lượt xem</div>
+          <div class="cx-foot">
+            <div class="cx-rating">${rating}</div>
+            <span class="cx-detail">Chi tiết</span>
+          </div>
+        </div>
+      </a>`;
+    }
+
+    // Khung xương hiện trong lúc chờ dữ liệu (thay cho vòng quay)
+    const skeletonCards = n => Array.from({ length: n }, () => `
+    <div class="cx-skel" aria-hidden="true">
+      <div class="skel skel-cover"></div>
+      <div class="skel-body">
+        <div class="skel skel-line" style="width:75%"></div>
+        <div class="skel skel-line" style="width:55%"></div>
+        <div class="skel skel-line" style="width:65%"></div>
+      </div>
+    </div>`).join('');
+
     // Thanh phân trang: « 1 … 4 5 [6] 7 8 … 20 »
     function renderPagination(container, page, totalPages, onChange) {
         if (totalPages <= 1) {
@@ -603,7 +661,7 @@
 
     return {
         placeholder, escapeHtml, formatNumber, formatDate, timeAgo,
-        spinner, message, stars, ratingLine, comicCard, chapterLabel, renderPagination,
-        renderNavbar, getTheme, setTheme,
+        spinner, message, stars, ratingLine, comicCard, slug, comicLabel, comicCardX, skeletonCards,
+        chapterLabel, renderPagination, renderNavbar, getTheme, setTheme,
     };
 })();
