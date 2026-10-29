@@ -41,6 +41,7 @@ public class ComicRepository : Repository<Comic>, IComicRepository
             "views" => q.OrderByDescending(c => c.ViewCount),
             "newest" => q.OrderByDescending(c => c.CreatedAt),
             "title" => q.OrderBy(c => c.Title),
+            "follows" => q.OrderByDescending(c => c.Follows.Count),
             "rating" => q.OrderByDescending(c => c.Ratings.Average(r => (double?)r.Stars) ?? 0)
              .ThenByDescending(c => c.Ratings.Count),
             _ => q.OrderByDescending(c => c.UpdatedAt)
