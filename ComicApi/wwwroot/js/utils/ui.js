@@ -267,6 +267,51 @@
         mail: svg('<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>'),
         bubble: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5 3h14a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3h-6.2l-4.6 3.9A.8.8 0 0 1 6.9 20.7V17H5a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3z"/></svg>',
     };
+    // ================== Trạng thái trống ==================
+    // Khi có ảnh minh họa riêng, điền đường dẫn vào đây (ví dụ '/img/empty/empty-follow.svg').
+    // Để trống thì dùng biểu tượng có sẵn.
+    const EMPTY_IMAGES = { search: '', follow: '', history: '', comments: '' };
+
+    const EMPTY_ICONS = {
+        search: svg('<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5M8.5 11h5"/>'),
+        follow: svg('<path d="M12 21s-7.5-4.6-9.6-9.3A5.6 5.6 0 0 1 12 6.6a5.6 5.6 0 0 1 9.6 5.1C19.5 16.4 12 21 12 21z"/>'),
+        history: svg('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/>'),
+        comments: svg('<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1.1-4.6A8 8 0 1 1 21 12z"/>'),
+    };
+
+    function emptyState({ kind = 'search', title, text = '', href = '', label = '' }) {
+        const img = EMPTY_IMAGES[kind];
+        const art = img
+            ? `<img class="empty-img" src="${escapeHtml(img)}" alt="">`
+            : `<div class="empty-icon">${EMPTY_ICONS[kind] || EMPTY_ICONS.search}</div>`;
+
+        return `
+      <div class="empty-state">
+        ${art}
+        <h3>${escapeHtml(title)}</h3>
+        ${text ? `<p class="text-muted">${escapeHtml(text)}</p>` : ''}
+        ${href ? `<a class="btn btn-brand" href="${escapeHtml(href)}">${escapeHtml(label || 'Quay lại')}</a>` : ''}
+      </div>`;
+    }
+
+    // Nút "lên đầu trang" ở góc dưới bên trái, chỉ hiện khi đã cuộn xuống
+    function initBackToTop() {
+        if (location.pathname.startsWith('/admin/')) return;
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'to-top';
+        btn.title = 'Lên đầu trang';
+        btn.setAttribute('aria-label', 'Lên đầu trang');
+        btn.innerHTML = svg('<path d="M6 15l6-6 6 6"/>');
+        document.body.appendChild(btn);
+
+        const onScroll = () => btn.classList.toggle('show', window.scrollY > 600);
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+
+        btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    }
 
     // ================== Chế độ sáng/tối ==================
     const THEME_KEY = 'comichub_theme';
@@ -693,6 +738,7 @@
 
     renderNavbar();
     renderFooter();
+    initBackToTop();
 
     // Nút chat nổi trên mọi trang (trừ khu quản trị)
     if (!location.pathname.startsWith('/admin/')) {
@@ -704,6 +750,6 @@
     return {
         placeholder, escapeHtml, formatNumber, formatDate, timeAgo, parseDate,
         spinner, message, stars, ratingLine, comicCard, slug, comicLabel, comicCardX, skeletonCards,
-        posterCard, toast, chapterLabel, renderPagination, renderNavbar, getTheme, setTheme,
+        posterCard, toast, emptyState, chapterLabel, renderPagination, renderNavbar, getTheme, setTheme,
     };
 })();

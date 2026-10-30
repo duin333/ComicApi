@@ -338,11 +338,13 @@
         renderPills();
     }
 
-    const emptyState = () => `
-    <div class="col-12 text-center py-5">
-      <p class="text-muted mb-3">Không tìm thấy truyện nào phù hợp.</p>
-      <a class="btn btn-pill-outline" href="/index.html?browse=1">Xóa bộ lọc</a>
-    </div>`;
+    const emptyState = () => UI.emptyState({
+        kind: 'search',
+        title: 'Không tìm thấy truyện nào',
+        text: 'Thử đổi từ khóa hoặc bỏ bớt bộ lọc nhé.',
+        href: '/index.html?browse=1',
+        label: 'Xóa bộ lọc',
+    });
 
     async function loadList() {
         const id = ++reqId;

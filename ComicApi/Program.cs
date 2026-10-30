@@ -79,6 +79,22 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// Địa chỉ không tồn tại (không phải API hay file) thì hiện trang 404 của website
+app.UseStatusCodePages(async context =>
+{
+    var response = context.HttpContext.Response;
+    var path = context.HttpContext.Request.Path;
+
+    var isApi = path.StartsWithSegments("/api") || path.StartsWithSegments("/swagger");
+    var isFile = Path.HasExtension(path.Value ?? string.Empty);   // ảnh, js, css... thì giữ 404 trống
+
+    if (response.StatusCode == StatusCodes.Status404NotFound && !isApi && !isFile)
+    {
+        response.ContentType = "text/html; charset=utf-8";
+        await response.SendFileAsync(Path.Combine(app.Environment.WebRootPath, "404.html"));
+    }
+});
+
 app.UseHttpsRedirection();
 app.UseDefaultFiles();
 app.UseStaticFiles();
