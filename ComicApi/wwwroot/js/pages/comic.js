@@ -2,9 +2,17 @@
     const root = document.getElementById('comicRoot');
     const id = parseInt(new URLSearchParams(location.search).get('id'));
     const COMMENT_PAGE_SIZE = 10;
+    const NEW_CHAPTER_MS = 3 * 24 * 3600 * 1000;     // chương tạo trong 3 ngày gần đây thì gắn nhãn "Mới"
+    const DESC_LIMIT = 380;                           // mô tả dài hơn thì thu gọn
     const $ = elId => document.getElementById(elId);
+    const esc = UI.escapeHtml;
 
     const me = Auth.isLoggedIn() ? Auth.getUser() : null;   // người đang đăng nhập (nếu có)
+
+    const SHARE_ICON =
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" ' +
+        'stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/>' +
+        '<circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>';
 
     const EMOJIS = [
         '😀', '😁', '😂', '🤣', '😊', '😍', '🥰', '😘', '😎', '🤩', '🥳', '😅',
@@ -32,139 +40,206 @@
 
     const emptySummary = () => ({ average: 0, count: 0, distribution: [0, 0, 0, 0, 0], myRating: null });
 
+    let comic = null;
     let chapters = [];            // sắp theo số chương tăng dần (đúng như server trả về)
     let newestFirst = true;       // hiển thị chương mới nhất lên đầu
+    let chapterFilter = '';       // chữ đang gõ trong ô tìm chương
+    let lastRead = null;          // chương đọc gần nhất của người dùng (nếu có)
     let following = false;        // tôi có đang theo dõi truyện này không
     let rating = emptySummary();  // tổng hợp đánh giá của truyện
     let commentPage = 1;
     let selectedGif = null;       // GIF đang chọn cho bình luận sắp gửi
 
-    const notFound = text => `
-    <div class="text-center py-5">
-      <h4 class="mb-3">${UI.escapeHtml(text)}</h4>
-      <a class="btn btn-warning" href="index.html">Về trang chủ</a>
+    const notFoundHtml = text => `
+    <div class="container py-5 text-center">
+      <div class="nf-code">404</div>
+      <h2 class="mb-2">${esc(text)}</h2>
+      <p class="text-muted">Có thể truyện đã bị xóa hoặc đường dẫn không đúng.</p>
+      <a class="btn btn-brand" href="/index.html">Về trang chủ</a>
     </div>`;
 
     // Thiếu hoặc sai ?id= trên địa chỉ
     if (!id) {
-        root.innerHTML = notFound('Không tìm thấy truyện');
+        root.innerHTML = notFoundHtml('Không tìm thấy truyện');
         return;
     }
 
     (async function init() {
-        root.innerHTML = `<div class="row">${UI.spinner()}</div>`;
+        root.innerHTML = '<div class="hero-skel" style="height:420px"></div>';
         try {
             // Gọi 3 API cùng lúc cho nhanh. Đánh giá lỗi thì vẫn hiện trang với đánh giá trống
-            const [comic, list, summary] = await Promise.all([
+            const [c, list, summary] = await Promise.all([
                 Api.get('/api/Comics/' + id),
                 Api.get(`/api/Comics/${id}/chapters`),
                 Api.get(`/api/comics/${id}/ratings`).catch(() => emptySummary()),
             ]);
+            comic = c;
             chapters = list;
             rating = summary;
-            render(comic);
+            render();
         } catch (err) {
             root.innerHTML = err.status === 404
-                ? notFound('Không tìm thấy truyện')
-                : `<div class="row">${UI.message(err.message)}</div>`;
+                ? notFoundHtml('Không tìm thấy truyện')
+                : `<div class="container py-5"><div class="row">${UI.message(err.message)}</div></div>`;
         }
     })();
 
-    // ---------- Dựng trang ----------
-    function render(comic) {
+    // =====================================================================
+    // DỰNG TRANG
+    // =====================================================================
+    function render() {
         document.title = `${comic.title} - ComicHub`;
 
-        const cover = comic.coverUrl ? UI.escapeHtml(comic.coverUrl) : UI.placeholder;
+        const cover = comic.coverUrl ? esc(comic.coverUrl) : UI.placeholder;
         const done = comic.status === 'Completed';
-
-        const genres = comic.genres.map(g =>
-            `<a class="badge text-bg-secondary text-decoration-none me-1"
-          href="index.html?genreId=${g.id}">${UI.escapeHtml(g.name)}</a>`).join('');
-
-        const stat = (value, label, elId) => `
-      <div class="col">
-        <div class="bg-white rounded shadow-sm p-2">
-          <div class="fw-bold" ${elId ? `id="${elId}"` : ''}>${UI.formatNumber(value)}</div>
-          <div class="small text-muted">${label}</div>
-        </div>
-      </div>`;
+        const firstGenre = comic.genres[0];
+        const chips = comic.genres
+            .map(g => `<a class="detail-chip" href="/index.html?genreId=${g.id}">${esc(g.name)}</a>`).join('');
+        const infoChips = comic.genres
+            .map(g => `<a class="badge text-bg-secondary text-decoration-none me-1" href="/index.html?genreId=${g.id}">${esc(g.name)}</a>`).join('')
+            || '<span class="text-muted">Chưa phân loại</span>';
 
         const first = chapters[0];
         const last = chapters[chapters.length - 1];
         const readButtons = chapters.length
-            ? `<a class="btn btn-warning" href="reader.html?id=${first.id}">Đọc từ đầu</a>
-         <a class="btn btn-outline-dark" href="reader.html?id=${last.id}">Chương mới nhất</a>`
-            : '<button class="btn btn-secondary" disabled>Chưa có chương</button>';
+            ? `<a class="btn btn-brand btn-lg" href="/reader.html?id=${first.id}">Đọc từ đầu</a>
+         <a class="btn btn-outline-light btn-lg" href="/reader.html?id=${last.id}">Chương mới nhất</a>`
+            : '<button class="btn btn-secondary btn-lg" disabled>Chưa có chương</button>';
 
-        root.innerHTML = `
-      <div class="row g-4">
-        <div class="col-12 col-md-4 col-lg-3">
-          <div class="cover-wrap shadow-sm rounded">
-            <img src="${cover}" alt="${UI.escapeHtml(comic.title)}"
-                 onerror="this.onerror=null;this.src=UI.placeholder">
-          </div>
-        </div>
-
-        <div class="col-12 col-md-8 col-lg-9">
-          <h2 class="mb-2">${UI.escapeHtml(comic.title)}</h2>
-          <div class="mb-2">
-            <span class="badge ${done ? 'text-bg-success' : 'text-bg-primary'}">${done ? 'Hoàn thành' : 'Đang ra'}</span>
-            <span class="text-muted ms-2">Tác giả: ${UI.escapeHtml(comic.author || 'Đang cập nhật')}</span>
-            <span class="text-muted ms-2">· Cập nhật ${UI.timeAgo(comic.updatedAt)}</span>
-            <span id="ratingInline" class="ms-2"></span>
-          </div>
-          <div class="mb-3">${genres}</div>
-
-          <div class="row row-cols-2 row-cols-sm-4 g-2 mb-3 text-center">
-            ${stat(comic.viewCount, 'Lượt xem')}
-            ${stat(chapters.length, 'Chương')}
-            ${stat(comic.followCount, 'Theo dõi', 'followStat')}
-            ${stat(comic.commentCount, 'Bình luận', 'commentStat')}
-          </div>
-
-          <h6 class="text-uppercase text-muted">Giới thiệu</h6>
-          <p class="comic-description">${UI.escapeHtml(comic.description || 'Chưa có mô tả.')}</p>
-
-          <div id="readButtons" class="d-flex gap-2 flex-wrap">
-            ${readButtons}
-            <button id="followBtn" type="button" class="btn btn-outline-dark">+ Theo dõi</button>
-          </div>
-        </div>
-      </div>
-
-      <div id="ratingCard" class="card shadow-sm border-0 mt-4">
-        <div class="card-header bg-white"><strong>Đánh giá</strong></div>
-        <div id="ratingBody" class="card-body"></div>
-      </div>
-
-      <div class="card shadow-sm border-0 mt-4">
-        <div class="card-header bg-white d-flex justify-content-between align-items-center">
-          <strong>Danh sách chương (${chapters.length})</strong>
-          <button id="sortBtn" type="button" class="btn btn-sm btn-outline-secondary">Mới nhất trước</button>
-        </div>
-        <div id="chapterBox" class="list-group list-group-flush chapter-scroll"></div>
-      </div>
-
-      <div class="card shadow-sm border-0 mt-4">
-        <div class="card-header bg-white">
-          <strong>Bình luận (<span id="commentCount">${UI.formatNumber(comic.commentCount)}</span>)</strong>
-        </div>
-        <div class="card-body">
-          <div id="commentFormBox" class="mb-3"></div>
-          <div id="commentList"></div>
-          <div id="commentPager" class="mt-3"></div>
-        </div>
+        const stat = (value, label, elId) => `
+      <div class="detail-stat">
+        <strong ${elId ? `id="${elId}"` : ''}>${UI.formatNumber(value)}</strong>
+        <span>${label}</span>
       </div>`;
 
-        const sortBtn = $('sortBtn');
-        sortBtn.addEventListener('click', () => {
-            newestFirst = !newestFirst;
-            sortBtn.textContent = newestFirst ? 'Mới nhất trước' : 'Cũ nhất trước';
-            renderChapters();
-        });
-        renderChapters();
+        const desc = comic.description || 'Truyện chưa có mô tả.';
+        const longDesc = desc.length > DESC_LIMIT;
+
+        root.innerHTML = `
+      <section class="detail-hero">
+        <div class="detail-bg" data-bg="${cover}"></div>
+        <div class="container detail-hero-inner">
+          <div class="detail-cover">
+            <img src="${cover}" alt="Bìa truyện ${esc(comic.title)}" onerror="this.onerror=null;this.src=UI.placeholder">
+          </div>
+          <div class="detail-info">
+            <nav class="detail-crumbs" aria-label="Đường dẫn">
+              <a href="/index.html">Trang chủ</a><span>/</span>
+              ${firstGenre ? `<a href="/index.html?genreId=${firstGenre.id}">${esc(firstGenre.name)}</a><span>/</span>` : ''}
+              <span>${esc(comic.title)}</span>
+            </nav>
+            <h1 class="detail-title">${esc(comic.title)}</h1>
+            <div class="detail-sub">
+              <span class="status-pill ${done ? 'done' : 'ongoing'}">${done ? 'Hoàn thành' : 'Đang ra'}</span>
+              <span>Tác giả: ${esc(comic.author || 'Đang cập nhật')}</span>
+              <span>Cập nhật ${UI.timeAgo(comic.updatedAt)}</span>
+            </div>
+            <div class="detail-genres">${chips}</div>
+            <div class="detail-rating"><span id="ratingInline"></span><a href="#danh-gia">Xem đánh giá</a></div>
+            <div class="detail-stats">
+              ${stat(comic.viewCount, 'Lượt xem')}
+              ${stat(chapters.length, 'Chương')}
+              ${stat(comic.followCount, 'Theo dõi', 'followStat')}
+              ${stat(comic.commentCount, 'Bình luận', 'commentStat')}
+            </div>
+            <div id="readButtons" class="detail-actions">
+              ${readButtons}
+              <button id="followBtn" type="button" class="btn btn-outline-light btn-lg">+ Theo dõi</button>
+              <button id="shareBtn" type="button" class="icon-btn share-btn" aria-label="Chia sẻ truyện" title="Chia sẻ">${SHARE_ICON}</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="detail-tabs-wrap">
+        <div class="container">
+          <nav id="detailTabs" class="detail-tabs" aria-label="Các phần của trang">
+            <a href="#gioi-thieu" data-tab="gioi-thieu" class="active">Giới thiệu</a>
+            <a href="#chuong" data-tab="chuong">Chương (<span id="tabChapters">${chapters.length}</span>)</a>
+            <a href="#danh-gia" data-tab="danh-gia">Đánh giá</a>
+            <a href="#binh-luan" data-tab="binh-luan">Bình luận (<span id="tabComments">${UI.formatNumber(comic.commentCount)}</span>)</a>
+          </nav>
+        </div>
+      </div>
+
+      <div class="container detail-body">
+        <section id="gioi-thieu" class="detail-section">
+          <h2 class="section-title mb-4">Giới thiệu</h2>
+          <div class="row g-4">
+            <div class="col-lg-8">
+              <div id="descBox" class="desc-text ${longDesc ? 'desc-clamp' : ''}">${esc(desc)}</div>
+              ${longDesc ? '<button id="descToggle" type="button" class="btn btn-link px-0">Xem thêm</button>' : ''}
+            </div>
+            <div class="col-lg-4">
+              <div class="info-card">
+                <dl>
+                  <dt>Tác giả</dt><dd>${esc(comic.author || 'Đang cập nhật')}</dd>
+                  <dt>Trạng thái</dt><dd>${done ? 'Hoàn thành' : 'Đang ra'}</dd>
+                  <dt>Thể loại</dt><dd>${infoChips}</dd>
+                  <dt>Số chương</dt><dd>${chapters.length}</dd>
+                  <dt>Ngày đăng</dt><dd>${UI.formatDate(comic.createdAt)}</dd>
+                  <dt>Cập nhật</dt><dd>${UI.timeAgo(comic.updatedAt)}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="chuong" class="detail-section">
+          <h2 class="section-title mb-4">Danh sách chương</h2>
+          <div class="chapter-tools">
+            <input id="chapterSearch" class="form-control" style="max-width:260px" type="search"
+                   placeholder="Tìm chương..." aria-label="Tìm chương">
+            <button id="sortBtn" type="button" class="btn btn-pill-outline btn-sm">Mới nhất trước</button>
+          </div>
+          <div id="chapterBox" class="chapter-list"></div>
+        </section>
+
+        <section id="danh-gia" class="detail-section">
+          <h2 class="section-title mb-4">Đánh giá</h2>
+          <div id="ratingCard" class="card border-0 shadow-sm">
+            <div id="ratingBody" class="card-body"></div>
+          </div>
+        </section>
+
+        <section id="binh-luan" class="detail-section">
+          <h2 class="section-title mb-4">Bình luận (<span id="commentCount">${UI.formatNumber(comic.commentCount)}</span>)</h2>
+          <div class="card border-0 shadow-sm">
+            <div class="card-body">
+              <div id="commentFormBox" class="mb-3"></div>
+              <div id="commentList"></div>
+              <div id="commentPager" class="mt-3"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="relatedSection" class="detail-section d-none">
+          <h2 id="relatedTitle" class="section-title mb-4">Có thể bạn cũng thích</h2>
+          <div id="relatedRow" class="poster-row"></div>
+        </section>
+      </div>`;
+
+        // Ảnh nền đặt bằng JS để xử lý an toàn mọi ký tự trong đường dẫn
+        const bg = root.querySelector('.detail-bg');
+        bg.style.backgroundImage = `url(${JSON.stringify(bg.dataset.bg)})`;
 
         $('followBtn').addEventListener('click', toggleFollow);
+        $('shareBtn').addEventListener('click', share);
+
+        $('descToggle')?.addEventListener('click', () => {
+            const clamped = $('descBox').classList.toggle('desc-clamp');
+            $('descToggle').textContent = clamped ? 'Xem thêm' : 'Thu gọn';
+        });
+
+        $('sortBtn').addEventListener('click', () => {
+            newestFirst = !newestFirst;
+            $('sortBtn').textContent = newestFirst ? 'Mới nhất trước' : 'Cũ nhất trước';
+            renderChapters();
+        });
+        $('chapterSearch').addEventListener('input', e => {
+            chapterFilter = e.target.value;
+            renderChapters();
+        });
 
         // Đánh giá: gắn sự kiện một lần ở thẻ cha (phần bên trong được vẽ lại mỗi khi có thay đổi)
         const ratingCard = $('ratingCard');
@@ -177,35 +252,74 @@
                 paintStars(rating.myRating || 0);                           // rời khỏi các sao: về số sao thật
         });
         ratingCard.addEventListener('click', onRatingClick);
-        renderRating();
 
         $('commentList').addEventListener('click', onCommentClick);
         $('commentList').addEventListener('error', onCommentImageError, true);   // bắt lỗi ảnh GIF hỏng
+
+        setupTabs();
+        renderChapters();
+        renderRating();
         renderCommentForm();
         loadComments();
         loadUserState();
+        loadRelated();
     }
 
+    // Thanh tab: tự sáng theo phần đang cuộn tới
+    function setupTabs() {
+        if (!('IntersectionObserver' in window)) return;
+
+        const tabs = [...document.querySelectorAll('#detailTabs a')];
+        const setActive = key => tabs.forEach(a => a.classList.toggle('active', a.dataset.tab === key));
+
+        const io = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) setActive(e.target.id); });
+        }, { rootMargin: '-30% 0px -60% 0px' });
+
+        ['gioi-thieu', 'chuong', 'danh-gia', 'binh-luan'].forEach(key => io.observe($(key)));
+    }
+
+    // =====================================================================
+    // DANH SÁCH CHƯƠNG
+    // =====================================================================
     function renderChapters() {
         const box = $('chapterBox');
-        const items = newestFirst ? [...chapters].reverse() : chapters;
+        const q = chapterFilter.trim().toLowerCase();
 
-        box.innerHTML = items.length
-            ? items.map(c => `
-          <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
-             href="reader.html?id=${c.id}">
-            <span>${UI.escapeHtml(UI.chapterLabel(c))}</span>
-            <span class="small text-muted text-nowrap ms-3">
-              ${UI.formatNumber(c.viewCount)} lượt xem · ${UI.formatDate(c.createdAt)}
-            </span>
-          </a>`).join('')
-            : '<div class="list-group-item text-muted">Truyện chưa có chương nào.</div>';
+        let items = newestFirst ? [...chapters].reverse() : [...chapters];
+        if (q) {
+            items = items.filter(c => /^\d+$/.test(q)
+                ? String(c.number).startsWith(q)                         // gõ số: khớp theo số chương
+                : UI.chapterLabel(c).toLowerCase().includes(q));         // gõ chữ: khớp theo tên chương
+        }
+
+        if (!items.length) {
+            box.innerHTML = `<div class="p-4 text-center text-muted">${chapters.length ? 'Không có chương nào khớp.' : 'Truyện chưa có chương nào.'}</div>`;
+            return;
+        }
+
+        box.innerHTML = items.map(c => {
+            const created = UI.parseDate(c.createdAt);
+            const isNew = created && Date.now() - created.getTime() < NEW_CHAPTER_MS;
+            const reading = lastRead && lastRead.chapterId === c.id;
+
+            return `
+        <a class="chapter-row ${reading ? 'reading' : ''}" href="/reader.html?id=${c.id}">
+          <span class="chapter-name">${esc(UI.chapterLabel(c))}
+            ${isNew ? '<span class="tag tag-new">Mới</span>' : ''}
+            ${reading ? '<span class="tag tag-reading">Đang đọc dở</span>' : ''}
+          </span>
+          <span class="chapter-meta">${UI.formatNumber(c.viewCount)} lượt xem · ${UI.formatDate(c.createdAt)}</span>
+        </a>`;
+        }).join('');
     }
 
-    // ---------- Theo dõi và "Đọc tiếp" ----------
+    // =====================================================================
+    // THEO DÕI, CHIA SẺ, "ĐỌC TIẾP"
+    // =====================================================================
     function paintFollow() {
         const btn = $('followBtn');
-        btn.className = following ? 'btn btn-dark' : 'btn btn-outline-dark';
+        btn.className = following ? 'btn btn-light btn-lg' : 'btn btn-outline-light btn-lg';
         btn.textContent = following ? '✓ Đang theo dõi' : '+ Theo dõi';
     }
 
@@ -215,19 +329,36 @@
         const btn = $('followBtn');
         btn.disabled = true;
         try {
+            // Server trả về trạng thái mới, dùng luôn để cập nhật nút và số người theo dõi
             const res = following
                 ? await Api.del(`/api/Follows/${id}`)
                 : await Api.post(`/api/Follows/${id}`);
             following = res.isFollowing;
             $('followStat').textContent = UI.formatNumber(res.followCount);
             paintFollow();
+            UI.toast(following ? 'Đã thêm vào truyện đang theo dõi' : 'Đã bỏ theo dõi truyện');
         } catch (err) {
-            alert(err.message);
+            UI.toast(err.message, 'danger');
         } finally {
             btn.disabled = false;
         }
     }
 
+    async function share() {
+        try {
+            if (navigator.share) {
+                await navigator.share({ title: comic.title, url: location.href });   // điện thoại: mở bảng chia sẻ
+                return;
+            }
+            await navigator.clipboard.writeText(location.href);                     // máy tính: chép liên kết
+            UI.toast('Đã sao chép liên kết truyện');
+        } catch (err) {
+            if (err && err.name === 'AbortError') return;                           // người dùng tự đóng bảng chia sẻ
+            UI.toast('Không sao chép được liên kết', 'danger');
+        }
+    }
+
+    // Đã đăng nhập thì hỏi server: mình có đang theo dõi không, và đã đọc tới chương nào
     async function loadUserState() {
         if (!me) return;
         try {
@@ -240,16 +371,41 @@
             paintFollow();
 
             if (last) {
+                lastRead = last;
                 const label = UI.chapterLabel({ number: last.chapterNumber, title: last.chapterTitle });
                 $('readButtons').insertAdjacentHTML('afterbegin',
-                    `<a class="btn btn-success" href="reader.html?id=${last.chapterId}">Đọc tiếp: ${UI.escapeHtml(label)}</a>`);
+                    `<a class="btn btn-light btn-lg" href="/reader.html?id=${last.chapterId}">Đọc tiếp: ${esc(label)}</a>`);
+                renderChapters();                            // đánh dấu "Đang đọc dở" ở danh sách chương
             }
         } catch {
             /* lỗi thì bỏ qua, các nút vẫn dùng được */
         }
     }
 
-    // ---------- Đánh giá sao ----------
+    // =====================================================================
+    // CÙNG THỂ LOẠI
+    // =====================================================================
+    async function loadRelated() {
+        const section = $('relatedSection');
+        const genre = comic.genres[0];
+        if (!genre) return;
+
+        try {
+            const data = await Api.get(`/api/Comics?genreId=${genre.id}&pageSize=8&sort=views`);
+            const items = data.items.filter(c => c.id !== comic.id).slice(0, 7);
+            if (!items.length) return;
+
+            $('relatedTitle').textContent = `Cùng thể loại ${genre.name}`;
+            $('relatedRow').innerHTML = items.map(c => UI.posterCard(c)).join('');
+            section.classList.remove('d-none');
+        } catch {
+            /* lỗi thì ẩn mục này, không ảnh hưởng phần còn lại */
+        }
+    }
+
+    // =====================================================================
+    // ĐÁNH GIÁ SAO
+    // =====================================================================
     function paintStars(n) {
         document.querySelectorAll('#starInput .star-btn').forEach(b => {
             b.classList.toggle('on', Number(b.dataset.v) <= n);
@@ -310,10 +466,10 @@
 
         paintStars(s.myRating || 0);
 
-        // Dòng tóm tắt cạnh tên tác giả
+        // Dòng tóm tắt ở đầu trang
         $('ratingInline').innerHTML = has
-            ? `· ${UI.stars(s.average)} <span class="text-muted">${s.average.toFixed(1)} (${UI.formatNumber(s.count)})</span>`
-            : '<span class="text-muted">· Chưa có đánh giá</span>';
+            ? `${UI.stars(s.average)} <strong>${s.average.toFixed(1)}</strong> <span class="opacity-75">(${UI.formatNumber(s.count)} đánh giá)</span>`
+            : '<span class="opacity-75">Chưa có đánh giá</span>';
     }
 
     async function onRatingClick(e) {
@@ -337,7 +493,9 @@
         }
     }
 
-    // ---------- Bình luận ----------
+    // =====================================================================
+    // BÌNH LUẬN
+    // =====================================================================
     function renderCommentForm() {
         const box = $('commentFormBox');
 
@@ -436,7 +594,7 @@
         selectedGif = url;
         $('gifPreview').innerHTML = url
             ? `<div class="gif-preview">
-           <img src="${UI.escapeHtml(url)}" alt="GIF đã chọn">
+           <img src="${esc(url)}" alt="GIF đã chọn">
            <button type="button" class="btn-close" data-action="remove-gif" aria-label="Bỏ GIF"></button>
          </div>`
             : '';
@@ -480,6 +638,7 @@
             togglePanel(null);
             commentPage = 1;                 // bình luận mới nằm ở trang đầu
             await loadComments();
+            UI.toast('Đã gửi bình luận');
         } catch (err) {
             showCommentError(err.message);   // ví dụ: "Tài khoản đã bị khóa"
         } finally {
@@ -497,14 +656,14 @@
 
         return `
       <div class="d-flex gap-3 py-3 border-bottom" data-id="${c.id}">
-        <div class="avatar">${UI.escapeHtml((c.username || '?').charAt(0).toUpperCase())}</div>
+        <div class="avatar">${esc((c.username || '?').charAt(0).toUpperCase())}</div>
         <div class="flex-grow-1 comment-body">
           <div>
-            <strong>${UI.escapeHtml(c.username)}</strong>
+            <strong>${esc(c.username)}</strong>
             <span class="small text-muted ms-1">${UI.timeAgo(c.createdAt)}</span>
           </div>
-          ${text ? `<div class="comment-text ${onlyEmoji ? 'comment-emoji-only' : ''}">${UI.escapeHtml(text)}</div>` : ''}
-          ${c.gifUrl ? `<img class="comment-gif" src="${UI.escapeHtml(c.gifUrl)}" alt="GIF" loading="lazy">` : ''}
+          ${text ? `<div class="comment-text ${onlyEmoji ? 'comment-emoji-only' : ''}">${esc(text)}</div>` : ''}
+          ${c.gifUrl ? `<img class="comment-gif" src="${esc(c.gifUrl)}" alt="GIF" loading="lazy">` : ''}
         </div>
         ${canDelete
                 ? '<button type="button" class="btn btn-sm btn-outline-danger align-self-start" data-action="delete-comment">Xóa</button>'
@@ -524,8 +683,10 @@
                 return loadComments();
             }
 
-            $('commentCount').textContent = UI.formatNumber(data.totalItems);
-            $('commentStat').textContent = UI.formatNumber(data.totalItems);
+            const total = UI.formatNumber(data.totalItems);
+            $('commentCount').textContent = total;
+            $('commentStat').textContent = total;
+            $('tabComments').textContent = total;
 
             list.innerHTML = data.items.length
                 ? data.items.map(commentHtml).join('')
@@ -536,7 +697,7 @@
                 loadComments();
             });
         } catch (err) {
-            list.innerHTML = `<div class="alert alert-danger mb-0">${UI.escapeHtml(err.message)}</div>`;
+            list.innerHTML = `<div class="alert alert-danger mb-0">${esc(err.message)}</div>`;
         }
     }
 
@@ -549,8 +710,9 @@
         try {
             await Api.del('/api/comments/' + commentId);
             await loadComments();
+            UI.toast('Đã xóa bình luận');
         } catch (err) {
-            alert(err.message);
+            UI.toast(err.message, 'danger');
         }
     }
 

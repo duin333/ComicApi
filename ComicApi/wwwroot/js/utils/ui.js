@@ -161,6 +161,48 @@
       </div>
     </div>`).join('');
 
+    // Thẻ poster nhỏ cho hàng "Cùng thể loại"
+    function posterCard(c) {
+        const cover = c.coverUrl ? escapeHtml(c.coverUrl) : placeholder;
+        const badge = c.ratingCount
+            ? `<span class="poster-badge">★ ${Number(c.ratingAverage).toFixed(1)}</span>`
+            : '';
+        const latest = c.latestChapterNumber ? `Chương ${c.latestChapterNumber}` : 'Chưa có chương';
+
+        return `
+      <a class="poster-card" href="/comic.html?id=${c.id}" title="${escapeHtml(c.title)}">
+        <div class="poster-cover">
+          <img src="${cover}" alt="" loading="lazy" onerror="this.onerror=null;this.src=UI.placeholder">
+          ${badge}
+        </div>
+        <div class="poster-title">${escapeHtml(c.title)}</div>
+        <div class="poster-sub">${latest}</div>
+      </a>`;
+    }
+
+    // Thông báo nhỏ ở giữa đáy màn hình (thay cho alert)
+    function toast(text, type = 'success') {
+        let box = document.getElementById('uiToastBox');
+        if (!box) {
+            box = document.createElement('div');
+            box.id = 'uiToastBox';
+            box.className = 'ui-toast-box';
+            box.setAttribute('role', 'status');
+            box.setAttribute('aria-live', 'polite');
+            document.body.appendChild(box);
+        }
+
+        const el = document.createElement('div');
+        el.className = `ui-toast ui-toast-${type}`;
+        el.textContent = text;                  // textContent: an toàn trước XSS
+        box.appendChild(el);
+
+        setTimeout(() => {
+            el.classList.add('out');
+            setTimeout(() => el.remove(), 300);
+        }, 3200);
+    }
+
     // Thanh phân trang: « 1 … 4 5 [6] 7 8 … 20 »
     function renderPagination(container, page, totalPages, onChange) {
         if (totalPages <= 1) {
@@ -660,8 +702,8 @@
     }
 
     return {
-        placeholder, escapeHtml, formatNumber, formatDate, timeAgo,
+        placeholder, escapeHtml, formatNumber, formatDate, timeAgo, parseDate,
         spinner, message, stars, ratingLine, comicCard, slug, comicLabel, comicCardX, skeletonCards,
-        chapterLabel, renderPagination, renderNavbar, getTheme, setTheme,
+        posterCard, toast, chapterLabel, renderPagination, renderNavbar, getTheme, setTheme,
     };
 })();
