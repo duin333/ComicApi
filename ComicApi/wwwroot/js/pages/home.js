@@ -96,6 +96,7 @@
         <div class="container hero-inner">
           <div class="hero-cover-wrap">
             <img class="hero-cover" src="${cover}" alt="Bìa truyện ${esc(c.title)}"
+                 ${i === 0 ? 'fetchpriority="high"' : 'loading="lazy"'}
                  onerror="this.onerror=null;this.src=UI.placeholder">
             <a class="hero-readnow" href="/comic.html?id=${c.id}" data-readnow="${c.id}">Đọc ngay</a>
           </div>

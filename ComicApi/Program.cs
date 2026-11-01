@@ -2,8 +2,9 @@
 using ComicApi.Extensions;
 using ComicApi.Repositories;
 using ComicApi.Services;
-using System.Threading.RateLimiting;
 using ComicApi.Services.Chat;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -65,19 +66,19 @@ builder.Services.AddRateLimiter(options =>
             }));
 });
 
+// Nén HTML, JS, CSS, JSON để tải nhanh hơn
+builder.Services.AddResponseCompression(options => options.EnableForHttps = true);
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await db.Database.MigrateAsync();
     await DbSeeder.SeedAsync(db);
 }
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseResponseCompression();
 
 // Địa chỉ không tồn tại (không phải API hay file) thì hiện trang 404 của website
 app.UseStatusCodePages(async context =>
@@ -86,7 +87,7 @@ app.UseStatusCodePages(async context =>
     var path = context.HttpContext.Request.Path;
 
     var isApi = path.StartsWithSegments("/api") || path.StartsWithSegments("/swagger");
-    var isFile = Path.HasExtension(path.Value ?? string.Empty);   // ảnh, js, css... thì giữ 404 trống
+    var isFile = Path.HasExtension(path.Value ?? string.Empty);
 
     if (response.StatusCode == StatusCodes.Status404NotFound && !isApi && !isFile)
     {
@@ -95,13 +96,31 @@ app.UseStatusCodePages(async context =>
     }
 });
 
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
 app.UseHttpsRedirection();
 app.UseDefaultFiles();
-app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions
+{
+    OnPrepareResponse = ctx =>
+    {
+        // Ảnh bìa, ảnh thể loại, GIF hiếm khi đổi nên cho trình duyệt nhớ 7 ngày.
+        // Chỉ áp dụng khi chạy thật, còn lúc đang phát triển thì không để đỡ bị kẹt ảnh cũ.
+        var path = ctx.Context.Request.Path;
+        if (!app.Environment.IsDevelopment() &&
+            (path.StartsWithSegments("/uploads") || path.StartsWithSegments("/img")))
+        {
+            ctx.Context.Response.Headers.CacheControl = "public,max-age=604800";
+        }
+    }
+});
 
-app.UseAuthentication();    
+app.UseAuthentication();     // đứng trước UseAuthorization
 app.UseAuthorization();
-
 app.UseRateLimiter();
 
 app.MapControllers();

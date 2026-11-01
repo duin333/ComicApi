@@ -511,7 +511,7 @@
         box.innerHTML = `
       <div id="commentError" class="alert alert-danger d-none"></div>
       <textarea id="commentInput" class="form-control mb-2" rows="3" maxlength="1000"
-                placeholder="Viết bình luận của bạn..."></textarea>
+                placeholder="Viết bình luận của bạn..." aria-label="Nội dung bình luận"></textarea>
       <div id="gifPreview" class="mb-2"></div>
       <div class="d-flex justify-content-between align-items-center">
         <div class="d-flex align-items-center gap-2">
@@ -537,7 +537,7 @@
         <div class="small text-muted mt-3 mb-1">Hoặc dán link GIF (Giphy, Tenor)</div>
         <div class="input-group input-group-sm">
           <input id="gifUrlInput" class="form-control" placeholder="https://media.giphy.com/.../giphy.gif">
-          <button id="gifUrlUse" type="button" class="btn btn-outline-secondary">Dùng</button>
+          <button id="gifUrlUse" type="button" class="btn btn-outline-secondary" aria-label="Link ảnh GIF">Dùng</button>
         </div>
         <div id="gifUrlError" class="small text-danger mt-1"></div>
       </div>`;

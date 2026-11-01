@@ -1,5 +1,4 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap');
-body {
+﻿body {
     background: #f5f6f8;
 }
 
@@ -2759,4 +2758,153 @@ html {
     .auth-form {
         padding: 1.75rem 1.25rem;
     }
+}
+
+/* =====================================================================
+   10.12 HOÀN THIỆN: trợ năng, độ tương phản, khu quản trị
+   ===================================================================== */
+
+/* ---------- Chữ phụ đậm hơn để đạt độ tương phản chuẩn (chế độ tối giữ chữ sáng) ---------- */
+:root {
+    --bs-secondary-color: #5E5873;
+}
+
+[data-bs-theme="dark"] {
+    --bs-secondary-color: #B3ADC9;
+}
+
+/* ---------- Ruy-băng và nhãn: màu đủ tương phản với chữ ---------- */
+.cx-new {
+    background: #2E7D32;
+}
+
+.cx-done {
+    background: #1F6FBF;
+}
+
+.cx-top {
+    background: #F5A623;
+    color: #2B1E4A;
+}
+
+.status-pill.done {
+    background: #1F6FBF;
+}
+
+.tag-new {
+    background: #2E7D32;
+}
+
+/* ---------- Bàn phím: viền focus rõ ràng, liên kết "Bỏ qua menu" ---------- */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 3px solid var(--teal-400);
+    outline-offset: 2px;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--teal-600);
+    box-shadow: 0 0 0 .25rem rgba(45, 212, 191, .28);
+}
+
+main:focus {
+    outline: none;
+}
+
+.skip-link {
+    position: fixed;
+    top: -4rem;
+    left: 1rem;
+    z-index: 3000;
+    padding: .7rem 1.2rem;
+    border-radius: .5rem;
+    background: var(--teal-700);
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+    transition: top .15s;
+}
+
+    .skip-link:focus {
+        top: 1rem;
+        color: #fff;
+    }
+
+/* ---------- Khu quản trị ---------- */
+.admin-banner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+    padding: 1.1rem 1.4rem;
+    border-radius: .9rem;
+    background: linear-gradient(135deg, var(--brand-800), var(--brand-600) 60%, var(--teal-700));
+    color: #fff;
+}
+
+.admin-kicker {
+    color: var(--teal-300);
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+}
+
+.admin-heading {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.admin-banner .btn-pill-outline {
+    border-color: rgba(255, 255, 255, .65);
+    color: #fff;
+}
+
+    .admin-banner .btn-pill-outline:hover,
+    .admin-banner .btn-pill-outline:focus-visible {
+        border-color: #fff;
+        background: #fff;
+        color: var(--brand-800);
+    }
+
+.admin-pills .nav-link {
+    border-radius: 999px;
+    font-weight: 600;
+}
+
+.table-light {
+    --bs-table-bg: var(--surface-soft);
+    --bs-table-color: var(--text-strong);
+    --bs-table-border-color: var(--line);
+}
+
+.table thead th {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+.table-hover > tbody > tr:hover > * {
+    --bs-table-hover-bg: var(--surface-soft);
+}
+
+.modal-content {
+    border: 0;
+    border-radius: 1rem;
+}
+
+.modal-header,
+.modal-footer {
+    border-color: var(--line);
+}
+
+.toast.text-bg-success {
+    background-color: var(--teal-700) !important;
 }

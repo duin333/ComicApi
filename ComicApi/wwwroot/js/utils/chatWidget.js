@@ -47,7 +47,7 @@
     <div class="chat-chips" id="chatChips"></div>
     <form class="chat-form" id="chatForm">
       <input id="chatInput" class="form-control form-control-sm" maxlength="500"
-             placeholder="Hỏi về truyện..." autocomplete="off">
+             placeholder="Hỏi về truyện..." autocomplete="off" aria-label="Nhập câu hỏi cho chatbot">
       <button class="btn btn-warning btn-sm" type="submit" id="chatSend">Gửi</button>
     </form>`;
 

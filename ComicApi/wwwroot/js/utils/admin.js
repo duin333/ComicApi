@@ -20,14 +20,25 @@ const Admin = (() => {
         return true;
     }
 
-    // Thanh tab điều hướng giữa các trang quản trị
+    // Băng rôn và thanh tab điều hướng giữa các trang quản trị
     function renderNav(active) {
         const host = document.getElementById('adminNav');
         if (!host) return;
-        const tab = (key, label, href) =>
-            `<li class="nav-item"><a class="nav-link ${active === key ? 'active' : ''}" href="${href}">${label}</a></li>`;
+
+        const tab = (key, label, href) => `
+      <li class="nav-item">
+        <a class="nav-link ${active === key ? 'active' : ''}"${active === key ? ' aria-current="page"' : ''} href="${href}">${label}</a>
+      </li>`;
+
         host.innerHTML = `
-      <ul class="nav nav-pills mb-4">
+      <div class="admin-banner">
+        <div>
+          <div class="admin-kicker">Khu quản trị</div>
+          <h1 class="admin-heading">Bảng điều khiển</h1>
+        </div>
+        <a class="btn btn-sm btn-pill-outline" href="/index.html">← Xem website</a>
+      </div>
+      <ul class="nav nav-pills admin-pills mb-4">
         ${tab('comics', 'Truyện', '/admin/comics.html')}
         ${tab('genres', 'Thể loại', '/admin/genres.html')}
         ${tab('users', 'Người dùng', '/admin/users.html')}

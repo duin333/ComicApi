@@ -323,6 +323,40 @@
         try { localStorage.setItem(THEME_KEY, theme); } catch { /* bỏ qua */ }
     }
 
+    // Thẻ trong <head>: biểu tượng tab, mô tả trang, màu thanh trình duyệt trên điện thoại
+    function initHead() {
+        const add = html => document.head.insertAdjacentHTML('beforeend', html);
+
+        if (!document.querySelector('link[rel~="icon"]')) {
+            const iconSvg =
+                "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'>" +
+                "<rect width='64' height='64' rx='14' fill='#2B1E4A'/>" +
+                "<path d='M14 14h36a6 6 0 0 1 6 6v18a6 6 0 0 1-6 6H33l-10 9v-9h-9a6 6 0 0 1-6-6V20a6 6 0 0 1 6-6z' fill='#2DD4BF'/></svg>";
+            add(`<link rel="icon" href="data:image/svg+xml,${encodeURIComponent(iconSvg)}">`);
+        }
+        if (!document.querySelector('meta[name="description"]')) {
+            add(`<meta name="description" content="${escapeHtml(SITE.tagline)}">`);
+        }
+        if (!document.querySelector('meta[name="theme-color"]')) {
+            add('<meta name="theme-color" content="#2B1E4A">');
+        }
+    }
+
+    // Trợ năng: liên kết "Bỏ qua menu" cho người dùng bàn phím, đánh dấu vùng nội dung chính
+    function initA11y() {
+        const main = document.querySelector('body > main');
+        if (main) {
+            if (!main.id) main.id = 'main';
+            main.setAttribute('tabindex', '-1');
+        }
+
+        const skip = document.createElement('a');
+        skip.className = 'skip-link';
+        skip.href = '#' + (main?.id || 'main');
+        skip.textContent = 'Bỏ qua menu, đến nội dung chính';
+        document.body.prepend(skip);
+    }
+
     // ================== Thanh menu ==================
     function brandHtml() {
         return SITE.logo
@@ -400,7 +434,10 @@
           <button id="menuBtn" class="icon-btn" type="button" aria-label="Mở menu"
                   aria-expanded="false" aria-controls="megaMenu">${icon.menu}</button>
           <nav class="main-links" aria-label="Điều hướng chính">
-            ${mainLinks.map(l => `<a href="${l.href}" class="${isCurrent(l.href) ? 'active' : ''}">${l.label}</a>`).join('')}
+            ${mainLinks.map(l => {
+                const on = isCurrent(l.href);
+                return `<a href="${l.href}" class="${on ? 'active' : ''}"${on ? ' aria-current="page"' : ''}>${l.label}</a>`;
+            }).join('')}
           </nav>
           <div class="header-actions">
             <button id="themeBtn" class="icon-btn" type="button" aria-label="Chuyển giao diện sáng hoặc tối"></button>
@@ -526,7 +563,13 @@
         });
 
         document.addEventListener('keydown', e => {
-            if (e.key === 'Escape') closeAll();
+            if (e.key === 'Escape') {
+                const megaWasOpen = megaMenu.classList.contains('open');
+                const searchWasOpen = searchPanel.classList.contains('open');
+                closeAll();
+                if (megaWasOpen) menuBtn.focus();
+                else if (searchWasOpen) searchBtn.focus();
+            }
 
             // Phím "/" mở ô tìm kiếm (trừ khi đang gõ vào ô nhập liệu khác)
             const active = document.activeElement;
@@ -736,6 +779,8 @@
         document.body.appendChild(footer);
     }
 
+    initHead();
+    initA11y();
     renderNavbar();
     renderFooter();
     initBackToTop();
