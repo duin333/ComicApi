@@ -9,7 +9,8 @@
     const totalText = $('totalText');
 
     const me = Auth.getUser();                 // để biết dòng nào là chính mình
-    const state = { keyword: '', page: 1 };
+    const state = { keyword: new URLSearchParams(location.search).get('keyword') || '', page: 1 };
+    $('searchInput').value = state.keyword;
     let reqId = 0;
 
     const messageRow = html => `<tr><td colspan="7" class="text-center py-4">${html}</td></tr>`;
@@ -40,6 +41,7 @@
                   data-action="lock" ${disabled}>
             ${u.isLocked ? 'Mở khóa' : 'Khóa'}
           </button>
+            <a class="btn btn-sm btn-outline-secondary" href="/admin/comments.html?userId=${u.id}">Bình luận</a>
         </td>
       </tr>`;
     }

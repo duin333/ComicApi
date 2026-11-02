@@ -2908,3 +2908,46 @@ main:focus {
 .toast.text-bg-success {
     background-color: var(--teal-700) !important;
 }
+
+/* =====================================================================
+   10.7 QUẢN LÝ BÌNH LUẬN (ADMIN)
+   ===================================================================== */
+.stat-card {
+    padding: 1rem 1.2rem;
+    background: var(--surface-card);
+    border: 1px solid var(--line);
+    border-radius: .75rem;
+}
+
+.stat-num {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.stat-label {
+    color: var(--bs-secondary-color);
+    font-size: .85rem;
+}
+
+.cmt-text {
+    max-height: 7.5rem;
+    overflow-y: auto;
+    white-space: pre-line;
+    word-break: break-word;
+}
+
+.admin-gif {
+    display: block;
+    max-width: 110px;
+    max-height: 80px;
+    margin-top: .4rem;
+    border-radius: .4rem;
+}
+
+mark {
+    padding: 0 .15em;
+    background: rgba(255, 197, 61, .5);
+    color: inherit;
+}

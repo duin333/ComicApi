@@ -1,0 +1,102 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quản lý bình luận - ComicHub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/site.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap">
+    <script src="/js/utils/theme.js"></script>
+</head>
+<body>
+    <div id="navbar"></div>
+
+    <main class="container py-4" id="adminRoot">
+        <div id="adminNav"></div>
+
+        <!-- Thống kê nhanh -->
+        <div class="row g-3 mb-4">
+            <div class="col-6 col-lg-3">
+                <div class="stat-card"><div class="stat-num" id="stTotal">–</div><div class="stat-label">Tổng bình luận</div></div>
+            </div>
+            <div class="col-6 col-lg-3">
+                <div class="stat-card"><div class="stat-num" id="stGif">–</div><div class="stat-label">Có ảnh GIF</div></div>
+            </div>
+            <div class="col-6 col-lg-3">
+                <div class="stat-card"><div class="stat-num" id="stDay">–</div><div class="stat-label">Trong 24 giờ qua</div></div>
+            </div>
+            <div class="col-6 col-lg-3">
+                <div class="stat-card"><div class="stat-num" id="stLocked">–</div><div class="stat-label">Của tài khoản bị khóa</div></div>
+            </div>
+        </div>
+
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+            <h2 class="section-title mb-0">Quản lý bình luận <small id="totalText" class="text-muted fs-6"></small></h2>
+            <button id="bulkBtn" type="button" class="btn btn-sm btn-danger" disabled>
+                Xóa mục đã chọn (<span id="selCount">0</span>)
+            </button>
+        </div>
+
+        <!-- Bộ lọc -->
+        <div class="card border-0 shadow-sm mb-3">
+            <div class="card-body">
+                <form id="filterForm" class="row g-3 align-items-end">
+                    <div class="col-md-5">
+                        <label class="form-label small mb-1" for="searchInput">Tìm theo nội dung, tên người dùng hoặc tên truyện</label>
+                        <input id="searchInput" class="form-control" type="search" placeholder="Gõ để tìm...">
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <label class="form-label small mb-1" for="sortSelect">Sắp xếp</label>
+                        <select id="sortSelect" class="form-select">
+                            <option value="newest">Mới nhất trước</option>
+                            <option value="oldest">Cũ nhất trước</option>
+                        </select>
+                    </div>
+                    <div class="col-6 col-md-4 d-flex flex-wrap gap-3 pb-2">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="gifOnly">
+                            <label class="form-check-label" for="gifOnly">Có GIF</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="lockedOnly">
+                            <label class="form-check-label" for="lockedOnly">Tài khoản bị khóa</label>
+                        </div>
+                    </div>
+                </form>
+                <div id="chips" class="d-flex flex-wrap gap-2 mt-2"></div>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width:36px">
+                                <input type="checkbox" id="checkAll" class="form-check-input" aria-label="Chọn tất cả bình luận trên trang này">
+                            </th>
+                            <th>Người dùng</th>
+                            <th>Truyện</th>
+                            <th style="min-width:280px">Nội dung</th>
+                            <th>Thời gian</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="commentRows"></tbody>
+                </table>
+            </div>
+        </div>
+        <div id="pager" class="mt-3"></div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/utils/auth.js"></script>
+    <script src="/js/api/client.js"></script>
+    <script src="/js/utils/ui.js"></script>
+    <script src="/js/utils/admin.js"></script>
+    <script src="/js/pages/admin-comments.js"></script>
+</body>
+</html>

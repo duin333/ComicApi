@@ -42,6 +42,7 @@ const Admin = (() => {
         ${tab('comics', 'Truyện', '/admin/comics.html')}
         ${tab('genres', 'Thể loại', '/admin/genres.html')}
         ${tab('users', 'Người dùng', '/admin/users.html')}
+        ${tab('comments', 'Bình luận', '/admin/comments.html')}
       </ul>`;
     }
 
