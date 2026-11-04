@@ -5,6 +5,7 @@ using ComicApi.Repositories;
 using ComicApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace ComicApi.Controllers;
 
@@ -24,6 +25,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("register")]
+    [EnableRateLimiting("register")]
     public async Task<IActionResult> Register(RegisterDto dto)
     {
         if (await _users.UsernameExistsAsync(dto.Username))
@@ -47,6 +49,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
+    [EnableRateLimiting("login")]
     public async Task<IActionResult> Login(LoginDto dto)
     {
         var user = await _users.GetByUsernameOrEmailAsync(dto.UsernameOrEmail.Trim());

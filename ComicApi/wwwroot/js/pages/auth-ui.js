@@ -1,4 +1,27 @@
-﻿(() => {
+﻿// 11.2: khi server báo "quá nhiều lần" (429), khóa nút gửi và đếm ngược cho đỡ bấm dồn
+const AuthUi = {
+    // Server chỉ cho biết thời gian chờ TỐI ĐA nên nút chỉ khóa tối đa 30 giây rồi mở lại;
+    // nếu vẫn còn bị giới hạn, server sẽ báo lại và nút lại đếm ngược
+    cooldown(btn, seconds, idleText) {
+        let left = Math.max(1, Math.min(30, Math.ceil(seconds)));
+        btn.disabled = true;
+
+        const tick = () => {
+            if (left <= 0) {
+                clearInterval(timer);
+                btn.disabled = false;
+                btn.textContent = idleText;
+                return;
+            }
+            btn.textContent = `Thử lại sau ${left} giây`;
+            left--;
+        };
+
+        const timer = setInterval(tick, 1000);
+        tick();
+    },
+};
+(() => {
     // Nút "Hiện/Ẩn" mật khẩu
     document.querySelectorAll('.pw-toggle').forEach(btn => {
         btn.addEventListener('click', () => {

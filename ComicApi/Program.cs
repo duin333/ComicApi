@@ -4,7 +4,6 @@ using ComicApi.Repositories;
 using ComicApi.Services;
 using ComicApi.Services.Chat;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,29 +41,7 @@ builder.Services.AddHttpClient<ILlmClient, OpenRouterClient>(client =>
 builder.Services.AddScoped<IChatRepository, ChatRepository>();
 builder.Services.AddScoped<IChatService, ChatService>();
 
-// Mỗi người dùng (hoặc mỗi IP nếu là khách) chỉ được hỏi tối đa 10 câu mỗi phút
-builder.Services.AddRateLimiter(options =>
-{
-    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
-    options.OnRejected = async (context, token) =>
-    {
-        context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
-        await context.HttpContext.Response.WriteAsJsonAsync(
-            new { message = "Bạn hỏi hơi nhanh, vui lòng chờ một chút rồi hỏi tiếp nhé." }, token);
-    };
-
-    options.AddPolicy("chat", httpContext =>
-        RateLimitPartition.GetFixedWindowLimiter(
-            httpContext.User.GetUserId()?.ToString()
-                ?? httpContext.Connection.RemoteIpAddress?.ToString()
-                ?? "anonymous",
-            _ => new FixedWindowRateLimiterOptions
-            {
-                PermitLimit = 10,
-                Window = TimeSpan.FromMinutes(1),
-                QueueLimit = 0
-            }));
-});
+builder.Services.AddAppRateLimiting(builder.Configuration);
 
 // Nén HTML, JS, CSS, JSON để tải nhanh hơn
 builder.Services.AddResponseCompression(options => options.EnableForHttps = true);

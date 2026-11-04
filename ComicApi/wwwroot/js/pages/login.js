@@ -35,6 +35,7 @@
         alertBox.className = 'alert alert-danger d-none';
         submitBtn.disabled = true;
         submitBtn.textContent = 'Đang đăng nhập...';
+        let cooling = false;
 
         try {
             const res = await Api.post('/api/Auth/login', {
@@ -46,9 +47,16 @@
         } catch (err) {
             alertBox.textContent = err.message;
             alertBox.classList.remove('d-none');
+
+            if (err.status === 429) {        // 11.2: thử quá nhiều lần
+                cooling = true;
+                AuthUi.cooldown(submitBtn, (err.data && err.data.retryAfterSeconds) || 30, 'Đăng nhập');
+            }
         } finally {
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'Đăng nhập';
+            if (!cooling) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Đăng nhập';
+            }
         }
     });
 })();

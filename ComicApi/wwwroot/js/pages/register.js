@@ -30,6 +30,7 @@
 
         submitBtn.disabled = true;
         submitBtn.textContent = 'Đang đăng ký...';
+        let cooling = false;
 
         try {
             const res = await Api.post('/api/Auth/register', { username, email, password });
@@ -37,9 +38,16 @@
             location.href = 'index.html';
         } catch (err) {
             showError(err.message);          // ví dụ: "Tên đăng nhập đã tồn tại"
+
+            if (err.status === 429) {        // 11.2: tạo tài khoản quá nhiều lần
+                cooling = true;
+                AuthUi.cooldown(submitBtn, (err.data && err.data.retryAfterSeconds) || 30, 'Đăng ký');
+            }
         } finally {
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'Đăng ký';
+            if (!cooling) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Đăng ký';
+            }
         }
     });
 })();
