@@ -21,6 +21,7 @@
         userId: params.get('userId') || '',
         hasGif: false,
         locked: false,
+        onlyReplies: false,
         sort: 'newest',
         page: 1,
     };
@@ -57,6 +58,7 @@
             $('stGif').textContent = UI.formatNumber(s.withGif);
             $('stDay').textContent = UI.formatNumber(s.last24h);
             $('stLocked').textContent = UI.formatNumber(s.fromLockedUsers);
+            $('stReplies').textContent = `trong đó ${UI.formatNumber(s.replies)} phản hồi`;
         } catch {
             /* không tải được thống kê thì bỏ qua, bảng vẫn dùng được */
         }
@@ -68,7 +70,7 @@
         const exact = when ? when.toLocaleString('vi-VN') : '';
 
         return `
-      <tr data-id="${c.id}">
+      <tr data-id="${c.id}" data-replies="${c.replyCount}">
         <td><input type="checkbox" class="form-check-input row-check" aria-label="Chọn bình luận số ${c.id}"></td>
         <td>
           <a class="fw-semibold text-decoration-none" href="#" data-action="filter-user" data-user="${c.userId}">${esc(c.username)}</a>
@@ -85,6 +87,8 @@
                 ? `<div class="cmt-text">${highlight(c.content, state.keyword)}</div>`
                 : '<span class="text-muted fst-italic">(chỉ có ảnh GIF)</span>'}
           ${c.gifUrl ? `<img class="admin-gif" src="${esc(c.gifUrl)}" alt="GIF đính kèm" loading="lazy">` : ''}
+          ${c.parentId ? `<div class="small text-muted mt-1">↳ Trả lời <strong>${esc(c.parentUsername || '?')}</strong>: “${esc((c.parentContent || '(GIF)').slice(0, 60))}”</div>` : ''}
+          <div class="small text-muted mt-1">♥ ${UI.formatNumber(c.likeCount)} · ${UI.formatNumber(c.replyCount)} phản hồi</div>
         </td>
         <td class="small text-nowrap" title="${esc(exact)}">${UI.timeAgo(c.createdAt)}</td>
         <td class="text-nowrap text-end">
@@ -128,6 +132,7 @@
         if (state.userId) q.set('userId', state.userId);
         if (state.hasGif) q.set('hasGif', 'true');
         if (state.locked) q.set('locked', 'true');
+        if (state.onlyReplies) q.set('onlyReplies', 'true');
 
         try {
             const data = await Api.get('/api/admin/comments?' + q);
@@ -199,7 +204,8 @@
             }
 
             if (action === 'delete') {
-                if (!confirm('Xóa bình luận này?')) return;
+                const n = Number(row.dataset.replies) || 0;
+                if (!confirm(n > 0 ? `Xóa bình luận này và ${n} phản hồi của nó?` : 'Xóa bình luận này?')) return;
                 await Api.del('/api/comments/' + row.dataset.id);      // API xóa sẵn có, Admin được phép
                 Admin.toast('Đã xóa bình luận');
                 refreshAll();
@@ -255,6 +261,11 @@
     });
     $('lockedOnly').addEventListener('change', e => {
         state.locked = e.target.checked;
+        state.page = 1;
+        load();
+    });
+    $('repliesOnly').addEventListener('change', e => {
+        state.onlyReplies = e.target.checked;
         state.page = 1;
         load();
     });

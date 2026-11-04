@@ -13,6 +13,11 @@ public class AdminCommentDto
     public string Content { get; set; } = string.Empty;
     public string? GifUrl { get; set; }
     public DateTime CreatedAt { get; set; }
+    public int? ParentId { get; set; }
+    public string? ParentUsername { get; set; }
+    public string? ParentContent { get; set; }
+    public int LikeCount { get; set; }
+    public int ReplyCount { get; set; }
 }
 
 // Các điều kiện lọc gửi lên từ trang quản lý bình luận
@@ -26,6 +31,7 @@ public class AdminCommentQuery
     public string? Sort { get; set; }        // newest (mặc định) | oldest
     public int Page { get; set; } = 1;
     public int PageSize { get; set; } = 20;
+    public bool? OnlyReplies { get; set; }   // chỉ hiện phản hồi
 }
 
 public class BulkDeleteRequest

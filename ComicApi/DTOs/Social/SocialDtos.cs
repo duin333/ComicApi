@@ -20,15 +20,6 @@ public class HistoryItemDto
     public DateTime ReadAt { get; set; }
 }
 
-public class CommentDto
-{
-    public int Id { get; set; }
-    public int UserId { get; set; }
-    public string Username { get; set; } = string.Empty;
-    public string Content { get; set; } = string.Empty;
-    public string? GifUrl { get; set; }
-    public DateTime CreatedAt { get; set; }
-}
 
 // Bình luận có thể chỉ có chữ, chỉ có GIF, hoặc cả hai (kiểm tra trong controller)
 public class CommentCreateDto
@@ -38,6 +29,7 @@ public class CommentCreateDto
 
     [StringLength(500)]
     public string? GifUrl { get; set; }
+    public int? ParentId { get; set; }
 }
 
 public class RatingRequest

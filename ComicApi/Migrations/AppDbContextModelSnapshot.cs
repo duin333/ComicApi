@@ -172,16 +172,44 @@ namespace ComicApi.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("varchar(500)");
 
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ReplyToUserId")
+                        .HasColumnType("int");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ComicId");
+                    b.HasIndex("ParentId");
+
+                    b.HasIndex("ReplyToUserId");
 
                     b.HasIndex("UserId");
 
+                    b.HasIndex("ComicId", "ParentId", "CreatedAt");
+
                     b.ToTable("comments", (string)null);
+                });
+
+            modelBuilder.Entity("ComicApi.Models.CommentLike", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CommentId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("UserId", "CommentId");
+
+                    b.HasIndex("CommentId");
+
+                    b.ToTable("comment_likes", (string)null);
                 });
 
             modelBuilder.Entity("ComicApi.Models.Follow", b =>
@@ -377,6 +405,16 @@ namespace ComicApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ComicApi.Models.Comment", "Parent")
+                        .WithMany("Replies")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("ComicApi.Models.User", "ReplyToUser")
+                        .WithMany()
+                        .HasForeignKey("ReplyToUserId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.HasOne("ComicApi.Models.User", "User")
                         .WithMany("Comments")
                         .HasForeignKey("UserId")
@@ -384,6 +422,29 @@ namespace ComicApi.Migrations
                         .IsRequired();
 
                     b.Navigation("Comic");
+
+                    b.Navigation("Parent");
+
+                    b.Navigation("ReplyToUser");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ComicApi.Models.CommentLike", b =>
+                {
+                    b.HasOne("ComicApi.Models.Comment", "Comment")
+                        .WithMany("Likes")
+                        .HasForeignKey("CommentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ComicApi.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Comment");
 
                     b.Navigation("User");
                 });
@@ -469,6 +530,13 @@ namespace ComicApi.Migrations
                     b.Navigation("Follows");
 
                     b.Navigation("Ratings");
+                });
+
+            modelBuilder.Entity("ComicApi.Models.Comment", b =>
+                {
+                    b.Navigation("Likes");
+
+                    b.Navigation("Replies");
                 });
 
             modelBuilder.Entity("ComicApi.Models.Genre", b =>

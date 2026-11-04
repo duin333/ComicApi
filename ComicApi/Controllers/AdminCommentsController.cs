@@ -26,6 +26,7 @@ public class AdminCommentsController : ControllerBase
         return Ok(new
         {
             total = await _db.Comments.CountAsync(),
+            replies = await _db.Comments.CountAsync(c => c.ParentId != null),
             withGif = await _db.Comments.CountAsync(c => c.GifUrl != null),
             last24h = await _db.Comments.CountAsync(c => c.CreatedAt >= since),
             fromLockedUsers = await _db.Comments.CountAsync(c => c.User.IsLocked)
@@ -51,6 +52,7 @@ public class AdminCommentsController : ControllerBase
         if (q.UserId.HasValue) query = query.Where(c => c.UserId == q.UserId.Value);
         if (q.HasGif == true) query = query.Where(c => c.GifUrl != null);
         if (q.Locked == true) query = query.Where(c => c.User.IsLocked);
+        if (q.OnlyReplies == true) query = query.Where(c => c.ParentId != null);
 
         var total = await query.CountAsync();
 
@@ -71,7 +73,12 @@ public class AdminCommentsController : ControllerBase
                 ComicTitle = c.Comic.Title,
                 Content = c.Content,
                 GifUrl = c.GifUrl,
-                CreatedAt = c.CreatedAt
+                CreatedAt = c.CreatedAt,
+                ParentId = c.ParentId,
+                ParentUsername = c.Parent != null ? c.Parent.User.Username : null,
+                ParentContent = c.Parent != null ? c.Parent.Content : null,
+                LikeCount = c.Likes.Count,
+                ReplyCount = c.Replies.Count
             })
             .ToListAsync();
 

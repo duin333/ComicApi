@@ -24,14 +24,13 @@ public class CommentsController : ControllerBase
     }
 
     // Ai cũng xem được bình luận
+    // GET /api/comics/{comicId}/comments?page=&pageSize=&sort=newest|top|oldest
     [HttpGet("comics/{comicId:int}/comments")]
     public async Task<IActionResult> GetByComic(
-        int comicId, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+        int comicId, [FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string? sort = null)
     {
-        if (!await _comics.ExistsAsync(comicId))
-            return NotFound(new { message = "Không tìm thấy truyện" });
-
-        return Ok(await _comments.GetByComicAsync(comicId, page, pageSize));
+        // (giữ nguyên đoạn kiểm tra truyện có tồn tại như cũ nếu bạn đã có)
+        return Ok(await _comments.GetByComicAsync(comicId, page, pageSize, sort, User.GetUserId()));
     }
 
     [Authorize]
@@ -55,6 +54,26 @@ public class CommentsController : ControllerBase
         var user = await _users.GetByIdAsync(User.GetUserId() ?? 0);
         if (user is null || user.IsLocked)
             return StatusCode(StatusCodes.Status403Forbidden, new { message = "Tài khoản đã bị khóa" });
+        
+        // 10.13: đây là phản hồi?
+        int? parentId = null;
+        int? replyToUserId = null;
+        string? replyToUsername = null;
+
+        if (dto.ParentId.HasValue)
+        {
+            var target = await _comments.GetByIdAsync(dto.ParentId.Value);
+            if (target is null || target.ComicId != comicId)
+                return BadRequest(new { message = "Không tìm thấy bình luận cần trả lời" });
+
+            // Chỉ có hai cấp: trả lời một phản hồi thì gắn vào bình luận gốc và nhắc tên người đó
+            parentId = target.ParentId ?? target.Id;
+            if (target.ParentId != null)
+            {
+                replyToUserId = target.UserId;
+                replyToUsername = (await _users.GetByIdAsync(target.UserId))?.Username;
+            }
+        }
 
         var comment = new Comment { UserId = user.Id, ComicId = comicId, Content = content, GifUrl = gifUrl };
         await _comments.AddAsync(comment);
@@ -89,5 +108,36 @@ public class CommentsController : ControllerBase
         _comments.Delete(comment);
         await _comments.SaveAsync();
         return NoContent();
+    }
+
+    // GET /api/comments/{id}/replies?page=&pageSize=   (phản hồi của một bình luận gốc, cũ trước)
+    [HttpGet("comments/{id:int}/replies")]
+    public async Task<IActionResult> GetReplies(int id, [FromQuery] int page = 1, [FromQuery] int pageSize = 20)
+    {
+        if (await _comments.GetByIdAsync(id) is null)
+            return NotFound(new { message = "Không tìm thấy bình luận" });
+
+        return Ok(await _comments.GetRepliesAsync(id, page, pageSize, User.GetUserId()));
+    }
+
+    [Authorize]
+    [HttpPut("comments/{id:int}/like")]
+    public Task<IActionResult> Like(int id) => SetLike(id, true);
+
+    [Authorize]
+    [HttpDelete("comments/{id:int}/like")]
+    public Task<IActionResult> Unlike(int id) => SetLike(id, false);
+
+    private async Task<IActionResult> SetLike(int id, bool liked)
+    {
+        if (await _comments.GetByIdAsync(id) is null)
+            return NotFound(new { message = "Không tìm thấy bình luận" });
+
+        var user = await _users.GetByIdAsync(User.GetUserId() ?? 0);
+        if (user is null || user.IsLocked)
+            return StatusCode(403, new { message = "Tài khoản đã bị khóa" });
+
+        var count = await _comments.SetLikeAsync(user.Id, id, liked);
+        return Ok(new { liked, likeCount = count });
     }
 }

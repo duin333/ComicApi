@@ -2951,3 +2951,145 @@ mark {
     background: rgba(255, 197, 61, .5);
     color: inherit;
 }
+
+/* =====================================================================
+   10.13 PHẢN HỒI VÀ LƯỢT THÍCH BÌNH LUẬN
+   ===================================================================== */
+.thread {
+    border-bottom: 1px solid var(--line);
+}
+
+    .thread:last-child {
+        border-bottom: 0;
+    }
+
+.cmt {
+    display: flex;
+    gap: .9rem;
+    padding: 1rem 0;
+}
+
+.cmt-reply {
+    padding: .75rem 0;
+}
+
+.avatar-sm {
+    width: 32px;
+    height: 32px;
+    flex-basis: 32px;
+    font-size: .85rem;
+}
+
+.thread-replies {
+    margin: 0 0 .5rem 3.1rem;
+    padding-left: 1rem;
+    border-left: 2px solid var(--line);
+}
+
+    .thread-replies[hidden] {
+        display: none;
+    }
+
+.reply-slot .reply-box {
+    margin: .3rem 0 1rem 3.1rem;
+}
+
+.cmt-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .15rem 1rem;
+    margin-top: .3rem;
+}
+
+.cmt-act {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--bs-secondary-color);
+    font-size: .85rem;
+    font-weight: 600;
+}
+
+    .cmt-act:hover {
+        color: var(--teal-700);
+    }
+
+[data-bs-theme="dark"] .cmt-act:hover {
+    color: var(--teal-400);
+}
+
+.cmt-act.cmt-danger:hover {
+    color: #B42318;
+}
+
+.cmt-like.liked {
+    color: #D6336C;
+}
+
+[data-bs-theme="dark"] .cmt-like.liked {
+    color: #FF6B9A;
+}
+
+.cmt-like .heart {
+    display: inline-block;
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.cmt-like.pop .heart {
+    animation: heartPop .3s ease;
+}
+
+@keyframes heartPop {
+    0% {
+        transform: scale(.6);
+    }
+
+    60% {
+        transform: scale(1.4);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cmt-like.pop .heart {
+        animation: none;
+    }
+}
+
+.cmt-mention {
+    color: var(--brand-600);
+    font-weight: 600;
+}
+
+[data-bs-theme="dark"] .cmt-mention {
+    color: var(--brand-300);
+}
+
+/* Tab sắp xếp bình luận */
+.sort-tabs {
+    display: inline-flex;
+    padding: .2rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--surface-soft);
+}
+
+.sort-tab {
+    padding: .3rem 1rem;
+    border: 0;
+    border-radius: 999px;
+    background: none;
+    color: var(--bs-secondary-color);
+    font-size: .88rem;
+    font-weight: 600;
+}
+
+    .sort-tab.active {
+        background: var(--teal-700);
+        color: #fff;
+    }

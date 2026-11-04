@@ -48,6 +48,8 @@
     let following = false;        // tôi có đang theo dõi truyện này không
     let rating = emptySummary();  // tổng hợp đánh giá của truyện
     let commentPage = 1;
+    let commentSort = 'newest';   // newest | top
+    let commentTotal = 0;         // tổng bình luận tính cả phản hồi
     let selectedGif = null;       // GIF đang chọn cho bình luận sắp gửi
 
     const notFoundHtml = text => `
@@ -203,7 +205,13 @@
         </section>
 
         <section id="binh-luan" class="detail-section">
-          <h2 class="section-title mb-4">Bình luận (<span id="commentCount">${UI.formatNumber(comic.commentCount)}</span>)</h2>
+          <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+            <h2 class="section-title mb-0">Bình luận (<span id="commentCount">${UI.formatNumber(comic.commentCount)}</span>)</h2>
+            <div id="commentSortTabs" class="sort-tabs" role="group" aria-label="Sắp xếp bình luận">
+              <button type="button" class="sort-tab active" data-sort="newest" aria-pressed="true">Mới nhất</button>
+              <button type="button" class=" sort-tab" data-sort="top" aria-pressed="false">Nổi bật</button>
+            </div>
+          </div>
           <div class="card border-0 shadow-sm">
             <div class="card-body">
               <div id="commentFormBox" class="mb-3"></div>
@@ -254,6 +262,21 @@
         ratingCard.addEventListener('click', onRatingClick);
 
         $('commentList').addEventListener('click', onCommentClick);
+        // Ctrl+Enter trong ô trả lời = gửi
+        $('commentList').addEventListener('keydown', e => {
+            if (e.key === 'Enter' && (e.ctrlKey || e.metaKey) && e.target.matches('.reply-box textarea')) {
+                e.preventDefault();
+                e.target.closest('.reply-box').querySelector('[data-action="send-reply"]').click();
+            }
+        });
+
+        $('commentSortTabs').addEventListener('click', e => {
+            const b = e.target.closest('.sort-tab');
+            if (!b || b.dataset.sort === commentSort) return;
+            setCommentSort(b.dataset.sort);
+            commentPage = 1;
+            loadComments();
+        });
         $('commentList').addEventListener('error', onCommentImageError, true);   // bắt lỗi ảnh GIF hỏng
 
         setupTabs();
@@ -637,6 +660,7 @@
             selectGif(null);
             togglePanel(null);
             commentPage = 1;                 // bình luận mới nằm ở trang đầu
+            setCommentSort('newest');
             await loadComments();
             UI.toast('Đã gửi bình luận');
         } catch (err) {
@@ -646,28 +670,92 @@
         }
     }
 
-    function commentHtml(c) {
+    // ---------- Hiển thị bình luận, phản hồi, lượt thích ----------
+    function setCommentSort(sort) {
+        commentSort = sort;
+        document.querySelectorAll('#commentSortTabs .sort-tab').forEach(t => {
+            const on = t.dataset.sort === sort;
+            t.classList.toggle('active', on);
+            t.setAttribute('aria-pressed', on ? 'true' : 'false');
+        });
+    }
+
+    // Cập nhật mọi chỗ hiện tổng số bình luận (tiêu đề, ô thống kê, tab)
+    function setCommentTotal(n) {
+        commentTotal = Math.max(0, n);
+        const text = UI.formatNumber(commentTotal);
+        ['commentCount', 'commentStat', 'tabComments'].forEach(elId => {
+            if ($(elId)) $(elId).textContent = text;
+        });
+    }
+
+    function likeBtnHtml(c) {
+        return `
+      <button type="button" class="cmt-act cmt-like ${c.likedByMe ? 'liked' : ''}" data-action="like"
+              aria-pressed="${c.likedByMe ? 'true' : 'false'}" aria-label="Thích bình luận">
+        <span class="heart" aria-hidden="true">${c.likedByMe ? '♥' : '♡'}</span>
+        Thích<span class="like-count">${c.likeCount > 0 ? ` (${UI.formatNumber(c.likeCount)})` : ''}</span>
+      </button>`;
+    }
+
+    function paintLike(btn, liked, count) {
+        btn.classList.toggle('liked', liked);
+        btn.setAttribute('aria-pressed', liked ? 'true' : 'false');
+        btn.querySelector('.heart').textContent = liked ? '♥' : '♡';
+        btn.querySelector('.like-count').textContent = count > 0 ? ` (${UI.formatNumber(count)})` : '';
+
+        if (liked) {                                  // hiệu ứng nảy nhẹ khi vừa thích
+            btn.classList.remove('pop');
+            void btn.offsetWidth;                       // buộc trình duyệt tính lại để chạy lại hiệu ứng
+            btn.classList.add('pop');
+        }
+    }
+
+    // Một bình luận (gốc hoặc phản hồi)
+    function commentHtml(c, isReply = false) {
         // Chỉ để ẩn/hiện nút Xóa cho gọn. Việc chặn thật sự do server quyết định
         const canDelete = me && (me.id === c.userId || me.role === 'Admin');
         const text = c.content || '';
-
-        // Bình luận chỉ có emoji thì hiện chữ to hơn
         const onlyEmoji = text.length > 0 && /^[\p{Extended_Pictographic}\u200d\ufe0f\s]+$/u.test(text);
+        const mention = c.replyToUsername ? `<span class="cmt-mention">@${esc(c.replyToUsername)}</span> ` : '';
 
         return `
-      <div class="d-flex gap-3 py-3 border-bottom" data-id="${c.id}">
-        <div class="avatar">${esc((c.username || '?').charAt(0).toUpperCase())}</div>
+      <div class="cmt ${isReply ? 'cmt-reply' : ''}" data-id="${c.id}" data-user="${esc(c.username)}">
+        <div class="avatar ${isReply ? 'avatar-sm' : ''}">${esc((c.username || '?').charAt(0).toUpperCase())}</div>
         <div class="flex-grow-1 comment-body">
           <div>
             <strong>${esc(c.username)}</strong>
             <span class="small text-muted ms-1">${UI.timeAgo(c.createdAt)}</span>
           </div>
-          ${text ? `<div class="comment-text ${onlyEmoji ? 'comment-emoji-only' : ''}">${esc(text)}</div>` : ''}
+          ${(text || mention) ? `<div class="comment-text ${onlyEmoji && !mention ? 'comment-emoji-only' : ''}">${mention}${esc(text)}</div>` : ''}
           ${c.gifUrl ? `<img class="comment-gif" src="${esc(c.gifUrl)}" alt="GIF" loading="lazy">` : ''}
+          <div class="cmt-actions">
+            ${likeBtnHtml(c)}
+            <button type="button" class="cmt-act" data-action="reply">Trả lời</button>
+            ${canDelete ? '<button type="button" class="cmt-act cmt-danger" data-action="delete-comment">Xóa</button>' : ''}
+          </div>
         </div>
-        ${canDelete
-                ? '<button type="button" class="btn btn-sm btn-outline-danger align-self-start" data-action="delete-comment">Xóa</button>'
-                : ''}
+      </div>`;
+    }
+
+    function repliesInnerHtml(items, hidden) {
+        return items.map(r => commentHtml(r, true)).join('') +
+            (hidden > 0
+                ? `<button type="button" class="btn btn-link btn-sm px-0" data-action="more-replies">
+             Xem thêm ${UI.formatNumber(hidden)} phản hồi</button>`
+                : '');
+    }
+
+    // Một chủ đề = bình luận gốc + vài phản hồi đầu + chỗ để mở ô trả lời
+    function threadHtml(c) {
+        const shown = c.replies || [];
+        return `
+      <div class="thread" data-thread="${c.id}" data-replies="${c.replyCount}">
+        ${commentHtml(c)}
+        <div class="thread-replies" ${c.replyCount ? '' : 'hidden'}>
+          ${repliesInnerHtml(shown, c.replyCount - shown.length)}
+        </div>
+        <div class="reply-slot"></div>
       </div>`;
     }
 
@@ -675,7 +763,7 @@
         const list = $('commentList');
         try {
             const data = await Api.get(
-                `/api/comics/${id}/comments?page=${commentPage}&pageSize=${COMMENT_PAGE_SIZE}`);
+                `/api/comics/${id}/comments?page=${commentPage}&pageSize=${COMMENT_PAGE_SIZE}&sort=${commentSort}`);
 
             // Xóa hết bình luận ở trang cuối thì lùi về trang trước
             if (data.items.length === 0 && data.totalItems > 0 && commentPage > 1) {
@@ -683,13 +771,10 @@
                 return loadComments();
             }
 
-            const total = UI.formatNumber(data.totalItems);
-            $('commentCount').textContent = total;
-            $('commentStat').textContent = total;
-            $('tabComments').textContent = total;
+            setCommentTotal(data.totalComments);
 
             list.innerHTML = data.items.length
-                ? data.items.map(commentHtml).join('')
+                ? data.items.map(threadHtml).join('')
                 : '<p class="text-muted mb-0">Chưa có bình luận nào. Hãy là người đầu tiên!</p>';
 
             UI.renderPagination($('commentPager'), data.page, data.totalPages, p => {
@@ -701,16 +786,124 @@
         }
     }
 
-    async function onCommentClick(e) {
-        const btn = e.target.closest('button[data-action="delete-comment"]');
-        if (!btn) return;
-        if (!confirm('Xóa bình luận này?')) return;
+    // Tải lại TOÀN BỘ phản hồi của một chủ đề (tối đa 20 trang x 50) rồi vẽ lại phần phản hồi
+    async function refreshThread(thread) {
+        const rootId = thread.dataset.thread;
+        const all = [];
+        let page = 1;
+        let total = 0;
 
-        const commentId = btn.closest('[data-id]').dataset.id;
+        do {
+            const res = await Api.get(`/api/comments/${rootId}/replies?page=${page}&pageSize=50`);
+            all.push(...res.items);
+            total = res.totalItems;
+            page++;
+        } while (all.length < total && page <= 20);
+
+        thread.dataset.replies = total;
+        const box = thread.querySelector('.thread-replies');
+        box.hidden = all.length === 0;
+        box.innerHTML = repliesInnerHtml(all, Math.max(0, total - all.length));
+    }
+
+    // Mở ô trả lời dưới chủ đề; target là bình luận (gốc hoặc phản hồi) đang được trả lời
+    function openReplyBox(thread, target) {
+        const slot = thread.querySelector('.reply-slot');
+        slot.innerHTML = `
+      <div class="reply-box" data-target="${target.dataset.id}">
+        <div class="small text-muted mb-1">Trả lời <strong>${esc(target.dataset.user)}</strong></div>
+        <div class="reply-error small text-danger mb-1"></div>
+        <textarea class="form-control form-control-sm" rows="2" maxlength="1000"
+                  aria-label="Nội dung trả lời" placeholder="Viết câu trả lời... (Ctrl+Enter để gửi)"></textarea>
+        <div class="d-flex justify-content-end gap-2 mt-2">
+          <button type="button" class="btn btn-sm btn-pill-outline" data-action="cancel-reply">Hủy</button>
+          <button type="button" class="btn btn-sm btn-brand" data-action="send-reply">Gửi</button>
+        </div>
+      </div>`;
+        slot.querySelector('textarea').focus();
+    }
+
+    async function sendReply(thread, btn) {
+        const box = thread.querySelector('.reply-box');
+        const input = box.querySelector('textarea');
+        const err = box.querySelector('.reply-error');
+        err.textContent = '';
+
+        const content = input.value.trim();
+        if (!content) { err.textContent = 'Hãy nhập nội dung trả lời'; return; }
+
+        btn.disabled = true;
         try {
-            await Api.del('/api/comments/' + commentId);
-            await loadComments();
-            UI.toast('Đã xóa bình luận');
+            await Api.post(`/api/comics/${id}/comments`, { content, parentId: Number(box.dataset.target) });
+            thread.querySelector('.reply-slot').innerHTML = '';
+            setCommentTotal(commentTotal + 1);
+            await refreshThread(thread);
+            UI.toast('Đã gửi trả lời');
+        } catch (ex) {
+            err.textContent = ex.message;       // ví dụ: "Tài khoản đã bị khóa"
+            btn.disabled = false;
+        }
+    }
+
+    async function onCommentClick(e) {
+        const btn = e.target.closest('button[data-action]');
+        if (!btn) return;
+
+        const action = btn.dataset.action;
+        const cmt = btn.closest('.cmt');          // bình luận chứa nút (không có với nút Hủy/Gửi/Xem thêm)
+        const thread = btn.closest('.thread');
+
+        try {
+            if (action === 'like') {
+                if (!Auth.requireLogin()) return;
+                const wantLike = btn.getAttribute('aria-pressed') !== 'true';
+                btn.disabled = true;
+                try {
+                    const res = wantLike
+                        ? await Api.put(`/api/comments/${cmt.dataset.id}/like`)
+                        : await Api.del(`/api/comments/${cmt.dataset.id}/like`);
+                    paintLike(btn, res.liked, res.likeCount);
+                } finally {
+                    btn.disabled = false;
+                }
+                return;
+            }
+
+            if (action === 'reply') {
+                if (!Auth.requireLogin()) return;
+                const slot = thread.querySelector('.reply-slot');
+                const open = slot.querySelector('.reply-box');
+                if (open && open.dataset.target === cmt.dataset.id) { slot.innerHTML = ''; return; }   // bấm lần nữa = đóng
+                openReplyBox(thread, cmt);
+                return;
+            }
+
+            if (action === 'cancel-reply') { thread.querySelector('.reply-slot').innerHTML = ''; return; }
+            if (action === 'send-reply') return sendReply(thread, btn);
+
+            if (action === 'more-replies') {
+                btn.disabled = true;
+                await refreshThread(thread);
+                return;
+            }
+
+            if (action === 'delete-comment') {
+                const isReply = cmt.classList.contains('cmt-reply');
+                const n = Number(thread.dataset.replies) || 0;
+                const msg = isReply ? 'Xóa phản hồi này?'
+                    : n > 0 ? `Xóa bình luận này và ${n} phản hồi của nó?`
+                        : 'Xóa bình luận này?';
+                if (!confirm(msg)) return;
+
+                await Api.del('/api/comments/' + cmt.dataset.id);
+                if (isReply) {
+                    setCommentTotal(commentTotal - 1);
+                    await refreshThread(thread);
+                } else {
+                    await loadComments();               // tổng số được server tính lại, kể cả các phản hồi bị xóa theo
+                }
+                UI.toast('Đã xóa');
+            }
         } catch (err) {
             UI.toast(err.message, 'danger');
         }
