@@ -52,8 +52,11 @@ const Api = (() => {
             // Token hết hạn hoặc bị từ chối: xóa và đưa về trang đăng nhập
             if (res.status === 401 && token && !url.startsWith('/api/Auth/login')) {
                 Auth.logout();
-                location.href = '/login.html?redirect=' +
-                    encodeURIComponent(location.pathname + location.search);
+                // 11.1: server báo rõ lý do (account_locked, role_changed...); không có thì coi như hết hạn
+                const reason = (data && data.code) || 'expired';
+                location.href = 'login.html?redirect=' +
+                    encodeURIComponent(location.pathname + location.search) +
+                    '&reason=' + encodeURIComponent(reason);
             }
             throw new ApiError(res.status, extractMessage(data, res.status), data);
         }

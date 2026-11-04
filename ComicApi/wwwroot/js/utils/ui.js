@@ -313,6 +313,18 @@
         btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
     }
 
+    // 11.1: hỏi server xem phiên đăng nhập còn hiệu lực không (tối đa 1 lần mỗi 30 giây mỗi tab)
+    function verifySession() {
+        if (typeof Api === 'undefined' || !Auth.isLoggedIn()) return;
+
+        const last = Number(sessionStorage.getItem('comic_verified_at')) || 0;
+        if (Date.now() - last < 30000) return;
+        sessionStorage.setItem('comic_verified_at', String(Date.now()));
+
+        // Nếu bị từ chối (401), client.js đã tự đăng xuất và chuyển về trang đăng nhập
+        Api.get('/api/Auth/me').catch(() => { });
+    }
+
     // ================== Chế độ sáng/tối ==================
     const THEME_KEY = 'comichub_theme';
     const getTheme = () =>
@@ -784,6 +796,7 @@
     renderNavbar();
     renderFooter();
     initBackToTop();
+    verifySession();
 
     // Nút chat nổi trên mọi trang (trừ khu quản trị)
     if (!location.pathname.startsWith('/admin/')) {

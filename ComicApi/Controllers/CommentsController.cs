@@ -35,7 +35,6 @@ public class CommentsController : ControllerBase
 
     [Authorize]
     [HttpPost("comics/{comicId:int}/comments")]
-
     public async Task<IActionResult> Create(int comicId, CommentCreateDto dto)
     {
         var content = (dto.Content ?? string.Empty).Trim();
@@ -54,7 +53,7 @@ public class CommentsController : ControllerBase
         var user = await _users.GetByIdAsync(User.GetUserId() ?? 0);
         if (user is null || user.IsLocked)
             return StatusCode(StatusCodes.Status403Forbidden, new { message = "Tài khoản đã bị khóa" });
-        
+
         // 10.13: đây là phản hồi?
         int? parentId = null;
         int? replyToUserId = null;
@@ -75,7 +74,15 @@ public class CommentsController : ControllerBase
             }
         }
 
-        var comment = new Comment { UserId = user.Id, ComicId = comicId, Content = content, GifUrl = gifUrl };
+        var comment = new Comment
+        {
+            UserId = user.Id,
+            ComicId = comicId,
+            Content = content,
+            GifUrl = gifUrl,
+            ParentId = parentId,
+            ReplyToUserId = replyToUserId
+        };
         await _comments.AddAsync(comment);
         await _comments.SaveAsync();
 
@@ -86,7 +93,9 @@ public class CommentsController : ControllerBase
             Username = user.Username,
             Content = comment.Content,
             GifUrl = comment.GifUrl,
-            CreatedAt = comment.CreatedAt
+            CreatedAt = comment.CreatedAt,
+            ParentId = comment.ParentId,
+            ReplyToUsername = replyToUsername
         };
         return Created($"/api/comics/{comicId}/comments", result);
     }
