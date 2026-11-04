@@ -16,12 +16,14 @@ public class AuthController : ControllerBase
     private readonly IUserRepository _users;
     private readonly IPasswordHasher _hasher;
     private readonly IJwtService _jwt;
+    private readonly ILogger<AuthController> _logger;
 
-    public AuthController(IUserRepository users, IPasswordHasher hasher, IJwtService jwt)
+    public AuthController(IUserRepository users, IPasswordHasher hasher, IJwtService jwt, ILogger<AuthController> logger)
     {
         _users = users;
         _hasher = hasher;
         _jwt = jwt;
+        _logger = logger;
     }
 
     [HttpPost("register")]
@@ -56,12 +58,23 @@ public class AuthController : ControllerBase
 
         // Báo chung một câu để kẻ xấu không dò được tài khoản nào tồn tại
         if (user is null || !_hasher.Verify(dto.Password, user.PasswordHash))
+        {
+            // Chỉ ghi tên khi tài khoản có thật. Người dùng hay gõ nhầm mật khẩu vào ô tên đăng nhập,
+            // ghi lại sẽ vô tình để mật khẩu nằm trong file log
+            _logger.LogWarning("Đăng nhập sai: {Who} từ IP {Ip}",
+                user is null ? "(tên không tồn tại)" : user.Username, HttpContext.Connection.RemoteIpAddress);
             return Unauthorized(new { message = "Sai tên đăng nhập hoặc mật khẩu" });
+        }
 
         if (user.IsLocked)
+        {
+            _logger.LogWarning("Tài khoản bị khóa cố đăng nhập: {Username} từ IP {Ip}",
+                user.Username, HttpContext.Connection.RemoteIpAddress);
             return StatusCode(StatusCodes.Status403Forbidden,
                 new { message = "Tài khoản đã bị khóa" });
+        }
 
+        _logger.LogInformation("Đăng nhập thành công: {Username}", user.Username);
         return Ok(BuildResponse(user));
     }
 

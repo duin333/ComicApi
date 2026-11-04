@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# File log của ứng dụng (có IP và tên người dùng)
+logs/

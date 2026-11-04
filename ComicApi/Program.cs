@@ -4,9 +4,11 @@ using ComicApi.Repositories;
 using ComicApi.Services;
 using ComicApi.Services.Chat;
 using Microsoft.EntityFrameworkCore;
+using ComicApi.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Logging.AddFileLogging(builder.Configuration);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerWithJwt();          // thay cho AddSwaggerGen()
@@ -29,7 +31,9 @@ builder.Services.AddScoped<IReadingHistoryRepository, ReadingHistoryRepository>(
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 
 builder.Services.AddScoped<IRatingRepository, RatingRepository>();
-
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+builder.Services.AddAppHealthChecks();
 
 builder.Services.Configure<OpenRouterSettings>(builder.Configuration.GetSection("OpenRouter"));
 builder.Services.AddHttpClient<ILlmClient, OpenRouterClient>(client =>
@@ -43,6 +47,8 @@ builder.Services.AddScoped<IChatService, ChatService>();
 
 builder.Services.AddAppRateLimiting(builder.Configuration);
 
+
+
 // Nén HTML, JS, CSS, JSON để tải nhanh hơn
 builder.Services.AddResponseCompression(options => options.EnableForHttps = true);
 
@@ -55,6 +61,9 @@ using (var scope = app.Services.CreateScope())
     await DbSeeder.SeedAsync(db);
 }
 
+app.UseMiddleware<RequestLoggingMiddleware>();    // ngoài cùng, để thấy cả lỗi 500
+app.UseExceptionHandler();
+app.UseResponseCompression();
 app.UseResponseCompression();
 
 // Địa chỉ không tồn tại (không phải API hay file) thì hiện trang 404 của website
@@ -101,4 +110,5 @@ app.UseAuthorization();
 app.UseRateLimiter();
 
 app.MapControllers();
+app.MapAppHealthChecks();
 app.Run();

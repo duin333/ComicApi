@@ -58,7 +58,13 @@ const Api = (() => {
                     encodeURIComponent(location.pathname + location.search) +
                     '&reason=' + encodeURIComponent(reason);
             }
-            throw new ApiError(res.status, extractMessage(data, res.status), data);
+            let message = extractMessage(data, res.status);
+            if (res.status >= 500) {
+                // 11.3: kèm mã tham chiếu để người dùng báo lại, mình tra trong file log
+                const trace = (data && data.traceId) || res.headers.get('X-Trace-Id');
+                if (trace) message += ` (Mã tham chiếu: ${trace})`;
+            }
+            throw new ApiError(res.status, message, data);
         }
         return data;
     }

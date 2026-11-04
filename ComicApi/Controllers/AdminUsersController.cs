@@ -13,8 +13,13 @@ namespace ComicApi.Controllers;
 public class AdminUsersController : ControllerBase
 {
     private readonly IUserRepository _users;
+    private readonly ILogger<AdminUsersController> _logger;
 
-    public AdminUsersController(IUserRepository users) => _users = users;
+    public AdminUsersController(IUserRepository users, ILogger<AdminUsersController> logger)
+    {
+        _users = users;
+        _logger = logger;
+    }
 
     [HttpGet]
     public async Task<IActionResult> Search(
@@ -30,10 +35,13 @@ public class AdminUsersController : ControllerBase
             return BadRequest(new { message = "Bạn không thể tự đổi quyền của chính mình" });
 
         var user = await _users.GetByIdAsync(id);
+        var oldRole = user.Role;
         if (user is null) return NotFound(new { message = "Không tìm thấy người dùng" });
 
         user.Role = dto.Role;
         await _users.SaveAsync();
+        _logger.LogInformation("Admin {AdminId} đổi quyền người dùng {UserId} ({Username}) từ {Old} sang {New}",
+            User.GetUserId(), id, user.Username, oldRole, dto.Role);
 
         return NoContent();
     }
@@ -49,7 +57,8 @@ public class AdminUsersController : ControllerBase
 
         user.IsLocked = dto.IsLocked;
         await _users.SaveAsync();
-
+        _logger.LogInformation("Admin {AdminId} {Action} tài khoản {UserId} ({Username})",
+            User.GetUserId(), dto.IsLocked ? "khóa" : "mở khóa", id, user.Username);
         return NoContent();
     }
 }
