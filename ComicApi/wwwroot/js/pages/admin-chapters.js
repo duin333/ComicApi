@@ -83,7 +83,7 @@
         grid.innerHTML = items.map((it, i) => `
       <div class="img-item" data-i="${i}">
         <img src="${UI.escapeHtml(it.preview)}" alt="Trang ${i + 1}"
-             onerror="this.onerror=null;this.src=UI.placeholder">
+             data-fallback="placeholder">
         <span class="badge text-bg-dark img-index">${i + 1}</span>
         ${it.file ? '<span class="badge text-bg-warning img-new">Mới</span>' : ''}
         <div class="img-tools">

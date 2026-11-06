@@ -97,7 +97,7 @@
           <div class="hero-cover-wrap">
             <img class="hero-cover" src="${cover}" alt="Bìa truyện ${esc(c.title)}"
                  ${i === 0 ? 'fetchpriority="high"' : 'loading="lazy"'}
-                 onerror="this.onerror=null;this.src=UI.placeholder">
+                 data-fallback="placeholder">
             <a class="hero-readnow" href="/comic.html?id=${c.id}" data-readnow="${c.id}">Đọc ngay</a>
           </div>
           <div class="hero-panel-shell">
@@ -272,7 +272,7 @@
             ? items.map((g, i) => `
           <a class="genre-tile" href="/index.html?genreId=${g.id}"
              style="background:linear-gradient(135deg,hsl(${(260 + i * 37) % 360},55%,38%),hsl(${(300 + i * 37) % 360},60%,26%))">
-            <img src="/img/genres/genre-${UI.slug(g.name)}.jpg" alt="" loading="lazy" onerror="this.remove()">
+            <img src="/img/genres/genre-${UI.slug(g.name)}.jpg" alt="" loading="lazy" data-fallback="remove">
             <span class="genre-name">${esc(g.name)}</span>
           </a>`).join('')
             : '<div class="text-muted">Chưa có thể loại nào.</div>';

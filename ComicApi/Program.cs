@@ -8,6 +8,15 @@ using ComicApi.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.WebHost.ConfigureKestrel(o => o.AddServerHeader = false);          // ẩn dòng "Server: Kestrel"
+builder.Services.Configure<SecuritySettings>(builder.Configuration.GetSection("Security"));
+builder.Services.AddHsts(o =>
+{
+    o.MaxAge = TimeSpan.FromDays(180);
+    o.IncludeSubDomains = false;
+    o.Preload = false;
+});
+
 builder.Logging.AddFileLogging(builder.Configuration);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -62,8 +71,9 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.UseMiddleware<RequestLoggingMiddleware>();    // ngoài cùng, để thấy cả lỗi 500
+app.UseMiddleware<SecurityHeadersMiddleware>();
 app.UseExceptionHandler();
-app.UseResponseCompression();
+if (!app.Environment.IsDevelopment()) app.UseHsts();
 app.UseResponseCompression();
 
 // Địa chỉ không tồn tại (không phải API hay file) thì hiện trang 404 của website

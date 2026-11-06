@@ -35,7 +35,7 @@
         return `
       <div class="history-item" data-comic="${h.comicId}" data-title="${esc(h.comicTitle)}">
         <a class="history-cover" href="/comic.html?id=${h.comicId}">
-          <img src="${cover}" alt="" loading="lazy" onerror="this.onerror=null;this.src=UI.placeholder">
+          <img src="${cover}" alt="" loading="lazy" data-fallback="placeholder">
         </a>
         <div class="history-info">
           <a class="history-title" href="/comic.html?id=${h.comicId}">${esc(h.comicTitle)}</a>

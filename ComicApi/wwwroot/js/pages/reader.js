@@ -43,7 +43,7 @@
         const images = ch.images.length
             ? ch.images.map((im, i) =>
                 `<img src="${UI.escapeHtml(im.imageUrl)}" alt="Trang ${i + 1}" loading="lazy"
-                onerror="this.onerror=null;this.src=UI.placeholder">`).join('')
+                data-fallback="placeholder">`).join('')
             : '<div class="text-center text-secondary py-5">Chương này chưa có ảnh.</div>';
 
         root.innerHTML = `

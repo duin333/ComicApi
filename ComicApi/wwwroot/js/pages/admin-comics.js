@@ -37,7 +37,7 @@
         return `
       <tr data-id="${c.id}">
         <td><img class="admin-thumb" src="${cover}" alt=""
-                 onerror="this.onerror=null;this.src=UI.placeholder"></td>
+                 data-fallback="placeholder"></td>
         <td>
           <div class="fw-semibold">${UI.escapeHtml(c.title)}</div>
           <div class="small text-muted">${UI.escapeHtml(c.author || '')}</div>

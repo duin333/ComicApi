@@ -9,6 +9,7 @@ public static class GifUrlValidator
         "media3.giphy.com", "media4.giphy.com", "i.giphy.com",
         "media.tenor.com", "c.tenor.com"
     };
+    public static IReadOnlyCollection<string> AllowedHostNames => AllowedHosts;
 
     public static bool IsAllowed(string? url)
     {

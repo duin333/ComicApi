@@ -122,7 +122,7 @@
         <div class="detail-bg" data-bg="${cover}"></div>
         <div class="container detail-hero-inner">
           <div class="detail-cover">
-            <img src="${cover}" alt="Bìa truyện ${esc(comic.title)}" onerror="this.onerror=null;this.src=UI.placeholder">
+            <img src="${cover}" alt="Bìa truyện ${esc(comic.title)}" data-fallback="placeholder">
           </div>
           <div class="detail-info">
             <nav class="detail-crumbs" aria-label="Đường dẫn">

@@ -87,7 +87,7 @@
           <div class="card h-100 border-0 shadow-sm">
             <div class="cover-wrap">
               <img src="${cover}" alt="${escapeHtml(c.title)}" loading="lazy"
-                   onerror="this.onerror=null;this.src=UI.placeholder">
+                   data-fallback="placeholder">
               <span class="badge ${done ? 'text-bg-success' : 'text-bg-primary'} status-badge">
                 ${done ? 'Hoàn thành' : 'Đang ra'}
               </span>
@@ -136,7 +136,7 @@
       <a class="cx-card" href="/comic.html?id=${c.id}" title="${escapeHtml(c.title)}">
         <div class="cx-ribbon cx-${label.cls}">${label.text}</div>
         <div class="cx-cover">
-          <img src="${cover}" alt="" loading="lazy" onerror="this.onerror=null;this.src=UI.placeholder">
+          <img src="${cover}" alt="" loading="lazy" data-fallback="placeholder">
         </div>
         <div class="cx-body">
           <div class="cx-title">${escapeHtml(c.title)}</div>
@@ -172,7 +172,7 @@
         return `
       <a class="poster-card" href="/comic.html?id=${c.id}" title="${escapeHtml(c.title)}">
         <div class="poster-cover">
-          <img src="${cover}" alt="" loading="lazy" onerror="this.onerror=null;this.src=UI.placeholder">
+          <img src="${cover}" alt="" loading="lazy" data-fallback="placeholder">
           ${badge}
         </div>
         <div class="poster-title">${escapeHtml(c.title)}</div>
@@ -670,7 +670,7 @@
                     const rate = c.ratingCount ? `★ ${Number(c.ratingAverage).toFixed(1)}` : 'Chưa có đánh giá';
                     return `
             <a class="sr-item" href="/comic.html?id=${c.id}">
-              <img src="${cover}" alt="" loading="lazy" onerror="this.onerror=null;this.src=UI.placeholder">
+              <img src="${cover}" alt="" loading="lazy" data-fallback="placeholder">
               <div>
                 <div class="sr-title">${escapeHtml(c.title)}</div>
                 <div class="sr-meta">${escapeHtml(c.author || 'Đang cập nhật')} ·
@@ -810,4 +810,31 @@
         spinner, message, stars, ratingLine, comicCard, slug, comicLabel, comicCardX, skeletonCards,
         posterCard, toast, emptyState, chapterLabel, renderPagination, renderNavbar, getTheme, setTheme,
     };
+})();
+
+// 11.4: ảnh lỗi thì thay bằng ảnh mặc định hoặc gỡ bỏ. Dùng MỘT bộ lắng nghe chung thay cho thuộc tính
+// onerror viết thẳng trong HTML, vì chính sách bảo mật nội dung (CSP) không cho chạy mã nội tuyến.
+// Cách dùng: <img data-fallback="placeholder"> hoặc <img data-fallback="remove">
+(() => {
+    function handleBrokenImage(img) {
+        if (!(img instanceof HTMLImageElement)) return;
+        const mode = img.dataset.fallback;
+        if (!mode || img.dataset.fallbackDone) return;
+        img.dataset.fallbackDone = '1';        // chỉ thử một lần, tránh lặp vô hạn nếu ảnh mặc định cũng hỏng
+
+        if (mode === 'remove') img.remove();
+        else img.src = UI.placeholder;
+    }
+
+    // Sự kiện error của ảnh không nổi bọt lên, nhưng bắt được ở pha "capture"
+    document.addEventListener('error', e => handleBrokenImage(e.target), true);
+
+    // Ảnh nằm sẵn trong HTML có thể đã hỏng từ trước khi đoạn mã này chạy
+    function checkAlreadyBroken() {
+        document.querySelectorAll('img[data-fallback]').forEach(img => {
+            if (img.complete && img.naturalWidth === 0 && img.getAttribute('src')) handleBrokenImage(img);
+        });
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', checkAlreadyBroken);
+    else checkAlreadyBroken();
 })();

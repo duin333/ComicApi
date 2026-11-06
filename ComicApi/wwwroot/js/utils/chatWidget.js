@@ -64,7 +64,7 @@
     return comics.map(c => `
       <a class="chat-card" href="/comic.html?id=${c.id}">
         <img src="${c.coverUrl ? UI.escapeHtml(c.coverUrl) : UI.placeholder}" alt=""
-             onerror="this.onerror=null;this.src=UI.placeholder">
+             data-fallback="placeholder">
         <div>
           <div class="fw-semibold small">${UI.escapeHtml(c.title)}</div>
           <div class="small text-muted">
