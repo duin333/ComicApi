@@ -10,7 +10,7 @@
     const pager = $('pager');
     const totalText = $('totalText');
     const searchForm = $('searchForm');
-    const searchInput = $('searchInput');
+    const searchInput = $('adminSearchInput');
 
     const modal = new bootstrap.Modal($('comicModal'));
     const form = $('comicForm');

@@ -9,7 +9,7 @@
     const tbody = $('commentRows');
     const pager = $('pager');
     const totalText = $('totalText');
-    const searchInput = $('searchInput');
+    const searchInput = $('adminSearchInput');
     const bulkBtn = $('bulkBtn');
     const checkAll = $('checkAll');
 

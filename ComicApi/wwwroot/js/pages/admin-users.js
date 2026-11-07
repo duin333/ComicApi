@@ -10,7 +10,7 @@
 
     const me = Auth.getUser();                 // để biết dòng nào là chính mình
     const state = { keyword: new URLSearchParams(location.search).get('keyword') || '', page: 1 };
-    $('searchInput').value = state.keyword;
+    $('adminSearchInput').value = state.keyword;
     let reqId = 0;
 
     const messageRow = html => `<tr><td colspan="7" class="text-center py-4">${html}</td></tr>`;
@@ -108,7 +108,7 @@
 
     $('searchForm').addEventListener('submit', e => {
         e.preventDefault();
-        state.keyword = $('searchInput').value.trim();
+        state.keyword = $('adminSearchInput').value.trim();
         state.page = 1;
         load();
     });
